@@ -1,10 +1,12 @@
 <template>
-  <div></div>
+  <div>
+    <router-link to="/searchList">搜索</router-link>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "",
+  name: "Home",
 };
 </script>
 
