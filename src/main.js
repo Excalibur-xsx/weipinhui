@@ -6,16 +6,18 @@ import router from "./router";
 import store from "./store";
 
 import "./plugins/element.js";
-
+// 引入公共资源
+import "./styles/iconfont.css";
+import "./styles/reset.css";
 Vue.config.productionTip = false;
 
 new Vue({
-	beforeCreate() {
-		// 初始化全局事件总线对象
-		Vue.prototype.$bus = this;
-	},
-	render: (h) => h(App),
-	// 应用router
-	router,
-	store,
+  beforeCreate() {
+    // 初始化全局事件总线对象
+    Vue.prototype.$bus = this;
+  },
+  render: (h) => h(App),
+  // 应用router
+  router,
+  store,
 }).$mount("#app");

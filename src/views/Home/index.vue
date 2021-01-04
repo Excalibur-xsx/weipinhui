@@ -1,10 +1,14 @@
 <template>
-  <div></div>
+  <div>
+    <div>
+      <img src="./images/bgimage.jpg" alt="" />
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "",
+  name: "Home",
 };
 </script>
 
