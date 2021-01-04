@@ -6,17 +6,6 @@ import router from "./router";
 import store from "./store";
 
 import "./plugins/element.js";
-import "./plugins/lazyload.js";
-
-// 引入mockServer，为了加载里面代码
-// 里面代码一旦加载，就去启动mock服务器，从而拦截相应的请求
-import "./mock/mockServer";
-
-// 引入公共资源
-import "./styles/reset.css";
-import "./styles/iconfont.css";
-import "swiper/swiper-bundle.min.css";
-import './plugins/element.js'
 
 Vue.config.productionTip = false;
 
