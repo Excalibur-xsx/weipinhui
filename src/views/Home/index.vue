@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    <router-link to="/detail">去详情</router-link>
+  </div>
 </template>
 
 <script>
