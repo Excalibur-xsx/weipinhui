@@ -1,27 +1,7 @@
 <template>
-  <div class="contentContainer">
-    <!-- 当前搜索内容 -->
-    <ul class="nav">
-      <li class="item">
-        <span>全部结果</span>
-        <span class="tag">></span>
-      </li>
-      <li class="item">
-        <span class="border">
-          品牌:
-          <span>天意美</span>
-          <span>
-            <a>X</a>
-          </span>
-        </span>
-        <span class="tag">></span>
-      </li>
-      <li class="item">
-        <span class="categoryName">女鞋</span>
-      </li>
-    </ul>
+  <div>
     <!-- 搜索的选项 -->
-    <div class="optionContainer">
+    <div class="optionContainer" :style="{ height: isMore ? '333px' : '100%' }">
       <div class="barContainer dashed">
         <h3>唯品服务</h3>
         <div class="barContent">
@@ -36,43 +16,15 @@
           </button>
         </div>
       </div>
-      <div class="barContainer dashed">
+      <div class="barContainer dashed" v-if="trademarkList.length">
         <h3>品牌</h3>
-        <div class="barContent">
+        <div class="trandemark">
           <a
-            ><img
-              v-if="true"
-              src="//a.vpimg2.com/upload/brandcool/0/835f65a7efac4ddd8dfc361704099bd0/10000246/primary.png"
-            />
-            <div v-else class="logoName">宝格丽</div>
-          </a>
-          <a
-            ><img
-              v-if="true"
-              src="//a.vpimg2.com/upload/brandcool/0/b4331f2ad75c4046bb6cc94077360984/10026338/primary.png"
-            />
-            <div v-else class="logoName">宝格丽</div>
-          </a>
-          <a
-            ><img
-              v-if="true"
-              src="//a.vpimg2.com/upload/brandcool/0/04711cfb719443b3b28eb5ad36d39197/10026339/primary.png"
-            />
-            <div v-else class="logoName">宝格丽</div>
-          </a>
-          <a
-            ><img
-              v-if="true"
-              src="//a.vpimg2.com/upload/brandcool/0/835f65a7efac4ddd8dfc361704099bd0/10000246/primary.png"
-            />
-            <div v-else class="logoName">宝格丽</div>
-          </a>
-          <a
-            ><img
-              v-if="true"
-              src="//a.vpimg2.com/upload/brandcool/0/835f65a7efac4ddd8dfc361704099bd0/10000246/primary.png"
-            />
-            <div v-else class="logoName">宝格丽</div>
+            v-for="trademark in trademarkList"
+            :key="trademark.tmId"
+            @click="addTrademark(`${trademark.tmId}:${trademark.tmName}`)"
+          >
+            <div class="logoName">{{ trademark.tmName }}</div>
           </a>
         </div>
         <div class="right">
@@ -86,38 +38,21 @@
           </button>
         </div>
       </div>
-      <div class="barContainer dashed">
-        <h3>尺码</h3>
+      <div
+        class="barContainer dashed"
+        v-for="attr in attrsList"
+        :key="attr.attrId"
+      >
+        <h3>{{ attr.attrName }}</h3>
         <div class="barContent">
-          <a>女鞋</a>
-          <a>运动鞋</a>
-          <a>防雨防晒用品</a>
-          <a>个人居家用品</a>
-          <a>冰雪运动</a>
+          <a
+            v-for="value in attr.attrValueList"
+            :key="value"
+            @click="addAttrs(`${attr.attrId}:${value}:${attr.attrName}`)"
+            >{{ value }}</a
+          >
         </div>
         <div class="right">
-          <button class="multiple">
-            <span>+</span>
-            <span>多选</span>
-          </button>
-        </div>
-      </div>
-      <div class="barContainer">
-        <h3>尺码</h3>
-        <div class="barContent">
-          <a>26</a>
-          <a>27</a>
-          <a>28</a>
-          <a>29</a>
-          <a>30</a>
-          <a>31</a>
-          <a>32</a>
-        </div>
-        <div class="right">
-          <button class="more">
-            <span>更多</span>
-            <span>↓</span>
-          </button>
           <button class="multiple">
             <span>+</span>
             <span>多选</span>
@@ -125,83 +60,53 @@
         </div>
       </div>
     </div>
-    <!-- 搜索的结果 -->
+    <!-- 更多选项 -->
     <div class="optionsMore">
-      <button v-if="true">更多选项</button>
-      <button v-else>点击收起</button>
+      <button v-if="isMore" @click="moreOptions('show')">更多选项</button>
+      <button v-else @click="moreOptions('hidden')">点击收起</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Option",
+  props: {
+    addTrademark: Function,
+    addAttrs: Function,
+  },
+  data() {
+    return {
+      moreAttrs: this.attrsList,
+      isMore: true,
+    };
+  },
+  computed: {
+    ...mapGetters(["trademarkList", "attrsList"]),
+  },
+  methods: {
+    moreOptions(type) {
+      if (type === "show") {
+        this.isMore = false;
+      }
+      if (type === "hidden") {
+        this.isMore = true;
+      }
+    },
+    addSearchAttrName() {},
+  },
 };
 </script>
 
 <style lang="less" scoped>
-.contentContainer {
-  width: 1170px;
-  margin: 0 auto;
-  margin-top: 300px;
-}
-.nav {
-  display: flex;
-  align-items: center;
-  height: 41px;
-  .item {
-    font-size: 12px;
-    color: #666;
-    .border {
-      padding: 6px;
-      padding-right: 0;
-      border: 1px solid #999;
-      border-radius: 3px;
-      :nth-child(1) {
-        padding: 0 5px;
-        color: #f10180;
-      }
-      :nth-child(2) {
-        padding: 7px;
-        a {
-          font-weight: bold;
-          color: #999;
-        }
-      }
-    }
-    .border:hover {
-      padding: 6px;
-      padding-right: 0;
-      border: 1px solid #f10180;
-      border-radius: 3px;
-      :nth-child(1) {
-        padding: 0 5px;
-        color: #f10180;
-      }
-      :nth-child(2) {
-        padding: 7px;
-        background-color: #f10180;
-        a {
-          font-weight: bold;
-          color: #fff;
-        }
-      }
-    }
-    .tag {
-      padding: 0 8px;
-      font-size: 17px;
-      font-weight: 100;
-      color: #999;
-    }
-    .categoryName {
-      font-weight: bold;
-    }
-  }
-}
 .optionContainer {
   margin-top: 10px;
   width: 100%;
   border: 1px solid #ccc;
+  height: 500px;
+  overflow: hidden;
   .dashed {
     border-bottom: 1px dashed#ccc;
   }
@@ -213,42 +118,49 @@ export default {
       font-weight: inherit;
       padding: 15px 0 15px 15px;
       width: 118px;
+      flex-shrink: 0;
     }
     .barContent {
       flex-grow: 1;
       a {
         display: inline-block;
-        margin-right: 56px;
         cursor: pointer;
-        img {
-          padding: 10px;
-          margin: 15px 0;
-          margin-left: -56px;
-          width: 80px;
-          height: 40px;
-          border: 1px solid #ccc;
-          border-right: 0;
-        }
-        .logoName {
-          padding: 10px;
-          margin: 15px 0;
-          margin-left: -56px;
-          width: 80px;
-          height: 40px;
-          border: 1px solid #f10180;
-          text-align: center;
-          line-height: 40px;
-          color: #f10180;
-        }
-      }
-      a:nth-last-child(1) img {
-        border-right: 1px solid #ccc;
+        margin-right: 20px;
       }
       a:hover {
         color: #f10180;
       }
     }
+    .trandemark {
+      flex-grow: 1;
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      a {
+        width: 98px;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+        .logoName {
+          padding: 10px;
+          margin: 15px 0;
+          width: 75px;
+          height: 40px;
+          border: 1px solid #ccc;
+          text-align: center;
+          line-height: 40px;
+          color: #f10180;
+          font-size: 12px;
+        }
+      }
+      a:hover .logoName {
+        border: 1px solid #f10180;
+        font-weight: bold;
+      }
+    }
     .right {
+      display: flex;
+      flex-shrink: 0;
       button {
         width: 50px;
         margin-right: 10px;
