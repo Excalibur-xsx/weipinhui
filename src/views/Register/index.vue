@@ -22,23 +22,28 @@
             ref="ruleForm"
             class="demo-ruleForm"
           >
-            <el-form-item prop="userPhome" class="formHome">
+            <el-form-item prop="phone" class="formHome">
               <el-input
                 class="formHomeInput"
-                v-model="ruleForm.userPhome"
+                v-model="ruleForm.phone"
                 placeholder="请输入手机号码"
               ></el-input>
               <span class="iconfont icon-phone"></span>
               <span></span>
             </el-form-item>
-            <el-form-item prop="phomeCode" class="formCode">
+            <el-form-item prop="code" class="formCode">
               <el-input
                 class="formCodeInput"
-                v-model="ruleForm.phomeCode"
+                v-model="ruleForm.code"
                 placeholder="请输入验证码"
               ></el-input>
               <span class="iconfont icon-icon-test2"></span>
-              <button class="formCodeBtn">获取验证码</button>
+              <img
+                @click="refresh"
+                src="http://182.92.128.115/api/user/passport/code"
+                alt="code"
+                ref="code"
+              />
             </el-form-item>
             <el-form-item prop="password" class="formPasswor">
               <el-input
@@ -61,16 +66,20 @@
 
             <div class="registerTreaty">
               <el-checkbox
-                v-model="checked"
+                v-model="ruleForm.checked"
                 class="checkedTreaty"
               ></el-checkbox>
               <div class="treaty">
-                我已阅读并接受以下条款：<a href="">《隐私条款》</a
-                ><a href="">《唯品支付用户服务协议》</a>
+                我已阅读并接受以下条款：<a
+                  href="https://viva.vip.com/act/supportClause-pc?wapid=vivac_802&ff=125|2|1|12"
+                  >《隐私条款》</a
+                ><a href="https://i.vpal.com/portal/clause/clause.html"
+                  >《唯品支付用户服务协议》</a
+                >
               </div>
             </div>
 
-            <button class="registeBtn">立即注册</button>
+            <button class="registeBtn" @click="submit">立即注册</button>
           </el-form>
         </div>
       </div>
@@ -91,19 +100,18 @@ export default {
   data() {
     return {
       ruleForm: {
-        userPhome: "",
-        phomeCode: "",
+        phone: "",
+        code: "",
         password: "",
         notarizePassword: "",
+        checked: false,
       },
       rules: {
-        userPhome: [
-          { required: true, message: "手机号不能为空", trigger: "blur" },
-        ],
-        phomeCode: [
+        phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }],
+        code: [
           {
             required: true,
-            message: "请输入6位数字手机验证码",
+            message: "请输入验证码",
             trigger: "change",
           },
         ],
@@ -111,18 +119,60 @@ export default {
           {
             required: true,
             message: "密码不能为空",
-            trigger: "change",
+            trigger: "blur",
           },
         ],
         notarizePassword: [
           {
             required: true,
             message: "请确认密码",
-            trigger: "change",
+            trigger: "blur",
           },
         ],
       },
     };
+  },
+  methods: {
+    async submit() {
+      // console.log(111);
+      try {
+        const {
+          phone,
+          code,
+          password,
+          notarizePassword,
+          checked,
+        } = this.ruleForm;
+        // const code = this.refresh()
+        if (!checked) {
+          this.$message.error("请同意用户协议");
+          return;
+        }
+        if (password !== notarizePassword) {
+          this.$message.error("两次密码输入不一致！");
+          return;
+        }
+        //发送请求注册
+        await this.$store.dispatch("register", {
+          phone,
+          password,
+          code,
+        });
+        // console.log(111);
+        this.$router.push("/login");
+      } catch {
+        // console.log(111);
+        this.ruleForm.phone = "";
+        this.ruleForm.password = "";
+        this.ruleForm.notarizePassword = "";
+        this.refresh();
+      }
+    },
+    //获取最新验证码
+    refresh() {
+      // console.log(111);
+      this.$refs.code.src = "http://182.92.128.115/api/user/passport/code";
+    },
   },
 };
 </script>
@@ -278,7 +328,8 @@ export default {
     font-size: 18px;
     color: white;
     background-color: #f10180;
-    border: none;
+    outline: none;
+    border: 0;
   }
 }
 .registerBottom {
