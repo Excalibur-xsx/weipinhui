@@ -144,12 +144,24 @@ export default {
           checked,
         } = this.ruleForm;
         // const code = this.refresh()
-        if (!checked) {
-          this.$message.error("请同意用户协议");
+        if (!phone) {
+          this.$message.error("请输入手机号码");
+          return;
+        }
+        if (!code) {
+          this.$message.error("请输入验证码");
+          return;
+        }
+        if (!password) {
+          this.$message.error("请输入密码");
           return;
         }
         if (password !== notarizePassword) {
           this.$message.error("两次密码输入不一致！");
+          return;
+        }
+        if (!checked) {
+          this.$message.error("请同意用户协议");
           return;
         }
         //发送请求注册
@@ -162,6 +174,7 @@ export default {
         this.$router.push("/login");
       } catch {
         // console.log(111);
+        this.$message.error("注册失败,手机号已注册，请重新填写新的手机号码");
         this.ruleForm.phone = "";
         this.ruleForm.password = "";
         this.ruleForm.notarizePassword = "";

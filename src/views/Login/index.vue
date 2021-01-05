@@ -15,7 +15,9 @@
           <div class="registerContentRight">
             <div class="registerContentRightTop">
               <h3 class="memberRegisterTxet">扫码登录</h3>
-              <h3 class="memberRegisterTxet">账户登录</h3>
+              <h3 class="memberRegisterTxet" style="color: #f10180">
+                账户登录
+              </h3>
             </div>
             <el-form
               :model="ruleForm"
@@ -23,10 +25,10 @@
               ref="ruleForm"
               class="demo-ruleForm"
             >
-              <el-form-item prop="userPhome" class="formHome">
+              <el-form-item prop="phone" class="formHome">
                 <el-input
                   class="formHomeInput"
-                  v-model="ruleForm.userPhome"
+                  v-model="ruleForm.phone"
                   placeholder="手机号/用户名/邮箱"
                 ></el-input>
                 <span class="iconfont icon-phone"></span>
@@ -49,7 +51,7 @@
                 </div>
               </div>
 
-              <button class="registeBtn">登录</button>
+              <button class="registeBtn" @click="toLogin">登录</button>
             </el-form>
             <div class="registerContentRightFooter">
               <div class="weixin">
@@ -81,18 +83,17 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Login",
   data() {
     return {
       ruleForm: {
-        userPhome: "",
+        phone: "",
         password: "",
       },
       rules: {
-        userPhome: [
-          { required: true, message: "请输入登录名", trigger: "blur" },
-        ],
+        phone: [{ required: true, message: "请输入登录名", trigger: "blur" }],
         password: [
           {
             required: true,
@@ -101,8 +102,33 @@ export default {
           },
         ],
       },
+      isLogining: false,
     };
   },
+  computed: {
+    ...mapState({
+      token: (state) => state.user.token,
+      name: (state) => state.user.name,
+    }),
+  },
+  methods: {
+    async toLogin() {
+      try {
+        if (this.isLogining) return;
+        this.isLogining = true;
+        const { phone, password } = this.ruleForm;
+        await this.$store.dispatch("login", { phone, password });
+        localStorage.setItem("token", this.token);
+        localStorage.setItem("name", this.name);
+        this.$router.push("/");
+      } catch {
+        this.isLogining = false;
+      }
+
+      // console.log(result);
+    },
+  },
+  mounted() {},
 };
 </script>
 
