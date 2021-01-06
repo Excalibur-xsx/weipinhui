@@ -8,7 +8,7 @@ import store from "./store";
 import "./plugins/element.js";
 
 import "./style/reset.css";
-import "./style/iconfont.css";
+// import "./style/iconfont.css";
 
 Vue.config.productionTip = false;
 
