@@ -92,7 +92,7 @@ export default {
   },
   props: ["provinceInfo", "addressInfo"],
   watch: {
-    provinceInfo(val) {
+    async provinceInfo(val) {
       this.provInfo = val;
       this.provInfo.map((item) => {
         if (item.name === this.addressInfo.province) {
@@ -101,6 +101,15 @@ export default {
         }
         return item;
       });
+      let city;
+      if(this.cityInfo.length) return
+      if (this.provinceId === "101101") {
+        city = [{ name: "北京市", id: "101101" }];
+        this.cityInfo = city;
+      } else {
+        city = await getAddress(this.provinceId);
+        this.cityInfo = city.data.list;
+      }
     },
     cityInfo() {
       this.cityInfo.map((item) => {
@@ -214,7 +223,7 @@ export default {
       this.$emit("hideX");
     },
     //点击地址头部
-    clickProvince() {
+    async clickProvince() {
       this.provinceActive = true;
       this.cityActive = false;
       this.countyActive = false;
@@ -225,33 +234,24 @@ export default {
       this.cityActive = true;
       this.countyActive = false;
       this.streetActive = false;
-      let city;
-      if(this.cityInfo.length) return
-      if (this.provinceId === "101101") {
-        city = [{ name: "北京市", id: "101101" }];
-        this.cityInfo = city;
-      } else {
-        city = await getAddress(this.provinceId);
-        this.cityInfo = city.data.list;
-      }
+      if(this.countyInfo.length) return
+      const county = await getAddress(this.cityId);
+      this.countyInfo = county.data.list;
     },
     async clickCounty() {
       this.provinceActive = false;
       this.cityActive = false;
       this.countyActive = true;
       this.streetActive = false;
-      if(this.countyInfo.length) return
-      const county = await getAddress(this.cityId);
-      this.countyInfo = county.data.list;
+      if(this.streetInfo.length) return
+      const street = await getAddress(this.countyId);
+      this.streetInfo = street.data.list;
     },
-    async clickStreet() {
+    clickStreet() {
       this.provinceActive = false;
       this.cityActive = false;
       this.countyActive = false;
       this.streetActive = true;
-      if(this.streetInfo.length) return
-      const street = await getAddress(this.countyId);
-      this.streetInfo = street.data.list;
     },
   },
   mounted() {

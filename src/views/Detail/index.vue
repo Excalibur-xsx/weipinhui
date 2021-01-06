@@ -140,7 +140,7 @@
       </div>
       <div
         class="specs attr"
-        :class="noSelectAttr?'active':''"
+        :class="attr.noSelectAttr?'active':''"
         v-for="(attr, attrIndex) in noColorInfo"
         :key="attr.id"
       >
@@ -207,7 +207,7 @@ export default {
       provinceInfo: [],
       addressInfo: {},
       noSelectColor: false,
-      noSelectAttr: false
+      noSelectAttr: []
     };
   },
   watch: {
@@ -266,7 +266,7 @@ export default {
     },
     //选择其他属性
     selectAttr(attrIndex, attrValueIndex) {
-      this.noSelectAttr = false
+      this.noColorInfo[attrIndex].noSelectAttr = false
       this.$set(
         this.noColorInfo[attrIndex].spuSaleAttrValueList[attrValueIndex],
         "isActive",
@@ -290,24 +290,19 @@ export default {
         this.noSelectColor = false
       }
       //判断是否选择其他属性
-      const selectedAllAttr = this.noColorInfo.every(attr=>{
+      this.noSelectAttr = []
+      this.noColorInfo.map(attr=>{
         const selectedAttr = attr.spuSaleAttrValueList.find(item=>item.isActive)
-        if(selectedAttr){
-          return true
-        }else{
-          return false
+        if(!selectedAttr){
+          this.$set(attr,"noSelectAttr",true)
+          this.noSelectAttr.push("no")
         }
       })
-      if(!selectedAllAttr){
-        this.noSelectAttr = true
-      }else{
-        this.noSelectAttr = false
-      }
-
       //每个属性都选择才发请求
-      if(!this.noSelectColor && !this.noSelectAttr){
-        addToShopcart(this.goodDetail.skuInfo.id,this.count)
+      if(this.noSelectColor || this.noSelectAttr.length){
+        return
       }
+      addToShopcart(this.goodDetail.skuInfo.id,this.count)
     },
     //test获取购物车列表
     getShopcartList() {
