@@ -1,11 +1,7 @@
 <template>
-  <div class="zoomContanier">
-    <div
-      class="middleImg"
-      ref="middleImg"
-      @mouseenter="enter"
-    >
-      <img src="../images/b1.png" alt="" />
+  <div class="zoomContanier" v-if="skuImageList">
+    <div class="middleImg" ref="middleImg" @mouseenter="enter">
+      <img :src="skuImageList[currentIndex].imgUrl" alt="" />
     </div>
     <div
       class="bigImg"
@@ -13,7 +9,7 @@
       @mousemove="move"
       @mouseleave="leave"
     >
-      <img ref="bigImg" src="../images/b1.png" alt="" />
+      <img ref="bigImg" :src="skuImageList[currentIndex].imgUrl" alt="" />
     </div>
   </div>
 </template>
@@ -25,6 +21,14 @@ export default {
     return {
       bigShow: false,
     };
+  },
+  props: {
+    skuImageList: {
+      type: Array,
+    },
+    currentIndex: {
+      type: Number
+    }
   },
   methods: {
     enter() {

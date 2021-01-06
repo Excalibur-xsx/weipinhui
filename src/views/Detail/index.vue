@@ -1,8 +1,14 @@
 <template>
   <div class="goodShowContanier">
     <div class="leftContainer">
-      <Zoom />
-      <ImgList />
+      <Zoom
+        :skuImageList="goodDetail.skuInfo && goodDetail.skuInfo.skuImageList"
+        :currentIndex="currentIndex"
+      />
+      <ImgList
+        :skuImageList="goodDetail.skuInfo && goodDetail.skuInfo.skuImageList"
+        @getIndex="getIndex"
+      />
       <div class="bottomHandle">
         <span class="goodCode"
           >商品编码：苹果iPhone11-128G简配绿 商品编码：苹果iPhone11-128G简配绿
@@ -50,11 +56,13 @@
         <img src="./images/pc_xuanguan.png" alt="" />
       </div>
     </div>
-    <div class="rightContainer">
+    <div class="rightContainer" v-if="goodDetail.skuInfo">
       <div class="brandName">
-        <a href="www.baidu.com">苹果</a>
+        <!-- <a href="www.baidu.com">苹果</a> -->
+        <a href="www.baidu.com">{{ goodDetail.skuInfo.skuName.slice(0, 2) }}</a>
         <p class="goodTitle">
-          <span>iPhone11 128G 双卡双待（无充电器耳机版）全网通手机</span>
+          <!-- <span>iPhone11 128G 双卡双待（无充电器耳机版）全网通手机</span> -->
+          <span>{{ goodDetail.skuInfo.skuDesc }}</span>
         </p>
       </div>
       <div class="priceContainer">
@@ -76,151 +84,96 @@
           <p>该商品为特殊商品，不支持使用全场券、品类券、超级VIP9.8折</p>
         </div>
       </div>
-      <div class="delivery">
+      <div class="delivery attr">
         <p class="attrName">配送</p>
         <div class="address">
-          <div class="optionBox">
-            <p>请选择</p>
-            <i class="iconfont icon-Icon-KeyboardArrow-Down-Rounded"></i>
+          <div
+            class="optionBox"
+            :class="isClick ? 'isClick' : ''"
+            @click="showAddress"
+          >
+            <p v-if="!provinceName">请选择配送地址</p>
+            <p v-else>{{ provinceName }} {{ cityName }} {{ countyName }} {{ streetName }}</p>
+            <i
+              class="iconfont"
+              :class="
+                isClick ? 'icon-Tarrow' : 'icon-Icon-KeyboardArrow-Down-Rounded'
+              "
+            ></i>
           </div>
-          <div class="addressBox">
-            <ul class="addressTitle">
-              <li>省份</li>
-              <li>城市</li>
-              <li>县区</li>
-              <li>街道</li>
-            </ul>
-            <div>
-              <ul class="addressName">
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-                <li>
-                  <a href="">广东省</a>
-                </li>
-              </ul>
-              <ul class="addressName">
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-                <li>
-                  <a href="">西红柿</a>
-                </li>
-              </ul>
-              <ul class="addressName">
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-                <li>
-                  <a href="">xx县</a>
-                </li>
-              </ul>
-              <ul class="addressName">
-                <li>
-                  <a href="">大街</a>
-                </li>
-                <li>
-                  <a href="">大街</a>
-                </li>
-                <li>
-                  <a href="">大街</a>
-                </li>
-                <li>
-                  <a href="">大街</a>
-                </li>
-                <li>
-                  <a href="">大街</a>
-                </li>
-                <li>
-                  <a href="">大街</a>
-                </li>
-                <li>
-                  <a href="">大街</a>
-                </li>
-                <li>
-                  <a href="">大街</a>
-                </li>
-                <li>
-                  <a href="">大街</a>
-                </li>
-              </ul>
-            </div>
+          <Address
+            v-show="isClick"
+            @hideX="isClick = false"
+            @selectProvince="selectProvince"
+            @selectCity="selectCity"
+            @selectCounty="selectCounty"
+            @selectStreet="selectStreet"
+            :provinceInfo="provinceInfo"
+          />
+          <p class="time">现在付款，最快明天送达</p>
+        </div>
+      </div>
+      <div class="freight attr">
+        <p class="attrName">运费</p>
+        <div>
+          <span>订单满88元免运费</span>
+          <i class="iconfont icon-wenhao"></i>
+        </div>
+      </div>
+      <div class="color attr">
+        <p class="attrName">颜色</p>
+        <div class="colorContainer">
+          <div
+            class="colorValue"
+            :class="color.isActive ? 'active' : ''"
+            v-for="(color, index) in colorInfo.spuSaleAttrValueList"
+            :key="color.id"
+            @click="selectColor(index)"
+          >
+            <img src="./images/s2.png" alt="" />
+            <span>{{ color.saleAttrValueName }}</span>
+            <i v-if="color.isActive" class="iconfont icon-gou1"></i>
           </div>
+        </div>
+      </div>
+      <div
+        class="specs attr"
+        v-for="(attr, attrIndex) in noColorInfo"
+        :key="attr.id"
+      >
+        <p class="attrName">{{ attr.saleAttrName.slice(2) }}</p>
+        <div
+          :class="attrValue.isActive ? 'active' : ''"
+          v-for="(attrValue, attrValueIndex) in attr.spuSaleAttrValueList"
+          :key="attrValue.id"
+          @click="selectAttr(attrIndex, attrValueIndex)"
+        >
+          <span>{{ attrValue.saleAttrValueName }}</span>
+          <i v-if="attrValue.isActive" class="iconfont icon-gou1"></i>
+        </div>
+      </div>
+      <div class="count attr">
+        <p class="attrName">数量</p>
+        <el-input-number
+          v-model="count"
+          @change="handleChange"
+          :min="1"
+          :max="2"
+          label="描述文字"
+        ></el-input-number>
+      </div>
+      <button class="buyBtn">
+        <p>￥6666</p>
+        <span>特卖价</span>
+        <span>抢 ></span>
+      </button>
+      <div class="line"></div>
+      <div class="cusService attr">
+        <p class="attrName">客服</p>
+        <div>
+          <i class="iconfont icon-duihua"></i>
+          <a>在线客服</a>
+          <span>(09:00-22:00)</span>
         </div>
       </div>
     </div>
@@ -230,12 +183,35 @@
 <script>
 import Zoom from "./Zoom";
 import ImgList from "./ImgList";
+import Address from "../../components/Address";
+import { getGoodDetail, getProvince } from "../../api/detail";
 export default {
   name: "Detail",
   data() {
     return {
       isHover: false,
+      isClick: false,
+      count: 1,
+      goodDetail: {},
+      currentIndex: 0,
+      provinceInfo: [],
+      provinceName: "",
+      cityName: "",
+      countyName: "",
+      streetName: "",
     };
+  },
+  computed: {
+    colorInfo() {
+      return this.goodDetail.spuSaleAttrList.find(
+        (attr) => attr.saleAttrName === "选择颜色"
+      );
+    },
+    noColorInfo() {
+      return this.goodDetail.spuSaleAttrList.filter(
+        (attr) => attr.saleAttrName !== "选择颜色"
+      );
+    },
   },
   methods: {
     shareEnter() {
@@ -244,10 +220,66 @@ export default {
     shareLeave() {
       this.isHover = false;
     },
+    //选择地址
+    async showAddress() {
+      this.isClick = true;
+      const res = await getProvince();
+      this.provinceInfo = res.data.list;
+      // console.log(res)
+    },
+    //当Address组件选择地址时
+    selectProvince(name) {
+      this.provinceName = name;
+    },
+    selectCity(name) {
+      this.cityName = name;
+    },
+    selectCounty(name) {
+      this.countyName = name;
+    },
+    selectStreet(name) {
+      this.streetName = name;
+    },
+    handleChange() {},
+    //获取当前选中轮播图图片下标
+    getIndex(index) {
+      this.currentIndex = index;
+    },
+    //选择颜色
+    selectColor(index) {
+      this.$set(this.colorInfo.spuSaleAttrValueList[index], "isActive", true);
+      this.colorInfo.spuSaleAttrValueList.map((attr, i) => {
+        if (i !== index) {
+          this.$set(attr, "isActive", false);
+        }
+        return attr;
+      });
+    },
+    //选择其他属性
+    selectAttr(attrIndex, attrValueIndex) {
+      this.$set(
+        this.noColorInfo[attrIndex].spuSaleAttrValueList[attrValueIndex],
+        "isActive",
+        true
+      );
+      this.noColorInfo[attrIndex].spuSaleAttrValueList.map((value, i) => {
+        if (i !== attrValueIndex) {
+          this.$set(value, "isActive", false);
+        }
+        return value;
+      });
+    },
+  },
+  async mounted() {
+    //获取商品详情数据
+    const res = await getGoodDetail(1361);
+    // const res = await getGoodDetail(1194)
+    this.goodDetail = res;
   },
   components: {
     Zoom,
     ImgList,
+    Address,
   },
 };
 </script>
@@ -370,7 +402,7 @@ export default {
   }
   .priceWrap {
     padding: 15px 0;
-    background-color: indianred;
+    // background-color: indianred;
   }
   .price {
     width: 300px;
@@ -425,79 +457,184 @@ export default {
       white-space: nowrap;
     }
   }
-  .delivery{
-    height: 30px;
-    line-height: 30px;
+  .attr {
     display: flex;
+    align-items: center;
+    margin: 20px 0;
+  }
+  .delivery {
     position: relative;
+    align-items: flex-start;
+    p {
+      height: 30px;
+      line-height: 30px;
+    }
+    .time {
+      margin-top: 10px;
+      color: #666;
+    }
   }
   /* .address{
     position: relative;
   } */
-  .optionBox{
+  .optionBox {
     width: 250px;
     height: 30px;
     padding: 0 10px;
     box-sizing: border-box;
     background-color: #fff;
     border: 1px solid #ccc;
-    border-bottom: #fff;
     position: relative;
-    z-index: 2;
+    z-index: 3;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .iconfont{
+    p{
+      max-width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .iconfont {
       color: #b3b3b3;
     }
+    &.isClick {
+      border-bottom: 1px solid #fff;
+    }
   }
-  .attrName{
+  .attrName {
     color: #999;
     margin-right: 16px;
   }
-  .addressBox{
-    padding: 20px;
-    padding-bottom: 0;
-    border: 1px solid #ccc;
-    position: absolute;
-    left: -20px;
-    top: 29px;
-    z-index: 1;
-  }
-  .addressTitle{
-    width: 455px;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    li{
-      width: 70px;
-      height: 30px;
-      text-align: center;
-      margin-right: -1px;
-      margin-bottom: -1px;
-      border: 1px solid #ccc;
-      // border-bottom: transparent;
-      background-color: #f9f9f9;
-    }
-  }
-  .addressName{
-    padding: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    display: none;
-    &:nth-of-type(1){
+  .freight {
+    div {
       display: flex;
+      align-items: center;
     }
-    li{
-      width: 103px;
-      height: 22px;
-      a{
-        padding: 2px 10px;
-        border: 1px solid transparent;
+    .icon-wenhao {
+      margin-left: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+  }
+  .colorContainer {
+    display: flex;
+  }
+  .colorValue {
+    margin-right: 10px;
+    padding: 1px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+    img {
+      width: 28px;
+      height: 28px;
+    }
+    span {
+      padding: 0 15px;
+    }
+    &.active {
+      padding: 0;
+      border: 2px solid indianred;
+    }
+    .icon-gou1 {
+      position: absolute;
+      bottom: -2px;
+      right: -1px;
+      color: indianred;
+    }
+  }
+  .specs {
+    div {
+      height: 32px;
+      line-height: 32px;
+      margin-right: 10px;
+      padding: 1px;
+      border: 1px solid #ccc;
+      position: relative;
+      box-sizing: border-box;
+      &.active {
+        padding: 0;
+        border: 2px solid indianred;
       }
-      a:hover{
-        text-decoration: none;
-        border: 1px solid rgb(245,86,144);
-      }
+    }
+    span {
+      padding: 0 20px;
+    }
+    .icon-gou1 {
+      position: absolute;
+      bottom: -8px;
+      right: -1px;
+      color: indianred;
+    }
+  }
+  .count {
+    /deep/.el-input {
+      width: 75px;
+      height: 30px;
+    }
+    /deep/.el-input-number {
+      width: 75px;
+      height: 30px;
+    }
+    /deep/.el-input__inner {
+      width: 75px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid #b3b3b3;
+      border-radius: 0;
+      display: flex;
+      justify-content: space-between;
+    }
+    /deep/.el-input-number__decrease,
+    /deep/.el-input-number__increase {
+      width: 21px;
+      height: 28px;
+      line-height: 28px;
+    }
+  }
+  .buyBtn {
+    width: 252px;
+    height: 46px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    background-color: indianred;
+    color: #fff;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    p {
+      font-size: 20px;
+    }
+    span {
+      font-size: 14px;
+    }
+  }
+  .line {
+    margin-top: 10px;
+    border-bottom: 1px dashed #e2e2e2;
+  }
+  .cusService {
+    div {
+      display: flex;
+      align-items: center;
+    }
+    .iconfont {
+      margin-right: 5px;
+      color: indianred;
+    }
+    a {
+      color: indianred;
+      text-decoration: underline;
+    }
+    span {
+      margin-left: 5px;
+      color: #999;
     }
   }
 }
