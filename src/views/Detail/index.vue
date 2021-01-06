@@ -160,13 +160,12 @@
         <p class="attrName">数量</p>
         <el-input-number
           v-model="count"
-          @change="handleChange"
           :min="1"
           :max="2"
           label="描述文字"
         ></el-input-number>
       </div>
-      <button class="buyBtn">
+      <button class="buyBtn" @click="addShopcart">
         <p>￥{{ goodDetail.price * count }}</p>
         <span>特卖价</span>
         <span>抢 ></span>
@@ -178,6 +177,7 @@
           <i class="iconfont icon-duihua"></i>
           <a>在线客服</a>
           <span>(09:00-22:00)</span>
+          <a @click="getShopcartList">看看购物车</a>
         </div>
       </div>
     </div>
@@ -188,7 +188,7 @@
 import Zoom from "./Zoom";
 import ImgList from "./ImgList";
 import Address from "../../components/Address";
-import { getGoodDetail, getProvince } from "../../api/detail";
+import { getGoodDetail, getProvince,addToShopcart,getShopcartList } from "../../api/detail";
 export default {
   name: "Detail",
   data() {
@@ -228,7 +228,7 @@ export default {
     shareLeave() {
       this.isHover = false;
     },
-    //选择地址
+    //点击选择地址
     async showAddress() {
       this.isClick = true;
       if (this.provinceInfo.length) {
@@ -236,13 +236,11 @@ export default {
       }
       const res = await getProvince();
       this.provinceInfo = res.data.list;
-      // console.log(res)
     },
     //当Address组件选择地址时
     selectAddress(title,name){
       this.$set(this.addressInfo,title,name)
     },
-    handleChange() {},
     //获取当前选中轮播图图片下标
     getIndex(index) {
       this.currentIndex = index;
@@ -271,6 +269,14 @@ export default {
         return value;
       });
     },
+    //加入购物车
+    addShopcart(){
+      addToShopcart(this.goodDetail.skuInfo.id,this.count)
+    },
+    //test获取购物车列表
+    getShopcartList(){
+      getShopcartList()
+    }
   },
   async mounted() {
     //获取商品详情数据

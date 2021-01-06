@@ -1,6 +1,7 @@
 import axios from "axios"
 import request from "../utils/request"
 
+//获取商品详情数据
 export const getGoodDetail = (skuId)=>{
   return request({
     method: "GET",
@@ -8,6 +9,7 @@ export const getGoodDetail = (skuId)=>{
   })
 } 
 
+//获取省份数据
 export const getProvince = ()=>{
   return axios({
     method: "GET",
@@ -15,6 +17,7 @@ export const getProvince = ()=>{
   })
 } 
 
+//获取市、县、街道数据
 export const getAddress = (areaid)=>{
   return axios({
     method: "GET",
@@ -22,16 +25,18 @@ export const getAddress = (areaid)=>{
   })
 } 
 
-/* export const getProvince = ()=>{
-  return axios({
-    method: "GET",
-    url: "/huan/getProvince"
+//加入购物车
+export const addToShopcart = (skuId,skuNum)=>{
+  return request({
+    method: "POST",
+    url: `/cart/addToCart/${skuId}/${skuNum}`
   })
-}  */
+}
 
-/* export const getCity = (id)=>{
-  return axios({
+//获取购物车列表（test）
+export const getShopcartList = () => {
+  return request({
     method: "GET",
-    url: `/huan/getCity?provinceId=${id}`
+    url: "/cart/cartList"
   })
-}  */
+}
