@@ -72,15 +72,163 @@
           <span class="slipline"></span>
           <p>请提交订单，下单后你另有 30 分钟的支付时间。</p>
         </div>
-        
+        <div class="shoplist_table">
+          <form action>
+            <ul class="shoplist_table_title">
+              <li class="firsttitle">
+                <input type="checkbox" />
+                全选
+              </li>
+              <li>商品</li>
+              <li>单价</li>
+              <li>数量</li>
+              <li class="lasttitle">操作</li>
+            </ul>
+            <ul>
+              <li class="shoplist_table_detail">
+                <div class="shopdetail">
+                  <input type="checkbox" />
+                  <img src="./images/shop1.jpg" alt />
+                  <div>
+                    <h3>坦克玩具车耐摔儿童玩具车男孩3岁大号合金小汽车军事模型套装</h3>
+                    <p>尺码：均码</p>
+                    <span>7天退换</span>
+                    <span>退换无忧</span>
+                  </div>
+                </div>
+                <div class="shopprice">
+                  <strong>¥60</strong>
+                </div>
+                <div class="shopnumber">
+                  <div class="sub">-</div>
+                  <div class="number">1</div>
+                  <div class="add">+</div>
+                </div>
+                <div class="shopdel">
+                  <span>删除</span>
+                </div>
+              </li>
+              <li class="shoplist_table_detail">
+                <div class="shopdetail">
+                  <input type="checkbox" />
+                  <img src="./images/shop1.jpg" alt />
+                  <div>
+                    <h3>坦克玩具车耐摔儿童玩具车男孩3岁大号合金小汽车军事模型套装</h3>
+                    <p>尺码：均码</p>
+                    <span>7天退换</span>
+                    <span>退换无忧</span>
+                  </div>
+                </div>
+                <div class="shopprice">
+                  <strong>¥60</strong>
+                </div>
+                <div class="shopnumber">
+                  <div class="sub">-</div>
+                  <div class="number">1</div>
+                  <div class="add">+</div>
+                </div>
+                <div class="shopdel">
+                  <span>删除</span>
+                </div>
+              </li>
+            </ul>
+            <div class="shoplist_table_footer">
+              <span class="table_footer_maker">运费</span>
+              <div class="table_footer_text">已免运费</div>
+            </div>
+          </form>
+        </div>
+        <div class="shoplist_count">
+          <div class="shoplist_count_coupon">
+            <div class="count_coupon_top">
+              <span class="top_1th">
+                使用优惠劵
+                <i class="iconfont icon-arrow-down"></i>
+              </span>
+              <span>
+                <span class="top_2th">
+                  共
+                  <span class="top_2th_num">1</span>
+                  件商品&nbsp;&nbsp;商品金额
+                </span>
+                <span class="top_3th">￥60</span>
+              </span>
+            </div>
+            <div class="count_coupon_bottom">
+              <span class="bottom_1th">总金额（未含运费）</span>
+              <span class="bottom_2th">￥60</span>
+            </div>
+          </div>
+          <div class="shoplist_count_footer">
+            <div class="count_footer_text">请确认商品后结账</div>
+            <div class="count_footer_true">立即结账</div>
+          </div>
+        </div>
       </div>
     </div>
+    <!-- history shop -->
+    <div class="history_shop">
+      <div class="titleContainer">
+        <span class="title">购物历史</span>
+      </div>
+      <div class="historylist">
+        <div class="history_prev">&lt;</div>
+        <div class="history_contaiter">
+          <div class="history_item">
+            <img src="./images/history.jpg" alt />
+            <h3>奥迪双钻 超级飞侠大变形机器人儿童玩具乐迪小爱多多</h3>
+            <div class="history_item_text">收纳坦克军绿色+合金车仔;均码</div>
+            <div class="history_item_footer">
+              <span class="history_item_price">￥60</span>
+              <div class="history_item_button">
+                <span>重新购买</span>
+              </div>
+            </div>
+          </div>
+          <div class="history_item">
+            <img src="./images/shop1.jpg" alt />
+            <h3>奥迪双钻 超级飞侠大变形机器人儿童玩具乐迪小爱多多</h3>
+            <div class="history_item_text">收纳坦克军绿色+合金车仔;均码</div>
+            <div class="history_item_footer">
+              <span class="history_item_price">￥60</span>
+              <div class="history_item_button">
+                <span>重新购买</span>
+              </div>
+            </div>
+          </div>
+          <div class="history_item">
+            <img src="./images/shop2.jpg" alt />
+            <h3>奥迪双钻 超级飞侠大变形机器人儿童玩具乐迪小爱多多</h3>
+            <div class="history_item_text">收纳坦克军绿色+合金车仔;均码</div>
+            <div class="history_item_footer">
+              <span class="history_item_price">￥60</span>
+              <div class="history_item_button">
+                <span>重新购买</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="history_next">&gt;</div>
+      </div>
+    </div>
+    <!-- 质量保证 -->
+    <div class="quality_guarantee">
+      <div class="quality_1th"></div>
+      <div class="quality_2th"></div>
+      <div class="quality_3th"></div>
+    </div>
+    <Footer />
   </div>
 </template>
 
 <script>
+import Footer from "../../components/footer";
+
 export default {
   name: "ShopCar",
+  components: {
+    Footer,
+  },
 };
 </script>
 
@@ -260,6 +408,309 @@ ul {
       color: #666;
       font: 14px/20px "Microsoft Yahei";
     }
+  }
+  .shoplist_table {
+    .shoplist_table_title {
+      display: flex;
+      justify-content: space-between;
+      margin: 40px 0;
+      border: 1px solid #e0e0e0;
+      height: 38px;
+      line-height: 38px;
+      background-color: #f9f9f9;
+      color: #333;
+      font-size: 12px;
+      .firsttitle {
+        font-size: 16px;
+        margin-left: 15px;
+      }
+      .lasttitle {
+        margin-right: 85px;
+      }
+    }
+    .shoplist_table_detail {
+      padding: 15px 0 15px 15px;
+      border: 1px solid #e0e0e0;
+      display: flex;
+      .shopdetail {
+        display: flex;
+        align-items: center;
+        width: 335px;
+        img {
+          width: 74px;
+          height: 74px;
+          padding: 0 15px;
+        }
+        div {
+          h3 {
+            color: #333;
+            font-size: 12px;
+            font-weight: normal;
+            padding: 0;
+            margin: 0 0 8px;
+            width: 176px;
+          }
+          p {
+            color: #333;
+            font-size: 12px;
+          }
+          span {
+            background: #edf3ff;
+            padding: 0 8px;
+            color: #627db6;
+            border-radius: 13px;
+            display: inline-block;
+            margin-bottom: 5px;
+            margin-right: 5px;
+            font: 12px/1.5 tahoma, arial, Hiragino Sans GB, WenQuanYi Micro Hei,
+              \5fae\8f6f\96c5\9ed1, \5b8b\4f53, sans-serif;
+            padding: 0 8px;
+          }
+        }
+      }
+      .shopprice {
+        font-size: 14px;
+        color: #f10180;
+        width: 215px;
+        text-align: center;
+        margin-top: 20px;
+      }
+      .shopnumber {
+        width: 195px;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        div {
+          height: 22px;
+          border: 1px solid #e3e2e2;
+          text-align: center;
+          line-height: 22px;
+        }
+        .sub {
+          font-size: 18px;
+          width: 23px;
+          color: #aaa;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        .number {
+          width: 28px;
+          font-size: 12px;
+        }
+        .add {
+          font-size: 18px;
+          width: 23px;
+          color: #aaa;
+          font-weight: bold;
+          cursor: pointer;
+        }
+      }
+      .shopdel {
+        color: #666;
+        font-size: 12px;
+        width: 200px;
+        text-align: center;
+        margin-top: 20px;
+        span {
+          cursor: pointer;
+        }
+      }
+    }
+    .shoplist_table_footer {
+      border: 1px solid #e0e0e0;
+      padding: 10px 15px;
+      .table_footer_maker {
+        padding: 3px 7px;
+        min-width: 0;
+        border: 1px solid #36c88e;
+        border-radius: 11px;
+        color: #36c88e;
+        margin-right: 10px;
+        height: 12px;
+        text-align: center;
+        font: 400 12px/12px \5b8b\4f53;
+      }
+      .table_footer_text {
+        display: inline-block;
+        font-size: 15px;
+        color: #666;
+      }
+    }
+  }
+  .shoplist_count {
+    .shoplist_count_coupon {
+      border: 1px solid #e0e0e0;
+      margin-top: 40px;
+      padding: 18px 20px 15px;
+      text-align: right;
+      height: 80px;
+      .count_coupon_top {
+        display: flex;
+        justify-content: space-between;
+        .top_1th {
+          display: inline-block;
+          position: relative;
+          z-index: 1;
+          padding-left: 10px;
+          height: 30px;
+          line-height: 30px;
+          vertical-align: top;
+          color: #f10180;
+          border: 1px solid #f10180;
+          border-radius: 3px;
+          background-color: #fff;
+          .iconfont {
+            margin-left: 15px;
+            margin-right: 5px;
+          }
+        }
+        .top_2th {
+          color: #888;
+          font-size: 12px;
+          margin-right: 100px;
+          .top_2th_num {
+            color: #f10180;
+          }
+        }
+        .top_3th {
+          color: #333;
+          font-size: 14px;
+        }
+      }
+      .count_coupon_bottom {
+        .bottom_1th {
+          color: #888;
+          font-size: 12px;
+          margin-right: 85px;
+        }
+        .bottom_2th {
+          color: #f10180;
+          font-size: 18px;
+        }
+      }
+    }
+    .shoplist_count_footer {
+      height: 50px;
+      display: flex;
+      margin-bottom: 40px;
+      .count_footer_text {
+        padding: 14px 0px 14px 20px;
+        border: 1px solid #e2e1e1;
+        background-color: #f3f3f3;
+        padding-right: 20px;
+        width: 668px;
+        height: 20px;
+        display: inline-block;
+        text-align: right;
+        font-size: 14px;
+        color: #666;
+      }
+      .count_footer_true {
+        display: inline-block;
+        width: 252px;
+        height: 48px;
+        line-height: 50px;
+        text-align: center;
+        background-color: #f10180;
+        border: 1px solid #f10180;
+        color: #fff;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+.history_shop {
+  width: 960px;
+  margin: 0px auto;
+  .historylist {
+    display: flex;
+    align-items: center;
+    .history_prev,
+    .history_next {
+      width: 28px;
+      height: 55px;
+      text-align: center;
+      line-height: 55px;
+      font-size: 30px;
+      color: #e1e1e1;
+      font-weight: bold;
+      // background-color: #627db6;
+    }
+    .history_contaiter {
+      width: 924px;
+      display: flex;
+      .history_item {
+        height: 275px;
+        margin: 0 7px;
+        img {
+          width: 140px;
+          height: 178px;
+        }
+        h3 {
+          color: #333;
+          font-size: 12px;
+          font-weight: normal;
+          margin: 6px 0;
+          width: 140px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .history_item_text {
+          color: #333;
+          font-size: 12px;
+          margin-bottom: 3px;
+          width: 140px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .history_item_footer {
+          display: flex;
+          justify-content: space-between;
+          width: 140px;
+          .history_item_price {
+            font-size: 16px;
+            color: #333;
+          }
+          .history_item_button {
+            color: #e00078;
+            background-color: #fcedf2;
+            border: 1px solid #ffbee0;
+            width: 70px;
+            font: 12px/22px tahoma, arial, Hiragino Sans GB, WenQuanYi Micro Hei,
+              "\5FAE\8F6F\96C5\9ED1", "\5B8B\4F53", sans-serif;
+            height: 22px;
+            border-radius: 3px;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: top;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+.quality_guarantee {
+  width: 960px;
+  margin: 80px auto;
+  display: flex;
+  justify-content: space-between;
+  div {
+    width: 302px;
+    height: 141px;
+    background-image: url("./images/sprites-hash.png");
+  }
+  .quality_1th {
+    background-position: -306px 0;
+  }
+  .quality_2th {
+    background-position: 0 0;
+  }
+  .quality_3th {
+    background-position: 0 -145px;
   }
 }
 </style>
