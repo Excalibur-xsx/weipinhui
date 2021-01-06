@@ -101,21 +101,22 @@
       </div>
       <!-- 商品列表 -->
       <div class="productList">
-        <virtual-list
+        <!-- 虚拟长列表的使用 -->
+        <!-- <virtual-list
           :style="{ height: '360px', width: '100%', 'overflow-y': 'auto' }"
           :size="120"
           :remain="3"
           :data-key="'id'"
           :data-sources="productList.goodsList"
           :data-component="itemComponent"
-        >
+        > -->
           <!-- 单个商品 -->
-          <!-- <Product
+          <Product
             v-for="goods in productList.goodsList"
             :key="goods.id"
             :goods="goods"
-          /> -->
-        </virtual-list>
+          />
+        <!-- </virtual-list> -->
       </div>
       <!-- 分页器 -->
       <div class="paginationContainer">
@@ -131,7 +132,7 @@
 </template>
 
 <script>
-import VirtualList from "vue-virtual-scroll-list";
+// import VirtualList from "vue-virtual-scroll-list";
 import Option from "./Option";
 import Pagination from "../../components/Pagination";
 import Product from "./Product";
@@ -152,7 +153,7 @@ export default {
         props: [], //属性选项
         trademark: "", //品牌
       },
-      itemComponent: Product,
+      // itemComponent: Product,
       //价格区间排序区域的选中样式
       isPriceActive: false,
       //是否是综合
@@ -250,8 +251,8 @@ export default {
   components: {
     Option,
     Pagination,
-    // Product,
-    "virtual-list": VirtualList,
+    Product,
+    // "virtual-list": VirtualList,
   },
 };
 </script>

@@ -1,21 +1,23 @@
 <template>
-  <div class="product" @click="toDetail(source.id)">
-    <img v-lazy="source.defaultImg" />
-    <div class="priceContainer">
-      <div class="special">
-        <span>特卖价</span>
+  <div>
+    <div class="product" @click="toDetail(goods.id)">
+      <img v-lazy="goods.defaultImg" />
+      <div class="priceContainer">
+        <div class="special">
+          <span>特卖价</span>
+        </div>
+        <div class="price">
+          <span>￥{{ goods.price }}</span>
+        </div>
+        <div class="discount">
+          <span>￥{{ goods.price - 100 }}</span>
+          <span>1.5折</span>
+        </div>
       </div>
-      <div class="price">
-        <span>￥{{ source.price }}</span>
-      </div>
-      <div class="discount">
-        <span>￥{{ source.price - 100 }}</span>
-        <span>1.5折</span>
-      </div>
+      <h3 class="ProductTitle">
+        {{ goods.title }}
+      </h3>
     </div>
-    <h3 class="ProductTitle">
-      {{ source.title }}
-    </h3>
   </div>
 </template>
 
