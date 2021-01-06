@@ -27,6 +27,9 @@ const Home = () => import(/* webpackChunkName: "Home"*/ "../views/Home")
 //搜索页面
 const SearchList = () =>
   import(/* webpackChunkName: "Home"*/ "../views/Search/SearchList")
+//唯品快抢
+const ForestallBuy = () =>
+  import(/* webpackChunkName: "ForestallBuy"*/ "../views/ForestallBuy")
 
 // 安装插件
 Vue.use(VueRouter)
@@ -44,10 +47,16 @@ const router = new VueRouter({
     {
       path: "/register",
       component: Register,
+      meta: {
+        title: "注册",
+      },
     },
     {
       path: "/login",
       component: Login,
+      meta: {
+        title: "登录",
+      },
     },
     {
       path: "/navlogin",
@@ -59,6 +68,14 @@ const router = new VueRouter({
       component: SearchList,
       meta: {
         title: "搜索",
+      },
+    },
+    {
+      name: "forestallBuy",
+      path: "/forestallBuy",
+      component: ForestallBuy,
+      meta: {
+        title: "唯品快抢",
       },
     },
   ],

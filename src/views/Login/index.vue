@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="registerContainer">
+    <div class="registerContainer" v-wechat-title="$route.meta.title">
       <div class="registerHeader">
         <img
           class="logo"
@@ -128,7 +128,9 @@ export default {
       // console.log(result);
     },
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$route.meta.title);
+  },
 };
 </script>
 

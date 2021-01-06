@@ -1,5 +1,5 @@
 <template>
-  <div class="registerContainer">
+  <div class="registerContainer" v-wechat-title="$route.meta.title">
     <div class="registerHeader">
       <img
         class="logo"
