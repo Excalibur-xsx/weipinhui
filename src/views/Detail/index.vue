@@ -110,6 +110,7 @@
             @hideX="isClick = false"
             @selectAddress="selectAddress"
             :provinceInfo="provinceInfo"
+            :addressInfo="addressInfo"
           />
           <p class="time">现在付款，最快明天送达</p>
         </div>
