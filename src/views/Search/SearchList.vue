@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-wechat-title="$route.meta.title">
     <div class="productContainer">
       <!-- 当前搜索内容 -->
       <ul class="nav">
@@ -39,12 +39,26 @@
       <Option :addTrademark="addTrademark" :addAttrs="addAttrs" />
       <!-- 排序bar -->
       <div class="sortContainer">
-        <div class="sortType active">
+        <div
+          :class="{ sortType: true, active: isSynthesis }"
+          @click="sort('1')"
+        >
           <p>综合</p>
         </div>
-        <div class="sortType">
+        <div
+          :class="{ sortType: true, active: isPriceSort }"
+          @click="sort('2')"
+        >
           <p>价格</p>
-          <i></i>
+          <!-- icon-paixu-1 降序   -->
+          <!-- icon-sort-small-copy-copy 升序 -->
+          <i
+            :class="{
+              iconfont: true,
+              'icon-paixu-1': isdDscending && isPriceSort,
+              'icon-sort-small-copy-copy': !isdDscending && isPriceSort,
+            }"
+          ></i>
         </div>
         <div class="sortType">
           <p>折扣</p>
@@ -53,15 +67,25 @@
         <div class="sortType">
           <p>销量</p>
         </div>
-        <div class="priceArae priceActive">
+        <div :class="{ priceArae: true, priceActive: isPriceActive }">
           <span class="startPrice">
-            <input type="text" placeholder="￥" />
+            <input
+              type="text"
+              placeholder="￥"
+              @focus="isPriceActive = true"
+              @blur="isPriceActive = false"
+            />
           </span>
           <i>-</i>
           <span class="endPrice">
-            <input type="text" placeholder="￥" />
+            <input
+              type="text"
+              placeholder="￥"
+              @focus="isPriceActive = true"
+              @blur="isPriceActive = false"
+            />
           </span>
-          <button class="success">确定</button>
+          <button class="success" v-if="isPriceActive">确定</button>
         </div>
         <div class="paging">
           <span class="current">{{ options.pageNo }}</span
@@ -77,34 +101,27 @@
       </div>
       <!-- 商品列表 -->
       <div class="productList">
-        <div
-          class="product"
-          v-for="goods in productList.goodsList"
-          :key="goods.id"
+        <virtual-list
+          :style="{ height: '360px', width: '100%', 'overflow-y': 'auto' }"
+          :size="120"
+          :remain="3"
+          :data-key="'id'"
+          :data-sources="productList.goodsList"
+          :data-component="itemComponent"
         >
-          <img :src="goods.defaultImg" />
-          <div class="priceContainer">
-            <div class="special">
-              <span>特卖价</span>
-            </div>
-            <div class="price">
-              <span>￥{{ goods.price }}</span>
-            </div>
-            <div class="discount">
-              <span>￥{{ goods.price - 100 }}</span>
-              <span>1.5折</span>
-            </div>
-          </div>
-          <h3 class="ProductTitle">
-            {{ goods.title }}
-          </h3>
-        </div>
+          <!-- 单个商品 -->
+          <!-- <Product
+            v-for="goods in productList.goodsList"
+            :key="goods.id"
+            :goods="goods"
+          /> -->
+        </virtual-list>
       </div>
       <!-- 分页器 -->
       <div class="paginationContainer">
         <Pagination
-          :total="productList.totalPages"
-          :pageSize="5"
+          :total="productList.total"
+          :pageSize="options.pageSize"
           :currentPage="options.pageNo"
           @currentChange="handleCurrentChange"
         />
@@ -114,8 +131,10 @@
 </template>
 
 <script>
+import VirtualList from "vue-virtual-scroll-list";
 import Option from "./Option";
 import Pagination from "../../components/Pagination";
+import Product from "./Product";
 import { mapActions, mapState } from "vuex";
 export default {
   name: "SearchList",
@@ -129,10 +148,19 @@ export default {
         keyword: "", //搜索关键字
         order: "1:desc", //1代表是综合排序，desc代表升序
         pageNo: 1, //第一页
-        pageSize: 10, //每页显示几个
+        pageSize: 100, //每页显示几个
         props: [], //属性选项
         trademark: "", //品牌
       },
+      itemComponent: Product,
+      //价格区间排序区域的选中样式
+      isPriceActive: false,
+      //是否是综合
+      isSynthesis: true,
+      //是否是价格排序
+      isPriceSort: false,
+      //是否是价格排序的降序
+      isdDscending: true,
     };
   },
   computed: {
@@ -142,6 +170,36 @@ export default {
   },
   methods: {
     ...mapActions(["getSearchList"]),
+    //排序
+    sort(type) {
+      let [orderNum, orderType] = this.options.order.split(":");
+      //不是第一次点击
+      if (type === orderNum) {
+        if (type === "2") {
+          this.isPriceSort = true;
+          this.isdDscending = !this.isdDscending;
+          this.isSynthesis = false;
+          orderType = orderType === "desc" ? "asc" : "desc";
+        } else {
+          this.isSynthesis = true;
+          orderType = "desc";
+        }
+
+        //第一次点击
+      } else {
+        this.isSynthesis = true;
+        this.isPriceSort = false;
+        if (type === "2") {
+          this.isPriceSort = true;
+          this.isdDscending = true;
+          this.isSynthesis = false;
+        }
+        orderType = "desc";
+      }
+      this.options.order = `${type}:${orderType}`;
+      this.updataProductList();
+    },
+    //下一页
     nextPage(type) {
       if (this.options.pageNo >= this.productList.totalPages) {
         return;
@@ -154,11 +212,13 @@ export default {
       this.updataProductList(pageNo);
       this.options.pageNo = pageNo;
     },
+    //重新请求列表
     updataProductList(pageNo = 1) {
       let options = { ...this.options, pageNo };
       this.options = options;
       this.getSearchList(options);
     },
+    //页面发生改变
     handleCurrentChange(pageNo) {
       this.updataProductList(pageNo);
     },
@@ -190,6 +250,8 @@ export default {
   components: {
     Option,
     Pagination,
+    // Product,
+    "virtual-list": VirtualList,
   },
 };
 </script>
@@ -262,6 +324,18 @@ export default {
       text-align: center;
       line-height: 40px;
       border-right: 1px solid #ccc;
+      cursor: pointer;
+      position: relative;
+      i {
+        top: 0;
+        position: absolute;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        right: 3px;
+        font-size: 20px;
+        color: #ff31a3;
+      }
     }
     .active {
       border: 1px solid #f10180;
@@ -293,7 +367,7 @@ export default {
       }
     }
     .priceActive {
-      border: 1px solid #ccc;
+      // border: 1px solid #ccc;
       background-color: #fff;
       color: #f10180;
     }
@@ -321,58 +395,6 @@ export default {
   display: flex;
   margin: 20px 0;
   flex-wrap: wrap;
-  .product {
-    width: 218px;
-    height: 340px;
-    border: 1px solid #ccc;
-    padding: 2px;
-    margin: 5px;
-    img {
-      width: 216px;
-      height: 218px;
-    }
-    .priceContainer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .special {
-        background-color: #ff31a3;
-        color: #fff;
-        padding: 2px;
-        border-radius: 10px;
-        flex-shrink: 0;
-      }
-      .price {
-        font-size: 22px;
-        font-weight: bold;
-      }
-      .discount {
-        color: #999;
-        font-size: 14px;
-        overflow: hidden;
-        :nth-child(1) {
-          margin: 0 3px;
-          text-decoration: line-through;
-        }
-      }
-    }
-    .ProductTitle {
-      color: #666;
-      margin-top: 10px;
-      padding: 0 5px;
-      font-weight: inherit;
-      font-size: 12px;
-      //设置文本两行超出隐藏...
-      display: -webkit-box; //开启webkit内核的盒模型
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -webkit-box-orient: vertical; //设置子元素对齐方式
-      -webkit-line-clamp: 2; //设置为2行文本溢出隐藏
-    }
-  }
-  .product:hover {
-    border: 1px solid #ff31a3;
-  }
 }
 .pagination {
   margin: 0 auto;

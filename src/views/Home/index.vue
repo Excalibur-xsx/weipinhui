@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-wechat-title="$route.meta.title">
     <router-link to="/searchList">搜索</router-link>
   </div>
 </template>

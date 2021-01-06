@@ -1,6 +1,6 @@
 <template>
   <div class="pagination">
-    <span>共:{{ total }}页</span>
+    <span>共:{{ Math.ceil(total / pageSize) }}页</span>
     <button
       @click="setCurrentPage(myCurrentPage - 1)"
       :disabled="myCurrentPage <= 1"
@@ -33,7 +33,6 @@
     >
       >
     </button>
-    
   </div>
 </template>
 
