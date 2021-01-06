@@ -94,7 +94,8 @@
           >
             <p v-if="!addressInfo.province">请选择配送地址</p>
             <p v-else>
-              {{ addressInfo.province }} {{ addressInfo.city }} {{ addressInfo.county }}
+              {{ addressInfo.province }} {{ addressInfo.city }}
+              {{ addressInfo.county }}
               {{ addressInfo.street }}
             </p>
             <i
@@ -120,7 +121,7 @@
           <i class="iconfont icon-wenhao"></i>
         </div>
       </div>
-      <div class="color attr">
+      <div class="color attr" :class="noSelectColor?'active':''">
         <p class="attrName">颜色</p>
         <div class="colorContainer">
           <div
@@ -138,6 +139,7 @@
       </div>
       <div
         class="specs attr"
+        :class="noSelectAttr?'active':''"
         v-for="(attr, attrIndex) in noColorInfo"
         :key="attr.id"
       >
@@ -149,9 +151,7 @@
             :key="attrValue.id"
             @click="selectAttr(attrIndex, attrValueIndex)"
           >
-            <span
-              >{{ attrValue.saleAttrValueName }}</span
-            >
+            <span>{{ attrValue.saleAttrValueName }}</span>
             <i v-if="attrValue.isActive" class="iconfont icon-gou1"></i>
           </div>
         </div>
@@ -188,7 +188,12 @@
 import Zoom from "./Zoom";
 import ImgList from "./ImgList";
 import Address from "../../components/Address";
-import { getGoodDetail, getProvince,addToShopcart,getShopcartList } from "../../api/detail";
+import {
+  getGoodDetail,
+  getProvince,
+  addToShopcart,
+  getShopcartList,
+} from "../../api/detail";
 export default {
   name: "Detail",
   data() {
@@ -199,15 +204,17 @@ export default {
       goodDetail: {},
       currentIndex: 0,
       provinceInfo: [],
-      addressInfo: {}
+      addressInfo: {},
+      noSelectColor: false,
+      noSelectAttr: false
     };
   },
-  watch:{
-    "addressInfo.street"(){
-      if(this.addressInfo.street){
-        localStorage.setItem("address",JSON.stringify(this.addressInfo))
+  watch: {
+    "addressInfo.street"() {
+      if (this.addressInfo.street) {
+        localStorage.setItem("address", JSON.stringify(this.addressInfo));
       }
-    }
+    },
   },
   computed: {
     colorInfo() {
@@ -238,8 +245,8 @@ export default {
       this.provinceInfo = res.data.list;
     },
     //当Address组件选择地址时
-    selectAddress(title,name){
-      this.$set(this.addressInfo,title,name)
+    selectAddress(title, name) {
+      this.$set(this.addressInfo, title, name);
     },
     //获取当前选中轮播图图片下标
     getIndex(index) {
@@ -247,6 +254,7 @@ export default {
     },
     //选择颜色
     selectColor(index) {
+      this.noSelectColor = false
       this.$set(this.colorInfo.spuSaleAttrValueList[index], "isActive", true);
       this.colorInfo.spuSaleAttrValueList.map((attr, i) => {
         if (i !== index) {
@@ -257,6 +265,7 @@ export default {
     },
     //选择其他属性
     selectAttr(attrIndex, attrValueIndex) {
+      this.noSelectAttr = false
       this.$set(
         this.noColorInfo[attrIndex].spuSaleAttrValueList[attrValueIndex],
         "isActive",
@@ -270,24 +279,51 @@ export default {
       });
     },
     //加入购物车
-    addShopcart(){
-      addToShopcart(this.goodDetail.skuInfo.id,this.count)
+    addShopcart() {
+      //判断是否选择颜色
+      const colorList = this.colorInfo.spuSaleAttrValueList;
+      const selectedColor = colorList.find((item) => item.isActive);
+      if(!selectedColor){
+        this.noSelectColor = true
+      }else{
+        this.noSelectColor = false
+      }
+      //判断是否选择其他属性
+      const selectedAllAttr = this.noColorInfo.every(attr=>{
+        const selectedAttr = attr.spuSaleAttrValueList.find(item=>item.isActive)
+        if(selectedAttr){
+          return true
+        }else{
+          return false
+        }
+      })
+      if(!selectedAllAttr){
+        this.noSelectAttr = true
+      }else{
+        this.noSelectAttr = false
+      }
+
+      //每个属性都选择才发请求
+      if(!this.noSelectColor && !this.noSelectAttr){
+        addToShopcart(this.goodDetail.skuInfo.id,this.count)
+      }
     },
     //test获取购物车列表
-    getShopcartList(){
-      getShopcartList()
-    }
+    getShopcartList() {
+      getShopcartList();
+    },
   },
   async mounted() {
     //获取商品详情数据
     // const res = await getGoodDetail(1361);
-    const res = await getGoodDetail(113);
+    // const res = await getGoodDetail(113);
     // const res = await getGoodDetail(1194)
+    const res = await getGoodDetail(123)
     this.goodDetail = res;
 
     //自动识别地址
-    const address = localStorage.getItem("address")
-    this.addressInfo = JSON.parse(address)
+    const address = localStorage.getItem("address");
+    this.addressInfo = JSON.parse(address);
   },
   components: {
     Zoom,
@@ -538,6 +574,16 @@ export default {
       line-height: 32px;
     }
   }
+  .color,.specs{
+    &.active {
+      padding: 10px;
+      padding-bottom: 0;
+      border: 1px solid indianred;
+      background-color: #fdedf5;
+      position: relative;
+      left: -10px;
+    }
+  }
   .colorContainer {
     display: flex;
     flex-wrap: wrap;
@@ -546,6 +592,7 @@ export default {
     margin: 0 10px 10px 0;
     padding: 1px;
     border: 1px solid #ccc;
+    background-color: #fff;
     display: flex;
     align-items: center;
     position: relative;
@@ -596,6 +643,7 @@ export default {
       margin: 0 10px 10px 0;
       padding: 1px;
       border: 1px solid #ccc;
+      background-color: #fff;
       position: relative;
       box-sizing: border-box;
       &.active {
