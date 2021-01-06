@@ -59,7 +59,7 @@
     <div class="rightContainer" v-if="goodDetail.skuInfo">
       <div class="brandName">
         <!-- <a href="www.baidu.com">苹果</a> -->
-        <a href="www.baidu.com">{{ goodDetail.skuInfo.skuName.slice(0, 2) }}</a>
+        <a href="www.baidu.com">{{ goodDetail.skuInfo.skuName }}</a>
         <p class="goodTitle">
           <!-- <span>iPhone11 128G 双卡双待（无充电器耳机版）全网通手机</span> -->
           <span>{{ goodDetail.skuInfo.skuDesc }}</span>
@@ -70,11 +70,11 @@
           <div class="price">
             <div class="presentPrice">
               <span>￥</span>
-              <p>4798</p>
+              <p>{{ goodDetail.price }}</p>
             </div>
             <div class="originalPrice">
               <span>￥</span>
-              <p>5299</p>
+              <p>{{ goodDetail.price + 999 }}</p>
             </div>
             <p class="discount">9.1折</p>
           </div>
@@ -92,8 +92,11 @@
             :class="isClick ? 'isClick' : ''"
             @click="showAddress"
           >
-            <p v-if="!provinceName">请选择配送地址</p>
-            <p v-else>{{ provinceName }} {{ cityName }} {{ countyName }} {{ streetName }}</p>
+            <p v-if="!addressInfo.province">请选择配送地址</p>
+            <p v-else>
+              {{ addressInfo.province }} {{ addressInfo.city }} {{ addressInfo.county }}
+              {{ addressInfo.street }}
+            </p>
             <i
               class="iconfont"
               :class="
@@ -104,10 +107,7 @@
           <Address
             v-show="isClick"
             @hideX="isClick = false"
-            @selectProvince="selectProvince"
-            @selectCity="selectCity"
-            @selectCounty="selectCounty"
-            @selectStreet="selectStreet"
+            @selectAddress="selectAddress"
             :provinceInfo="provinceInfo"
           />
           <p class="time">现在付款，最快明天送达</p>
@@ -142,14 +142,18 @@
         :key="attr.id"
       >
         <p class="attrName">{{ attr.saleAttrName.slice(2) }}</p>
-        <div
-          :class="attrValue.isActive ? 'active' : ''"
-          v-for="(attrValue, attrValueIndex) in attr.spuSaleAttrValueList"
-          :key="attrValue.id"
-          @click="selectAttr(attrIndex, attrValueIndex)"
-        >
-          <span>{{ attrValue.saleAttrValueName }}</span>
-          <i v-if="attrValue.isActive" class="iconfont icon-gou1"></i>
+        <div class="attrContainer">
+          <div
+            :class="attrValue.isActive ? 'active' : ''"
+            v-for="(attrValue, attrValueIndex) in attr.spuSaleAttrValueList"
+            :key="attrValue.id"
+            @click="selectAttr(attrIndex, attrValueIndex)"
+          >
+            <span
+              >{{ attrValue.saleAttrValueName }}</span
+            >
+            <i v-if="attrValue.isActive" class="iconfont icon-gou1"></i>
+          </div>
         </div>
       </div>
       <div class="count attr">
@@ -163,7 +167,7 @@
         ></el-input-number>
       </div>
       <button class="buyBtn">
-        <p>￥6666</p>
+        <p>￥{{ goodDetail.price * count }}</p>
         <span>特卖价</span>
         <span>抢 ></span>
       </button>
@@ -195,11 +199,15 @@ export default {
       goodDetail: {},
       currentIndex: 0,
       provinceInfo: [],
-      provinceName: "",
-      cityName: "",
-      countyName: "",
-      streetName: "",
+      addressInfo: {}
     };
+  },
+  watch:{
+    "addressInfo.street"(){
+      if(this.addressInfo.street){
+        localStorage.setItem("address",JSON.stringify(this.addressInfo))
+      }
+    }
   },
   computed: {
     colorInfo() {
@@ -223,22 +231,16 @@ export default {
     //选择地址
     async showAddress() {
       this.isClick = true;
+      if (this.provinceInfo.length) {
+        return;
+      }
       const res = await getProvince();
       this.provinceInfo = res.data.list;
       // console.log(res)
     },
     //当Address组件选择地址时
-    selectProvince(name) {
-      this.provinceName = name;
-    },
-    selectCity(name) {
-      this.cityName = name;
-    },
-    selectCounty(name) {
-      this.countyName = name;
-    },
-    selectStreet(name) {
-      this.streetName = name;
+    selectAddress(title,name){
+      this.$set(this.addressInfo,title,name)
     },
     handleChange() {},
     //获取当前选中轮播图图片下标
@@ -272,9 +274,14 @@ export default {
   },
   async mounted() {
     //获取商品详情数据
-    const res = await getGoodDetail(1361);
+    // const res = await getGoodDetail(1361);
+    const res = await getGoodDetail(113);
     // const res = await getGoodDetail(1194)
     this.goodDetail = res;
+
+    //自动识别地址
+    const address = localStorage.getItem("address")
+    this.addressInfo = JSON.parse(address)
   },
   components: {
     Zoom,
@@ -460,7 +467,7 @@ export default {
   .attr {
     display: flex;
     align-items: center;
-    margin: 20px 0;
+    margin: 15px 0;
   }
   .delivery {
     position: relative;
@@ -489,7 +496,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    p{
+    p {
       max-width: 240px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -517,11 +524,20 @@ export default {
       color: #333;
     }
   }
+  .color {
+    align-items: flex-start;
+    p {
+      white-space: nowrap;
+      height: 32px;
+      line-height: 32px;
+    }
+  }
   .colorContainer {
     display: flex;
+    flex-wrap: wrap;
   }
   .colorValue {
-    margin-right: 10px;
+    margin: 0 10px 10px 0;
     padding: 1px;
     border: 1px solid #ccc;
     display: flex;
@@ -547,10 +563,31 @@ export default {
     }
   }
   .specs {
-    div {
+    align-items: flex-start;
+    p {
+      white-space: nowrap;
       height: 32px;
       line-height: 32px;
-      margin-right: 10px;
+    }
+    span {
+      padding: 0 20px;
+    }
+    .icon-gou1 {
+      position: absolute;
+      bottom: -2px;
+      right: -1px;
+      color: indianred;
+    }
+  }
+  .attrContainer {
+    display: flex;
+    flex-wrap: wrap;
+    div {
+      height: 32px;
+      // line-height: 32px;
+      display: flex;
+      align-items: center;
+      margin: 0 10px 10px 0;
       padding: 1px;
       border: 1px solid #ccc;
       position: relative;
@@ -559,15 +596,6 @@ export default {
         padding: 0;
         border: 2px solid indianred;
       }
-    }
-    span {
-      padding: 0 20px;
-    }
-    .icon-gou1 {
-      position: absolute;
-      bottom: -8px;
-      right: -1px;
-      color: indianred;
     }
   }
   .count {
@@ -599,6 +627,7 @@ export default {
     width: 252px;
     height: 46px;
     padding: 0 40px;
+    margin-left: 40px;
     box-sizing: border-box;
     border: none;
     outline: none;

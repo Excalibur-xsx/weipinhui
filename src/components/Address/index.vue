@@ -9,23 +9,23 @@
     <i class="iconfont icon-cha" @click="$emit('hideX')"></i>
     <div>
       <ul v-show="provinceActive" class="addressWrap">
-        <li v-for="item in provinceInfo" :key="item.id">
-          <a @click="selectProvince(item.id, item.name)">{{ item.name }}</a>
+        <li v-for="item in provInfo" :key="item.id">
+          <a :class="item.active?'active':''" @click="selectProvince(item.id, item.name)">{{ item.name }}</a>
         </li>
       </ul>
       <ul v-show="cityActive" class="addressWrap">
         <li v-for="item in cityInfo" :key="item.id">
-          <a @click="selectCity(item.id, item.name)">{{ item.name }}</a>
+          <a :class="item.active?'active':''" @click="selectCity(item.id, item.name)">{{ item.name }}</a>
         </li>
       </ul>
       <ul v-show="countyActive" class="addressWrap">
         <li v-for="item in countyInfo" :key="item.id">
-          <a @click="selectCounty(item.id, item.name)">{{ item.name }}</a>
+          <a :class="item.active?'active':''" @click="selectCounty(item.id, item.name)">{{ item.name }}</a>
         </li>
       </ul>
       <ul v-show="streetActive" class="addressWrap">
         <li v-for="item in streetInfo" :key="item.id">
-          <a @click="selectStreet(item.name)">{{ item.name }}</a>
+          <a :class="item.active?'active':''" @click="selectStreet(item.id,item.name)">{{ item.name }}</a>
         </li>
       </ul>
     </div>
@@ -38,9 +38,10 @@ export default {
   name: "Address",
   data() {
     return {
-      cityInfo: {},
-      countyInfo: {},
-      streetInfo: {},
+      provInfo: [],
+      cityInfo: [],
+      countyInfo: [],
+      streetInfo: [],
       provinceActive: true,
       cityActive: false,
       countyActive: false,
@@ -51,19 +52,32 @@ export default {
     };
   },
   props: ["provinceInfo"],
+  watch:{
+    provinceInfo(val){
+      this.provInfo = val
+    }
+  },
   methods: {
     //选择省份
     async selectProvince(id, name) {
-      this.$emit("selectProvince", name);
-      this.$emit("selectCity", "");
-      this.$emit("selectCounty", "");
-      this.$emit("selectStreet", "");
+      this.provInfo.map(info=>{
+        if(info.id === id){
+          this.$set(info,"active",true)
+        }else{
+          this.$set(info,"active",false)
+        }
+        return info
+      })
+      this.$emit("selectAddress","province", name);
+      this.$emit("selectAddress","city", "");
+      this.$emit("selectAddress","county", "");
+      this.$emit("selectAddress","street", "");
       this.provinceActive = false;
       this.cityTitleActive = true;
       this.countyTitleActive = false
       this.streetTitleActive = false
       this.cityActive = true;
-      this.cityInfo = {};
+      this.cityInfo = [];
       let city;
       if (id === "101101") {
         city = [{ name: "北京市",id: "101101" }];
@@ -75,32 +89,56 @@ export default {
     },
     //选择市
     async selectCity(id, name) {
-      this.$emit("selectCity", name);
-      this.$emit("selectCounty", "");
-      this.$emit("selectStreet", "");
+      this.cityInfo.map(info=>{
+        if(info.id === id){
+          this.$set(info,"active",true)
+        }else{
+          this.$set(info,"active",false)
+        }
+        return info
+      })
+      this.$emit("selectAddress","city", name);
+      this.$emit("selectAddress","county", "");
+      this.$emit("selectAddress","street", "");
       this.countyTitleActive = true;
       this.streetTitleActive = false
       this.provinceActive = false;
       this.cityActive = false;
       this.countyActive = true;
-      this.countyInfo = {};
+      this.countyInfo = [];
       const county = await getAddress(id);
       this.countyInfo = county.data.list;
     },
     //选择县
     async selectCounty(id, name) {
-      this.$emit("selectCounty", name);
-      this.$emit("selectStreet", "");
+      this.countyInfo.map(info=>{
+        if(info.id === id){
+          this.$set(info,"active",true)
+        }else{
+          this.$set(info,"active",false)
+        }
+        return info
+      })
+      this.$emit("selectAddress","county", name);
+      this.$emit("selectAddress","street", "");
       this.streetTitleActive = true;
       this.countyActive = false;
       this.streetActive = true;
-      this.streetInfo = {};
+      this.streetInfo = [];
       const street = await getAddress(id);
       this.streetInfo = street.data.list;
     },
     //选择街道
-    selectStreet(name) {
-      this.$emit("selectStreet", name);
+    selectStreet(id,name) {
+      this.streetInfo.map(info=>{
+        if(info.id === id){
+          this.$set(info,"active",true)
+        }else{
+          this.$set(info,"active",false)
+        }
+        return info
+      })
+      this.$emit("selectAddress","street", name);
       this.$emit("hideX");
     },
     //点击地址头部
@@ -190,6 +228,10 @@ export default {
       text-overflow: ellipsis;
       padding: 2px 10px;
       border: 1px solid transparent;
+      &.active{
+        background-color: indianred;
+        color: #fff;
+      }
     }
     a:hover {
       text-decoration: none;

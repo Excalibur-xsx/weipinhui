@@ -78,6 +78,7 @@ export default {
     left: 0;
     display: none;
     overflow: hidden;
+    background-color: #fff;
     img {
       width: 200%;
       height: 200%;

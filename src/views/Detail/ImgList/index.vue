@@ -30,11 +30,6 @@ import "swiper/swiper-bundle.min.css";
 Swiper.use([Navigation]);
 export default {
   name: "ImgList",
-  data() {
-    return {
-      // currentIndex: 0
-    };
-  },
   props: {
     skuImageList: {
       type: Array,
