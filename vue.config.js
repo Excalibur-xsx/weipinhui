@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require("path")
 
 module.exports = {
   // lintOnSave: false, // 关闭所有eslint检查
@@ -28,4 +28,4 @@ module.exports = {
       },
     },
   },
-};
+}
