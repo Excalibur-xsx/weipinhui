@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { getAddress } from "../../api/detail";
+import { getAddress, getAddress2 } from "../../api/detail";
 export default {
   name: "Address",
   data() {
@@ -95,48 +95,54 @@ export default {
     async provinceInfo(val) {
       this.provInfo = val;
       this.provInfo.map((item) => {
-        if (item.name === this.addressInfo.province) {
+        if (item.name === this.addressInfo.addressName.province) {
           this.$set(item, "active", true);
           this.provinceId = item.id;
         }
         return item;
       });
       let city;
-      if(this.cityInfo.length) return
-      if (this.provinceId === "101101") {
-        city = [{ name: "北京市", id: "101101" }];
-        this.cityInfo = city;
+      if (this.cityInfo.length) return;
+      if (
+        this.provinceId === "101101" ||
+        this.provinceId === "101102" ||
+        this.provinceId === "105100" ||
+        this.provinceId === "103101"
+      ) {
+        city = await getAddress2(this.provinceId);
+        this.cityInfo = city.data.list;
       } else {
         city = await getAddress(this.provinceId);
         this.cityInfo = city.data.list;
       }
+      this.cityInfo.splice(0,1)
     },
     cityInfo() {
       this.cityInfo.map((item) => {
-        if (item.name === this.addressInfo.city) {
+        if (item.name === this.addressInfo.addressName.city) {
           this.$set(item, "active", true);
           this.cityId = item.id;
         }
-        return item
+        return item;
       });
     },
-    countyInfo(){
+    countyInfo() {
       this.countyInfo.map((item) => {
-        if (item.name === this.addressInfo.county) {
+        if (item.name === this.addressInfo.addressName.county) {
           this.$set(item, "active", true);
           this.countyId = item.id;
         }
-        return item
+        return item;
       });
     },
-    streetInfo(){
+    streetInfo() {
       this.streetInfo.map((item) => {
-        if (item.name === this.addressInfo.street) {
+        if (item.name === this.addressInfo.addressName.street) {
           this.$set(item, "active", true);
         }
-        return item
+        return item;
       });
-    }
+    },
   },
   methods: {
     //选择省份
@@ -149,24 +155,31 @@ export default {
         }
         return info;
       });
-      this.$emit("selectAddress", "province", name);
-      this.$emit("selectAddress", "city", "");
-      this.$emit("selectAddress", "county", "");
-      this.$emit("selectAddress", "street", "");
+      this.$emit("selectAddress", "province", name,id);
+      this.$emit("selectAddress", "city", "",id);
+      this.$emit("selectAddress", "county", "",id);
+      this.$emit("selectAddress", "street", "",id);
       this.provinceActive = false;
       this.cityTitleActive = true;
       this.countyTitleActive = false;
       this.streetTitleActive = false;
       this.cityActive = true;
       this.cityInfo = [];
+      //如果选择的是北京、上海、重庆、天津，
       let city;
-      if (id === "101101") {
-        city = [{ name: "北京市", id: "101101" }];
-        this.cityInfo = city;
+      if (
+        id === "101101" ||
+        id === "101102" ||
+        id === "105100" ||
+        id === "103101"
+      ) {
+        city = await getAddress2(id);
+        this.cityInfo = city.data.list;
       } else {
         city = await getAddress(id);
         this.cityInfo = city.data.list;
       }
+      this.cityInfo.splice(0,1)
     },
     //选择市
     async selectCity(id, name) {
@@ -178,9 +191,9 @@ export default {
         }
         return info;
       });
-      this.$emit("selectAddress", "city", name);
-      this.$emit("selectAddress", "county", "");
-      this.$emit("selectAddress", "street", "");
+      this.$emit("selectAddress", "city", name,id);
+      this.$emit("selectAddress", "county", "",id);
+      this.$emit("selectAddress", "street", "",id);
       this.countyTitleActive = true;
       this.streetTitleActive = false;
       this.provinceActive = false;
@@ -189,6 +202,7 @@ export default {
       this.countyInfo = [];
       const county = await getAddress(id);
       this.countyInfo = county.data.list;
+      this.countyInfo.splice(0,1)
     },
     //选择县
     async selectCounty(id, name) {
@@ -200,14 +214,15 @@ export default {
         }
         return info;
       });
-      this.$emit("selectAddress", "county", name);
-      this.$emit("selectAddress", "street", "");
+      this.$emit("selectAddress", "county", name,id);
+      this.$emit("selectAddress", "street", "",id);
       this.streetTitleActive = true;
       this.countyActive = false;
       this.streetActive = true;
       this.streetInfo = [];
       const street = await getAddress(id);
       this.streetInfo = street.data.list;
+      this.streetInfo.splice(0,1)
     },
     //选择街道
     selectStreet(id, name) {
@@ -219,7 +234,7 @@ export default {
         }
         return info;
       });
-      this.$emit("selectAddress", "street", name);
+      this.$emit("selectAddress", "street", name,id);
       this.$emit("hideX");
     },
     //点击地址头部
@@ -234,18 +249,27 @@ export default {
       this.cityActive = true;
       this.countyActive = false;
       this.streetActive = false;
-      if(this.countyInfo.length) return
+      if (this.countyInfo.length) return;
       const county = await getAddress(this.cityId);
       this.countyInfo = county.data.list;
+      this.countyInfo.splice(0,1)
     },
     async clickCounty() {
       this.provinceActive = false;
       this.cityActive = false;
       this.countyActive = true;
       this.streetActive = false;
-      if(this.streetInfo.length) return
+      //获取县数据
+      if (this.countyInfo.length) return;
+      const res = await getAddress(this.addressInfo.addressIds.cityId)
+      const county = res.data.list
+      county.splice(0,1)
+      this.countyInfo = county
+      //获取街道数据
+      if (this.streetInfo.length) return;
       const street = await getAddress(this.countyId);
       this.streetInfo = street.data.list;
+      this.streetInfo.splice(0,1)
     },
     clickStreet() {
       this.provinceActive = false;
@@ -254,12 +278,22 @@ export default {
       this.streetActive = true;
     },
   },
-  mounted() {
-    //如果localStorage有地址数据，就显示全部地址头部
-    if (this.addressInfo) {
+  async mounted() {
+    if (this.addressInfo.addressName.street) {
+      //如果localStorage有地址数据，就显示全部地址头部
       this.cityTitleActive = true;
       this.countyTitleActive = true;
       this.streetTitleActive = true;
+      //显示街道
+      this.provinceActive = false;
+      this.cityActive = false;
+      this.countyActive = false;
+      this.streetActive = true;
+      //获取街道数据
+      const res = await getAddress(this.addressInfo.addressIds.countyId)
+      const street = res.data.list
+      street.splice(0,1)
+      this.streetInfo = street
     }
   },
 };
@@ -281,6 +315,9 @@ export default {
     right: 15px;
     font-size: 12px;
     color: #8b8a8b;
+    &:hover{
+      color: #666;
+    }
   }
 }
 .addressTitle {
@@ -298,6 +335,7 @@ export default {
     border: 1px solid #ccc;
     // border-bottom: transparent;
     background-color: #f9f9f9;
+    cursor: pointer;
     &.active {
       background-color: #fff;
       border-top: 2px solid indianred;
@@ -317,7 +355,7 @@ export default {
     margin: 4px 0;
     a {
       display: inline-block;
-      max-width: 47px;
+      max-width: 68px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

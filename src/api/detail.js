@@ -25,6 +25,14 @@ export const getAddress = (areaid)=>{
   })
 } 
 
+//获取北京、上海、天津、重庆
+export const getAddress2 = (areaid) => {
+  return axios({
+    method: "GET",
+    url: `/huan/address/address?areaid=${areaid}&newIsBind=0`
+  })
+}
+
 //加入购物车
 export const addToShopcart = (skuId,skuNum)=>{
   return request({

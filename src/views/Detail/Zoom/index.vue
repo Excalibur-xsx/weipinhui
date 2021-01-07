@@ -11,6 +11,7 @@
     >
       <img ref="bigImg" :src="skuImageList[currentIndex].imgUrl" alt="" />
     </div>
+    <i class="iconfont icon-fangdajing"></i>
   </div>
 </template>
 
@@ -27,8 +28,8 @@ export default {
       type: Array,
     },
     currentIndex: {
-      type: Number
-    }
+      type: Number,
+    },
   },
   methods: {
     enter() {
@@ -79,6 +80,7 @@ export default {
     display: none;
     overflow: hidden;
     background-color: #fff;
+    cursor: crosshair;
     img {
       width: 200%;
       height: 200%;
@@ -89,6 +91,18 @@ export default {
   }
   .bigShow {
     display: block;
+  }
+  .iconfont {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 12px;
+    background-color: rgba(0,0,0,.1);
+    color: rgb(253, 253, 253);
   }
 }
 </style>

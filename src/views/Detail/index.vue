@@ -1,187 +1,224 @@
 <template>
-  <div class="goodShowContanier">
-    <div class="leftContainer">
-      <Zoom
-        :skuImageList="goodDetail.skuInfo && goodDetail.skuInfo.skuImageList"
-        :currentIndex="currentIndex"
-      />
-      <ImgList
-        :skuImageList="goodDetail.skuInfo && goodDetail.skuInfo.skuImageList"
-        @getIndex="getIndex"
-      />
-      <div class="bottomHandle">
-        <span class="goodCode"
-          >商品编码：苹果iPhone11-128G简配绿 商品编码：苹果iPhone11-128G简配绿
-        </span>
-        <div class="collection">
-          <i class="iconfont icon-kongxinwujiaoxing"></i>
-          <span>收藏商品</span>
-        </div>
-        <div
-          class="share"
-          :class="isHover ? 'isHover' : ''"
-          @mouseenter="shareEnter"
-          @mouseleave="shareLeave"
-        >
-          <i class="iconfont icon-fenxiang"></i>
-          <span>分享到:</span>
-          <i
-            class="iconfont"
-            :class="
-              isHover ? 'icon-triangle-t' : 'icon-triangle-copy-copy-copy'
-            "
-          ></i>
-        </div>
-        <ul
-          class="shareList"
-          :class="isHover ? 'isShow' : ''"
-          @mouseenter="shareEnter"
-          @mouseleave="shareLeave"
-        >
-          <li>
-            <i class="iconfont icon-qqkongjian"></i>
-          </li>
-          <li>
-            <i class="iconfont icon-qq"></i>
-          </li>
-          <li>
-            <i class="iconfont icon-weixin"></i>
-          </li>
-          <li>
-            <i class="iconfont icon-weibo"></i>
-          </li>
-        </ul>
-      </div>
-      <div class="bottomImg">
-        <img src="./images/pc_xuanguan.png" alt="" />
-      </div>
-    </div>
-    <div class="rightContainer" v-if="goodDetail.skuInfo">
-      <div class="brandName">
-        <!-- <a href="www.baidu.com">苹果</a> -->
-        <a href="www.baidu.com">{{ goodDetail.skuInfo.skuName }}</a>
-        <p class="goodTitle">
-          <!-- <span>iPhone11 128G 双卡双待（无充电器耳机版）全网通手机</span> -->
-          <span>{{ goodDetail.skuInfo.skuDesc }}</span>
-        </p>
-      </div>
-      <div class="priceContainer">
-        <div class="priceWrap">
-          <div class="price">
-            <div class="presentPrice">
-              <span>￥</span>
-              <p>{{ goodDetail.price }}</p>
-            </div>
-            <div class="originalPrice">
-              <span>￥</span>
-              <p>{{ goodDetail.price + 999 }}</p>
-            </div>
-            <p class="discount">9.1折</p>
+  <div>
+    <div class="goodShowContanier" v-if="goodDetail">
+      <div class="leftContainer">
+        <Zoom
+          :skuImageList="goodDetail.skuInfo && goodDetail.skuInfo.skuImageList"
+          :currentIndex="currentIndex"
+        />
+        <ImgList
+          :skuImageList="goodDetail.skuInfo && goodDetail.skuInfo.skuImageList"
+          @getIndex="getIndex"
+        />
+        <div class="bottomHandle">
+          <span class="goodCode"
+            >商品编码：苹果iPhone11-128G简配绿 商品编码：苹果iPhone11-128G简配绿
+          </span>
+          <div class="collection">
+            <i class="iconfont icon-kongxinwujiaoxing"></i>
+            <span>收藏商品</span>
           </div>
-        </div>
-        <div class="limit">
-          <span>限制</span>
-          <p>该商品为特殊商品，不支持使用全场券、品类券、超级VIP9.8折</p>
-        </div>
-      </div>
-      <div class="delivery attr">
-        <p class="attrName">配送</p>
-        <div class="address">
           <div
-            class="optionBox"
-            :class="isClick ? 'isClick' : ''"
-            @click="showAddress"
+            class="share"
+            :class="isHover ? 'isHover' : ''"
+            @mouseenter="shareEnter"
+            @mouseleave="shareLeave"
           >
-            <p v-if="!addressInfo.province">请选择配送地址</p>
-            <p v-else>
-              {{ addressInfo.province }} {{ addressInfo.city }}
-              {{ addressInfo.county }}
-              {{ addressInfo.street }}
-            </p>
+            <i class="iconfont icon-fenxiang"></i>
+            <span>分享到:</span>
             <i
               class="iconfont"
               :class="
-                isClick ? 'icon-Tarrow' : 'icon-Icon-KeyboardArrow-Down-Rounded'
+                isHover ? 'icon-triangle-t' : 'icon-triangle-copy-copy-copy'
               "
             ></i>
           </div>
-          <Address
-            v-show="isClick"
-            @hideX="isClick = false"
-            @selectAddress="selectAddress"
-            :provinceInfo="provinceInfo"
-            :addressInfo="addressInfo"
-          />
-          <p class="time">现在付款，最快明天送达</p>
-        </div>
-      </div>
-      <div class="freight attr">
-        <p class="attrName">运费</p>
-        <div>
-          <span>订单满88元免运费</span>
-          <i class="iconfont icon-wenhao"></i>
-        </div>
-      </div>
-      <div class="color attr" :class="noSelectColor?'active':''">
-        <p class="attrName">颜色</p>
-        <div class="colorContainer">
-          <div
-            class="colorValue"
-            :class="color.isActive ? 'active' : ''"
-            v-for="(color, index) in colorInfo.spuSaleAttrValueList"
-            :key="color.id"
-            @click="selectColor(index)"
+          <ul
+            class="shareList"
+            :class="isHover ? 'isShow' : ''"
+            @mouseenter="shareEnter"
+            @mouseleave="shareLeave"
           >
-            <img src="./images/s2.png" alt="" />
-            <span>{{ color.saleAttrValueName }}</span>
-            <i v-if="color.isActive" class="iconfont icon-gou1"></i>
+            <li>
+              <i class="iconfont icon-qqkongjian"></i>
+            </li>
+            <li>
+              <i class="iconfont icon-qq"></i>
+            </li>
+            <li>
+              <i class="iconfont icon-weixin"></i>
+            </li>
+            <li>
+              <i class="iconfont icon-weibo"></i>
+            </li>
+          </ul>
+        </div>
+        <div class="bottomImg">
+          <img src="./images/pc_xuanguan.png" alt="" />
+        </div>
+      </div>
+      <div class="rightContainer" v-if="goodDetail.skuInfo">
+        <div class="brandName">
+          <!-- <a href="www.baidu.com">苹果</a> -->
+          <a href="www.baidu.com">{{ goodDetail.skuInfo.skuName }}</a>
+          <p class="goodTitle">
+            <!-- <span>iPhone11 128G 双卡双待（无充电器耳机版）全网通手机</span> -->
+            <span>{{ goodDetail.skuInfo.skuDesc }}</span>
+          </p>
+        </div>
+        <div class="priceContainer">
+          <div class="priceWrap">
+            <div class="price">
+              <div class="presentPrice">
+                <span>￥</span>
+                <p>{{ goodDetail.price }}</p>
+              </div>
+              <div class="originalPrice">
+                <span>￥</span>
+                <p>{{ goodDetail.price + 999 }}</p>
+              </div>
+              <p class="discount">9.1折</p>
+              <div class="promoteMark">
+                <img src="./images/1590749967959_100x24_90.png" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="limit">
+            <span>限制</span>
+            <p>该商品为特殊商品，不支持使用全场券、品类券、超级VIP9.8折</p>
           </div>
         </div>
-      </div>
-      <div
-        class="specs attr"
-        :class="attr.noSelectAttr?'active':''"
-        v-for="(attr, attrIndex) in noColorInfo"
-        :key="attr.id"
-      >
-        <p class="attrName">{{ attr.saleAttrName.slice(2) }}</p>
-        <div class="attrContainer">
-          <div
-            :class="attrValue.isActive ? 'active' : ''"
-            v-for="(attrValue, attrValueIndex) in attr.spuSaleAttrValueList"
-            :key="attrValue.id"
-            @click="selectAttr(attrIndex, attrValueIndex)"
-          >
-            <span>{{ attrValue.saleAttrValueName }}</span>
-            <i v-if="attrValue.isActive" class="iconfont icon-gou1"></i>
+        <div class="delivery attr">
+          <p class="attrName">配送</p>
+          <div class="address">
+            <div
+              class="optionBox"
+              :class="isClick ? 'isClick' : ''"
+              @click="showAddress"
+            >
+              <p v-if="!addressInfo.addressName.province">请选择配送地址</p>
+              <p v-else>
+                {{ addressInfo.addressName.province }} {{ addressInfo.addressName.city }}
+                {{ addressInfo.addressName.county }}
+                {{ addressInfo.addressName.street }}
+              </p>
+              <i
+                class="iconfont"
+                :class="
+                  isClick
+                    ? 'icon-Tarrow'
+                    : 'icon-Icon-KeyboardArrow-Down-Rounded'
+                "
+              ></i>
+            </div>
+            <Address
+              v-show="isClick"
+              @hideX="isClick = false"
+              @selectAddress="selectAddress"
+              :provinceInfo="provinceInfo"
+              :addressInfo="addressInfo"
+            />
+            <p class="time">现在付款，最快一年后送达</p>
           </div>
         </div>
-      </div>
-      <div class="count attr">
-        <p class="attrName">数量</p>
-        <el-input-number
-          v-model="count"
-          :min="1"
-          :max="2"
-          label="描述文字"
-        ></el-input-number>
-      </div>
-      <button class="buyBtn" @click="addShopcart">
-        <p>￥{{ goodDetail.price * count }}</p>
-        <span>特卖价</span>
-        <span>抢 ></span>
-      </button>
-      <div class="line"></div>
-      <div class="cusService attr">
-        <p class="attrName">客服</p>
-        <div>
-          <i class="iconfont icon-duihua"></i>
-          <a>在线客服</a>
-          <span>(09:00-22:00)</span>
-          <a @click="getShopcartList">看看购物车</a>
+        <div class="freight attr">
+          <p class="attrName">运费</p>
+          <div>
+            <span>订单满88元免运费</span>
+            <i class="iconfont icon-wenhao"></i>
+          </div>
+        </div>
+        <div class="color attr" :class="noSelectColor ? 'active' : ''">
+          <p class="attrName">颜色</p>
+          <div class="colorContainer">
+            <div
+              class="colorValue"
+              :class="color.isActive ? 'active' : ''"
+              v-for="(color, index) in colorInfo.spuSaleAttrValueList"
+              :key="color.id"
+              @click="selectColor(index)"
+            >
+              <img src="./images/s2.png" alt="" />
+              <span>{{ color.saleAttrValueName }}</span>
+              <i v-if="color.isActive" class="iconfont icon-gou1"></i>
+            </div>
+          </div>
+        </div>
+        <div
+          class="specs attr"
+          :class="attr.noSelectAttr ? 'active' : ''"
+          v-for="(attr, attrIndex) in noColorInfo"
+          :key="attr.id"
+        >
+          <p class="attrName">{{ attr.saleAttrName.slice(2) }}</p>
+          <div class="attrContainer">
+            <div
+              :class="attrValue.isActive ? 'active' : ''"
+              v-for="(attrValue, attrValueIndex) in attr.spuSaleAttrValueList"
+              :key="attrValue.id"
+              @click="selectAttr(attrIndex, attrValueIndex)"
+            >
+              <span>{{ attrValue.saleAttrValueName }}</span>
+              <i v-if="attrValue.isActive" class="iconfont icon-gou1"></i>
+            </div>
+          </div>
+        </div>
+        <div class="count attr">
+          <p class="attrName">数量</p>
+          <el-input-number
+            v-model="count"
+            :min="1"
+            :max="2"
+            label="描述文字"
+          ></el-input-number>
+        </div>
+        <button class="buyBtn" @click="addShopcart(false)">
+          <p>￥{{ goodDetail.price * count }}</p>
+          <span>特卖价</span>
+          <span>抢 ></span>
+        </button>
+        <div class="line"></div>
+        <div class="cusService attr">
+          <p class="attrName">客服</p>
+          <div>
+            <i class="iconfont icon-duihua"></i>
+            <a>在线客服</a>
+            <span>(09:00-22:00)</span>
+            <a @click="getShopcartList">看看购物车</a>
+          </div>
+        </div>
+        <div class="service attr">
+          <p class="attrName">服务</p>
+          <div class="serviceWrap">
+            <div>
+              <i class="iconfont icon-gou"></i>
+              <span>唯品会发货及售后</span>
+            </div>
+            <div>
+              <i class="iconfont icon-gou"></i>
+              <span>顺丰配送</span>
+            </div>
+            <div>
+              <i class="iconfont icon-gou"></i>
+              <span>7天可退（激活后不可退)</span>
+            </div>
+            <div>
+              <i class="iconfont icon-gou"></i>
+              <span>退货无忧</span>
+            </div>
+            <div>
+              <i class="iconfont icon-gantanhao1"></i>
+              <span> 不支持换货</span>
+            </div>
+            <div>
+              <i class="iconfont icon-gou"></i>
+              <span>10天价保</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <DetailBottom :price="goodDetail.price" @addShopcart="addShopcart" />
   </div>
 </template>
 
@@ -189,6 +226,7 @@
 import Zoom from "./Zoom";
 import ImgList from "./ImgList";
 import Address from "../../components/Address";
+import DetailBottom from "./DetailBottom";
 import {
   getGoodDetail,
   getProvince,
@@ -205,14 +243,17 @@ export default {
       goodDetail: {},
       currentIndex: 0,
       provinceInfo: [],
-      addressInfo: {},
+      addressInfo: {
+        addressIds:{},
+        addressName:{}
+      },
       noSelectColor: false,
-      noSelectAttr: []
+      noSelectAttr: [],
     };
   },
   watch: {
-    "addressInfo.street"() {
-      if (this.addressInfo.street) {
+    "addressInfo.addressName.street"() {
+      if (this.addressInfo.addressName.street) {
         localStorage.setItem("address", JSON.stringify(this.addressInfo));
       }
     },
@@ -242,12 +283,15 @@ export default {
       if (this.provinceInfo.length) {
         return;
       }
+      //获取省份数据
       const res = await getProvince();
       this.provinceInfo = res.data.list;
+      this.provinceInfo.splice(0,1)
     },
     //当Address组件选择地址时
-    selectAddress(title, name) {
-      this.$set(this.addressInfo, title, name);
+    selectAddress(title, name,id) {
+      this.$set(this.addressInfo.addressName, title, name);
+      this.$set(this.addressInfo.addressIds, title+"Id", id);
     },
     //获取当前选中轮播图图片下标
     getIndex(index) {
@@ -255,7 +299,7 @@ export default {
     },
     //选择颜色
     selectColor(index) {
-      this.noSelectColor = false
+      this.noSelectColor = false;
       this.$set(this.colorInfo.spuSaleAttrValueList[index], "isActive", true);
       this.colorInfo.spuSaleAttrValueList.map((attr, i) => {
         if (i !== index) {
@@ -266,7 +310,7 @@ export default {
     },
     //选择其他属性
     selectAttr(attrIndex, attrValueIndex) {
-      this.noColorInfo[attrIndex].noSelectAttr = false
+      this.noColorInfo[attrIndex].noSelectAttr = false;
       this.$set(
         this.noColorInfo[attrIndex].spuSaleAttrValueList[attrValueIndex],
         "isActive",
@@ -280,29 +324,38 @@ export default {
       });
     },
     //加入购物车
-    addShopcart() {
+    addShopcart(isScroll) {
       //判断是否选择颜色
       const colorList = this.colorInfo.spuSaleAttrValueList;
       const selectedColor = colorList.find((item) => item.isActive);
-      if(!selectedColor){
-        this.noSelectColor = true
-      }else{
-        this.noSelectColor = false
+      if (!selectedColor) {
+        this.noSelectColor = true;
+        //判断如果是从底部详情导航点击的就要将滚动条设置到顶部
+        if(isScroll){
+          window.scrollTo(0,0)
+        }
+      } else {
+        this.noSelectColor = false;
       }
       //判断是否选择其他属性
-      this.noSelectAttr = []
-      this.noColorInfo.map(attr=>{
-        const selectedAttr = attr.spuSaleAttrValueList.find(item=>item.isActive)
-        if(!selectedAttr){
-          this.$set(attr,"noSelectAttr",true)
-          this.noSelectAttr.push("no")
+      this.noSelectAttr = [];
+      this.noColorInfo.map((attr) => {
+        const selectedAttr = attr.spuSaleAttrValueList.find(
+          (item) => item.isActive
+        );
+        if (!selectedAttr) {
+          this.$set(attr, "noSelectAttr", true);
+          this.noSelectAttr.push("no");
         }
-      })
+      });
       //每个属性都选择才发请求
-      if(this.noSelectColor || this.noSelectAttr.length){
-        return
+      if (this.noSelectColor || this.noSelectAttr.length) {
+        if(isScroll){
+          window.scrollTo(0,0)
+        }
+        return;
       }
-      addToShopcart(this.goodDetail.skuInfo.id,this.count)
+      addToShopcart(this.goodDetail.skuInfo.id, this.count);
     },
     //test获取购物车列表
     getShopcartList() {
@@ -314,17 +367,20 @@ export default {
     // const res = await getGoodDetail(1361);
     // const res = await getGoodDetail(113);
     // const res = await getGoodDetail(1194)
-    const res = await getGoodDetail(123)
+    const res = await getGoodDetail(123);
     this.goodDetail = res;
 
     //自动识别地址
     const address = localStorage.getItem("address");
-    this.addressInfo = JSON.parse(address);
+    if (address) {
+      this.addressInfo = JSON.parse(address);
+    }
   },
   components: {
     Zoom,
     ImgList,
     Address,
+    DetailBottom,
   },
 };
 </script>
@@ -422,7 +478,7 @@ export default {
     }
   }
   .bottomImg {
-    margin: 20px 0;
+    margin: 30px 0;
   }
   .rightContainer {
     width: 550px;
@@ -447,13 +503,21 @@ export default {
   }
   .priceWrap {
     padding: 15px 0;
-    // background-color: indianred;
+    background-image: url("./images/1597801542667.png");
+    position: relative;
   }
   .price {
     width: 300px;
     display: flex;
     justify-content: space-evenly;
     align-items: flex-end;
+    color: #fff;
+  }
+  .promoteMark {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 30px;
   }
   .presentPrice {
     span {
@@ -468,7 +532,7 @@ export default {
   }
   .originalPrice {
     font-size: 16px;
-    color: #999;
+    // color: #999;
     height: 37px;
     line-height: 37px;
     p {
@@ -478,7 +542,7 @@ export default {
   }
   .discount {
     font-size: 16px;
-    color: #999;
+    // color: #999;
     height: 37px;
     line-height: 37px;
   }
@@ -510,10 +574,10 @@ export default {
   .delivery {
     position: relative;
     align-items: flex-start;
-    p {
+    /* p {
       height: 30px;
       line-height: 30px;
-    }
+    } */
     .time {
       margin-top: 10px;
       color: #666;
@@ -523,7 +587,7 @@ export default {
     position: relative;
   } */
   .optionBox {
-    width: 250px;
+    // width: 250px;
     height: 30px;
     padding: 0 10px;
     box-sizing: border-box;
@@ -535,13 +599,18 @@ export default {
     justify-content: space-between;
     align-items: center;
     p {
-      max-width: 240px;
+      // max-width: 240px;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      padding-right: 5px;
+      cursor: pointer;
     }
     .iconfont {
       color: #b3b3b3;
+      &:hover{
+        color: #848484;
+      }
     }
     &.isClick {
       border-bottom: 1px solid #fff;
@@ -550,6 +619,9 @@ export default {
   .attrName {
     color: #999;
     margin-right: 16px;
+    height: 30px;
+    line-height: 30px;
+    white-space: nowrap;
   }
   .freight {
     div {
@@ -570,7 +642,8 @@ export default {
       line-height: 32px;
     }
   }
-  .color,.specs{
+  .color,
+  .specs {
     &.active {
       padding: 10px;
       padding-bottom: 0;
@@ -593,6 +666,7 @@ export default {
     align-items: center;
     position: relative;
     box-sizing: border-box;
+    cursor: pointer;
     img {
       width: 28px;
       height: 28px;
@@ -642,6 +716,7 @@ export default {
       background-color: #fff;
       position: relative;
       box-sizing: border-box;
+      cursor: pointer;
       &.active {
         padding: 0;
         border: 2px solid indianred;
@@ -682,11 +757,12 @@ export default {
     border: none;
     outline: none;
     border-radius: 4px;
-    background-color: indianred;
+    background-color: #f03867;
     color: #fff;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    cursor: pointer;
     p {
       font-size: 20px;
     }
@@ -714,6 +790,31 @@ export default {
     span {
       margin-left: 5px;
       color: #999;
+    }
+  }
+  .service {
+    align-items: flex-start;
+    p {
+      height: 20px;
+      line-height: 20px;
+    }
+  }
+  .serviceWrap {
+    display: flex;
+    flex-wrap: wrap;
+    div {
+      display: flex;
+      align-items: center;
+      margin: 0 15px 5px 0;
+      color: #666;
+    }
+    .iconfont {
+      color: #F10180;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .icon-gantanhao1 {
+      color: #98989f;
     }
   }
 }
