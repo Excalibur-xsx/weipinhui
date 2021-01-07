@@ -7,10 +7,12 @@ import VueLazyload from "vue-lazyload"
 import router from "./router"
 import store from "./store"
 
-import "./style/reset.css";
+import "./style/reset.css"
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 import "./plugins/element.js"
+//引入mockServer
+import mockServer from "./mocks/mockServer"
 
 //引入默认样式
 import "./style/reset.css"
@@ -26,10 +28,11 @@ Vue.use(VueLazyload, {
 new Vue({
   beforeCreate() {
     // 初始化全局事件总线对象
-    Vue.prototype.$bus = this;
+    Vue.prototype.$bus = this
   },
   render: (h) => h(App),
   // 应用router
   router,
   store,
+  mockServer,
 }).$mount("#app")

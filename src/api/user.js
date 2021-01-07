@@ -1,4 +1,4 @@
-import request from "../utils/request";
+import request from "../utils/request"
 
 // 注册请求
 export const reqRegister = ({ phone, password, code }) => {
@@ -10,8 +10,8 @@ export const reqRegister = ({ phone, password, code }) => {
       password,
       code,
     },
-  });
-};
+  })
+}
 
 // 登录请求
 // 注册请求
@@ -23,5 +23,7 @@ export const reqLogin = (phone, password) => {
       phone,
       password,
     },
-  });
-};
+  })
+}
+
+

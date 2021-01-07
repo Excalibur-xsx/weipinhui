@@ -15,7 +15,7 @@
               </div>
             </div>
             <transition name="slide-fade">
-              <p v-show="isEnterHotProduct" class="title">13斤洗衣柔顺组合</p>
+              <p class="title">13斤洗衣柔顺组合</p>
             </transition>
             <div class="msg">
               <span>特卖价</span>
@@ -34,7 +34,7 @@
               </div>
             </div>
             <transition name="slide-fade">
-              <p v-show="isEnterHotProduct" class="title">13斤洗衣柔顺组合</p>
+              <p class="title">13斤洗衣柔顺组合</p>
             </transition>
             <div class="msg">
               <span>特卖价</span>
@@ -53,7 +53,7 @@
               </div>
             </div>
             <transition name="slide-fade">
-              <p v-show="isEnterHotProduct" class="title">13斤洗衣柔顺组合</p>
+              <p class="title">13斤洗衣柔顺组合</p>
             </transition>
             <div class="msg">
               <span>特卖价</span>
@@ -72,7 +72,7 @@
               </div>
             </div>
             <transition name="slide-fade">
-              <p v-show="isEnterHotProduct" class="title">13斤洗衣柔顺组合</p>
+              <p class="title">13斤洗衣柔顺组合</p>
             </transition>
             <div class="msg">
               <span>特卖价</span>
@@ -90,7 +90,7 @@
                 />
               </div>
             </div>
-            <p v-show="isEnterHotProduct" class="title">13斤洗衣柔顺组合</p>
+            <p class="title">13斤洗衣柔顺组合</p>
             <div class="msg">
               <span>特卖价</span>
               <span class="price">￥59</span>
@@ -98,23 +98,165 @@
           </div>
         </div>
       </div>
-      <Title titleName="热销分类" />
+      <div class="sale-catalog-container">
+        <Title titleName="热销分类" />
+        <div class="sale-catalog-wrap">
+          <ul class="sale-catalog">
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+            <li class="sale-catalog-item">
+              <div class="show-detail">
+                <div class="sale-cate-name">
+                  <p>面部护理</p>
+                </div>
+                <div class="sale-cate-img">
+                  <img
+                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
+                  />
+                </div>
+              </div>
+              <div class="show-bg"></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <ProductList />
     </div>
   </div>
 </template>
 
 <script>
+import { getHotSaleList } from "../../api/forestallBuy";
 import Title from "./Title";
+import ProductList from "./ProductList";
 export default {
   name: "ForestallBuy",
   data() {
     return {
-      //移入热门商品显示商品名
-      isEnterHotProduct: true,
+      hotSaleList: [],
     };
   },
   components: {
     Title,
+    ProductList,
+  },
+  async mounted() {
+    this.hotSaleList = await getHotSaleList();
   },
 };
 </script>
@@ -136,6 +278,7 @@ export default {
       display: flex;
       justify-content: space-around;
       .product-item {
+        cursor: pointer;
         width: 180px;
         text-align: center;
         border-radius: 35px;
@@ -184,6 +327,79 @@ export default {
         }
       }
     }
+  }
+  .sale-catalog-container {
+    width: 100%;
+    height: 300px;
+    .sale-catalog-wrap {
+      width: 1170px;
+      margin: 0 auto;
+      height: 80%;
+      .sale-catalog {
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        height: 90%;
+      }
+    }
+  }
+  .sale-catalog-item {
+    height: 100px;
+    width: 193px;
+    float: left;
+    margin-right: 30px;
+    margin-top: 10px;
+    position: relative;
+    background-color: #fff;
+    z-index: 3;
+    cursor: pointer;
+    .show-bg {
+      position: absolute;
+      height: 0%;
+      width: 100%;
+      top: 100%;
+      z-index: 1;
+      transition: all 0.5s;
+    }
+    .show-detail {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 3;
+      color: #4a4a4a;
+      .sale-cate-name {
+        width: 93px;
+        margin-top: 38px;
+        margin-left: 20px;
+        font-weight: 700;
+        float: left;
+        font-size: 18px;
+        z-index: 3;
+        p {
+          height: 24px;
+          line-height: 24px;
+        }
+      }
+      .sale-cate-img {
+        width: 65px;
+        height: 65px;
+        float: left;
+        margin-top: 15px;
+        z-index: 3;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+  .show-detail:hover {
+    color: #fff;
+  }
+  .show-detail:hover + .show-bg {
+    height: 100%;
+    background-color: #f558af;
+    top: 0%;
   }
 }
 </style>

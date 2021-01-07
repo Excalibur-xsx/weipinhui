@@ -51,7 +51,7 @@
                 </div>
               </div>
 
-              <button class="registeBtn" @click="toLogin">登录</button>
+              <button class="registeBtn" @click.prevent="toLogin">登录</button>
             </el-form>
             <div class="registerContentRightFooter">
               <div class="weixin">
@@ -124,12 +124,7 @@ export default {
       } catch {
         this.isLogining = false;
       }
-
-      // console.log(result);
     },
-  },
-  mounted() {
-    console.log(this.$route.meta.title);
   },
 };
 </script>
