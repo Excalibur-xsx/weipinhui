@@ -5,7 +5,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home";
 import Register from "../views/Register";
 import Login from "../views/Login";
-import NvaLogin from "../components/NavLogin.vue"
+import NvaLogin from "../components/NavLogin/NavLogin.vue";
 
 // 安装插件
 Vue.use(VueRouter);
