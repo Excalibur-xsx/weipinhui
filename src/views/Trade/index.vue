@@ -4,7 +4,9 @@
     <div class="heard">
       <div class="heardContaiter">
         <div class="heardLeft">
-          <img src="./images/checkoutHeader.png" alt="购物车" />
+          <router-link title="唯品会" to="/">
+            <img src="./images/checkoutHeader.png" alt="logo" />
+          </router-link>
         </div>
         <div class="heardRight">
           <ul class="heardRight_top">
@@ -160,8 +162,55 @@
             <div class="goods_foot">
               <span class="foot_1th">运费： 免运费</span>
               <span class="foot_2th">本组商品金额：&nbsp;</span>
-              <span class="foot_3th">¥60</span>
+              <span class="foot_3th">¥49</span>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 支付信息 -->
+    <div class="pay_info">
+      <div class="info_title">
+        <span>支付信息</span>
+      </div>
+      <div class="pay_select">
+        <div class="select_title">
+          <h3>支付方式</h3>
+        </div>
+        <div class="select_ways">
+          <div class="select_item">
+            <span class="item_radio"></span>
+            <span class="item_text">微信支付</span>
+            <p>当前仅支持微信支付！</p>
+          </div>
+        </div>
+      </div>
+      <div class="pay_money">
+        <div class="pay_money_top">
+          <ul>
+            <li class="top_1th">
+              <span class="top_text">商品金额：</span>
+              <span class="top_price">¥49</span>
+            </li>
+            <li class="top_2th">
+              <span class="top_text">运费：</span>
+              <span class="top_price">¥0</span>
+            </li>
+          </ul>
+          <div class="pay_count">
+            <span class="top_text">待支付：</span>
+            <span class="top_price">¥49</span>
+          </div>
+          <div class="goto_add">
+            <span>送货至：南康区 天宇花园，幸世鑫，152*****168</span>
+          </div>
+        </div>
+        <div class="pay_money_bottom">
+          <div class="pay_ok">
+            <span>提交订单</span>
+          </div>
+          <div class="pay_warn">
+            <p>请确认无误后提交订单</p>
           </div>
         </div>
       </div>
@@ -172,18 +221,12 @@
       <div class="quality_2th"></div>
       <div class="quality_3th"></div>
     </div>
-    <Footer />
   </div>
 </template>
 
 <script>
-import Footer from "../../components/footer";
-
 export default {
-  name: "ShopPay",
-  components: {
-    Footer,
-  },
+  name: "Trade",
 };
 </script>
 
@@ -457,6 +500,7 @@ ul {
 .shop_list {
   width: 960px;
   margin: 30px auto;
+  margin-bottom: 90px;
   .list_title {
     padding: 10px 15px;
     height: 18px;
@@ -466,7 +510,6 @@ ul {
     background-color: #f9f9f9;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
-    margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
     .go_back {
@@ -557,6 +600,136 @@ ul {
           .foot_3th {
             color: #f10180;
           }
+        }
+      }
+    }
+  }
+}
+.pay_info {
+  width: 960px;
+  margin: 0px auto;
+  .info_title {
+    padding: 10px 15px;
+    height: 18px;
+    line-height: 18px;
+    border: 1px solid #e2e2e2;
+    border-left: 2px solid #f3168a;
+    background-color: #f9f9f9;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .pay_select {
+    width: 930px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 28px;
+    padding-bottom: 30px;
+    border-bottom: 1px dashed #e0e0e0;
+    .select_title {
+      margin-bottom: 12px;
+      h3 {
+        font-size: 14px;
+      }
+    }
+    .select_ways {
+      margin-top: 17px;
+      background-color: #fcfef9;
+      border: 1px solid #d0d0d0;
+      border-color: #7cbf13;
+      border-radius: 2px;
+      .select_item {
+        cursor: pointer;
+        padding: 13px 10px 13px 15px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        .item_radio {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          background-image: url("./images/sprite.png");
+          background-position: 0 -42px;
+        }
+        .item_text {
+          margin-right: 0;
+          margin-left: 5px;
+          font-size: 14px;
+        }
+        p {
+          font-size: 12px;
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+  .pay_money {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    .pay_money_top {
+      padding: 32px 20px 0;
+      color: #333;
+      font-size: 12px;
+      ul {
+        li {
+          position: relative;
+          margin-bottom: 7px;
+          text-align: right;
+          .top_text {
+            margin-right: 120px;
+          }
+          .top_price {
+            position: absolute;
+            right: 0;
+          }
+        }
+      }
+      .pay_count {
+        padding-bottom: 15px;
+        padding-top: 5px;
+        text-align: right;
+        overflow: hidden;
+        font-size: 18px;
+        font-weight: bold;
+        position: relative;
+        .top_text {
+          margin-right: 115px;
+        }
+        .top_price {
+          position: absolute;
+          right: 0;
+        }
+      }
+      .goto_add {
+        text-align: right;
+        color: #666;
+        padding-right: 20px;
+      }
+    }
+    .pay_money_bottom {
+      background-color: #f0f0f0;
+      margin-top: 12px;
+      height: 50px;
+      .pay_warn {
+        float: right;
+        p {
+          margin-right: 20px;
+          color: #666;
+          line-height: 50px;
+        }
+      }
+      .pay_ok {
+        width: 248px;
+        height: 48px;
+        float: right;
+        background-color: #f10180;
+        border: 1px solid #f10180;
+        color: #fff;
+        text-align: center;
+        span {
+          font-size: 18px;
+          line-height: 50px;
         }
       }
     }

@@ -3,8 +3,9 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 import Home from "../views/Home";
-import ShopCar from "../views/ShopCar";
-import ShopPay from "../views/ShopPay";
+import ShopCart from "../views/ShopCart";
+import Trade from "../views/Trade";
+import Pay from "../views/Pay";
 
 // 安装插件
 Vue.use(VueRouter);
@@ -17,15 +18,20 @@ const router = new VueRouter({
 			component: Home,
 		},
 		{
-			name: "ShopCar",
-			path: "/shopcar",
-			component: ShopCar,
+			name: "shopcart",
+			path: "/shopcart",
+			component: ShopCart,
 		},
 		{
-			name: "ShopPay",
-			path: "/shopcar/shoppay",
-			component: ShopPay,
-		}
+			name: "trade",
+			path: "/trade",
+			component: Trade,
+		},
+		{
+			name: "pay",
+			path: "/pay",
+			component: Pay,
+		},
 	],
 });
 
