@@ -1,16 +1,27 @@
 // @ts-nocheck
-import Vue from "vue";
-import App from "./App";
+import Vue from "vue"
+import App from "./App"
 
-import router from "./router";
-import store from "./store";
+import VueLazyload from "vue-lazyload"
 
-import "./plugins/element.js";
+import router from "./router"
+import store from "./store"
 
 import "./style/reset.css";
-// import "./style/iconfont.css";
 
 Vue.config.productionTip = false;
+import "./plugins/element.js"
+
+//引入默认样式
+import "./style/reset.css"
+//引入懒加载的默认图片
+import loading from "./assets/images/loading.gif"
+
+Vue.config.productionTip = false
+
+Vue.use(VueLazyload, {
+  loading,
+})
 
 new Vue({
   beforeCreate() {
@@ -21,4 +32,4 @@ new Vue({
   // 应用router
   router,
   store,
-}).$mount("#app");
+}).$mount("#app")
