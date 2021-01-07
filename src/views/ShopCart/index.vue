@@ -55,12 +55,12 @@
         <span class="title">特卖商品</span>
       </div>
       <!-- 购物袋为空 -->
-      <div class="nothing" v-if="!shopList.length">
+      <div class="nothing" v-if="!cartList.length">
         <span class="nothing_img"></span>
         <div class="nothing_text">
           <p class="text_1">购物袋空空如也，</p>
           <p class="text_2">快去抢购心仪商品吧~</p>
-          <button class="button_1">立即抢购</button>
+          <router-link to="/" class="button_1">立即抢购</router-link>
           <button class="button_2">查看订单</button>
         </div>
       </div>
@@ -78,7 +78,7 @@
           <form action>
             <ul class="shoplist_table_title">
               <li class="firsttitle">
-                <input type="checkbox" :checked="isCheckAll" @change="checkCartItems" />
+                <input type="checkbox" :checked="allIsChecked" @click="updateAllSkuChecked" />
                 全选
               </li>
               <li>商品</li>
@@ -87,60 +87,41 @@
               <li class="lasttitle">操作</li>
             </ul>
             <ul>
-              <li class="shoplist_table_detail" v-for="item in shopList" :key="item.id">
+              <li class="shoplist_table_detail" v-for="cart in cartList" :key="cart.id">
                 <div class="shopdetail">
-                  <input type="checkbox" :checked="item.isChecked" />
-                  <img :src="item.imgUrl" />
+                  <input
+                    type="checkbox"
+                    :checked="cart.isChecked"
+                    @click="updateSkuChecked(cart.skuId, cart.isChecked)"
+                  />
+                  <img :src="cart.imgUrl" />
                   <div>
-                    <h3>{{item.skuName}}</h3>
+                    <h3>{{cart.skuName}}</h3>
                     <p>尺码：均码</p>
                     <span>7天退换</span>
                     <span>退换无忧</span>
                   </div>
                 </div>
                 <div class="shopprice">
-                  <strong>¥{{item.skuPrice}}</strong>
+                  <strong>¥{{cart.skuPrice}}</strong>
                 </div>
                 <div class="shopnumber">
                   <button
                     class="sub"
-                    @click="changeCount2(item, -1)"
-                    :disabled="item.skuNum === 1"
+                    @click="updateSkuCount(cart.skuId, 1, $event)"
+                    :disabled="cart.skuNum === 1"
                   >-</button>
-                  <div class="number">{{item.skuNum}}</div>
+                  <div class="number">{{cart.skuNum}}</div>
                   <button
                     class="add"
-                    @click="changeCount2(item, 1)"
-                    :disabled="item.skuNum === 10"
+                    @click="updateSkuCount(cart.skuId, -1, $event)"
+                    :disabled="cart.skuNum === 10"
                   >+</button>
                 </div>
                 <div class="shopdel">
-                  <span @click="deleteCartItem(item.skuId)">删除</span>
+                  <span @click="deleteSku(cart.skuId)">删除</span>
                 </div>
               </li>
-              <!-- <li class="shoplist_table_detail">
-                <div class="shopdetail">
-                  <input type="checkbox" />
-                  <img src="./images/shop2.jpg" alt />
-                  <div>
-                    <h3>坦克玩具车耐摔儿童玩具车男孩3岁大号合金小汽车军事模型套装</h3>
-                    <p>尺码：均码</p>
-                    <span>7天退换</span>
-                    <span>退换无忧</span>
-                  </div>
-                </div>
-                <div class="shopprice">
-                  <strong>¥60</strong>
-                </div>
-                <div class="shopnumber">
-                  <div class="sub">-</div>
-                  <div class="number">1</div>
-                  <div class="add">+</div>
-                </div>
-                <div class="shopdel">
-                  <span>删除</span>
-                </div>
-              </li>-->
             </ul>
             <div class="shoplist_table_footer">
               <span class="table_footer_maker">运费</span>
@@ -158,20 +139,20 @@
               <span>
                 <span class="top_2th">
                   共
-                  <span class="top_2th_num">{{ totalCount }}</span>
+                  <span class="top_2th_num">{{ totalSkuNum }}</span>
                   件商品&nbsp;&nbsp;商品金额
                 </span>
-                <span class="top_3th">￥{{ totalPrice }}</span>
+                <span class="top_3th">￥{{ totalSkuPrice }}</span>
               </span>
             </div>
             <div class="count_coupon_bottom">
               <span class="bottom_1th">总金额（未含运费）</span>
-              <span class="bottom_2th">￥{{ totalPrice }}</span>
+              <span class="bottom_2th">￥{{ totalSkuPrice }}</span>
             </div>
           </div>
           <div class="shoplist_count_footer">
             <div class="count_footer_text">请确认商品后结账</div>
-            <div class="count_footer_true">立即结账</div>
+            <div class="count_footer_true" @click="$router.push('/trade')">立即结账</div>
           </div>
         </div>
       </div>
@@ -231,180 +212,132 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "ShopCart",
   data() {
     return {
-      // shopList: [],
-      shopList: [
-        {
-          id: 61,
-          userId: "2",
-          skuId: 4,
-          cartPrice: 5999,
-          skuNum: 4,
-          imgUrl: "/img/shop1.bf6021a6.jpg",
-          skuName: "坦克玩具车耐摔儿童玩具车男孩3岁大号合金小汽车军事模型套装",
-          isChecked: 1,
-          skuPrice: 5999,
-        },
-        {
-          id: 62,
-          userId: "2",
-          skuId: 2,
-          cartPrice: 5499,
-          skuNum: 1,
-          imgUrl: "/img/shop2.cbaccffb.jpg",
-          skuName: "Apple iPhone 11 (A2223) 64GB 红色",
-          isChecked: 0,
-          skuPrice: 5499,
-        },
-      ],
+      // cartList: [
+      //   {
+      //     id: 61,
+      //     userId: "2",
+      //     skuId: 4,
+      //     cartPrice: 5999,
+      //     skuNum: 4,
+      //     imgUrl: "/img/shop1.bf6021a6.jpg",
+      //     skuName: "坦克玩具车耐摔儿童玩具车男孩3岁大号合金小汽车军事模型套装",
+      //     isChecked: 1,
+      //     skuPrice: 5999,
+      //   },
+      //   {
+      //     id: 62,
+      //     userId: "2",
+      //     skuId: 2,
+      //     cartPrice: 5499,
+      //     skuNum: 1,
+      //     imgUrl: "/img/shop2.cbaccffb.jpg",
+      //     skuName: "Apple iPhone 11 (A2223) 64GB 红色",
+      //     isChecked: 1,
+      //     skuPrice: 5499,
+      //   },
+      // ],
     };
   },
   computed: {
-    // 获取vuex中购物车模块中的购物车的商品信息数据数组
     ...mapState({
-      // shopList: (state) => state.shopcart.shopList,
+      cartList: (state) => state.shopCart.cartList,
     }),
-    // 获取vuex中购物车模块中的计算属性数据:总数量,总价格,是否全选
-    ...mapGetters([
-      "totalCount",
-      "totalPrice",
-      "isCheckAll",
-      "selectedCartItems",
-    ]),
-  },
-  // 界面渲染的生命周期回调
-  mounted() {
-    // 获取购物车中的商品信息数据
-    this.getShopCartList();
+    // 购物车商品总价
+    totalSkuPrice() {
+      const result = this.cartList.reduce((p, c) => {
+        if (c.isChecked === 1) {
+          p = p + c.skuNum * c.skuPrice;
+        }
+        return p;
+      }, 0);
+      return result;
+    },
+    // 购物车商品总数量
+    totalSkuNum() {
+      const result = this.cartList.reduce((p, c) => {
+        if (c.isChecked === 1) {
+          p = p + c.skuNum;
+        }
+        return p;
+      }, 0);
+      return result;
+    },
+    // 商品是否全选
+    allIsChecked() {
+      if (this.cartList.length === 0) {
+        return false;
+      }
+      return this.cartList.every((sku) => {
+        return sku.isChecked;
+      });
+    },
   },
   methods: {
-    // 获取购物车数据
-    getShopCartList() {
-      // 分发action
-      this.$store.dispatch("getShopList");
+    ...mapActions([
+      "getCartList",
+      "addToCart",
+      "checkCart",
+      "deleteCart",
+      "gettrade",
+    ]),
+    // 修改商品数量
+    updateSkuCount(skuId, skuNum, $event) {
+      // 输入的数字
+      let count = $event.target.value;
+      // 购物车改变的数量=输入的数量-当前的数量
+      skuNum = count - skuNum;
+      this.addToCart({ skuId, skuNum });
     },
-    // 删除操作
-    async deleteCartItem(skuId) {
-      // 弹出对话框
-      if (window.confirm("您确定要删除吗?")) {
-        // 分发action
-        const errorMsg = await this.$store.dispatch("deleteCartItem1", skuId);
-        if (!errorMsg) {
-          // 成功了
-          this.getShopCartList();
-        } else {
-          // 失败了
-          alert(errorMsg);
-        }
-      }
+    // 单个商品选中状态切换
+    updateSkuChecked(skuId, isChecked) {
+      isChecked = isChecked === 1 ? 0 : 1;
+      // console.log(isChecked);
+      this.checkCart({ skuId, isChecked });
     },
-    // 删除所有选中的购物项
-    deleteCartItems() {
-      // 获取所有选中的购物项
-      const { selectedCartItems } = this;
-      // 如果该数组中的数据是没有的,那么也没有必要删除
-      if (selectedCartItems.length === 0) return;
-      // 弹框
-      if (window.confirm("您确定要删除所有选中的购物项吗")) {
-        // 定义一个存储promise对象的数组
-        const promises = [];
-        // 遍历数组,一个一个的删除
-        selectedCartItems.forEach((item) => {
-          // 分发action,删除每一个购物项操作
-          const promise = this.$store.dispatch("deleteCartItem2", item.skuId);
-          promises.push(promise);
-        });
-        // 统一的处理promise
-        Promise.all(promises).then(
-          () => {
-            // 成功了,重新获取购物车中的数据
-            this.getShopCartList();
-          },
-          (error) => {
-            // 失败了
-            alert(error.message);
-          }
-        );
-      }
-    },
-
-    // 设置购物项商品的选中状态(切换选中状态)
-    checkCartItem(item) {
-      const isChecked = item.isChecked === 1 ? 0 : 1;
-      // 分发action
-      this.$store
-        .dispatch("checkCartItem1", { skuId: item.skuId, isChecked })
-        .then(
-          (values) => {
-            // 成功了,重新获取购物车中的数据
-            this.getShopCartList();
-            console.log(values);
-          },
-          (error) => {
-            // 失败了
-            alert(error.message);
-          }
-        );
-    },
-
-    // 切换全选/全不选中的操作
-    async checkCartItems(e) {
-      // 获取当前复选框的选中状态
-      const isChecked = e.target.checked * 1;
-      // 使用map
-      const promises = this.shopList.map((item) => {
-        return this.$store.dispatch("checkCartItem1", {
-          skuId: item.skuId,
-          isChecked,
-        });
+    // 全部商品状态切换
+    updateAllSkuChecked() {
+      this.cartList.map((sku) => {
+        const isAllChecked = this.allIsChecked ? 1 : 0;
+        this.updateSkuChecked(sku.skuId, isAllChecked);
+        return sku;
       });
-      // 统一处理
-      try {
-        await Promise.all(promises);
-        // 成功了,重新获取数据
-        this.getShopCartList();
-      } catch (error) {
-        alert("error:" + error.message);
+    },
+    // 移除商品
+    deleteSku(skuId) {
+      if (window.confirm("确定要移除该商品吗")) {
+        this.deleteCart(skuId);
       }
     },
-
-    // 修改商品购物项的数量
-    async changeCount(item, changeNum) {
-      // 获取skuId
-      const { skuId } = item;
-      // 判断当前商品的数量和传入进来的修改的数量相加,要大于0
-      if (item.skuNum + changeNum > 0) {
-        // 分发action
-        const errorMsg = await this.$store.dispatch("addToCart2", {
-          skuId,
-          skuNum: changeNum,
-        });
-        if (!errorMsg) {
-          // 成功了
-          this.getShopCartList();
-        } else {
-          // 失败了
-          alert(errorMsg);
-        }
-      }
-    },
-    changeCount2(item, changeNum) {
-      // 获取skuId
-      const { skuId } = item;
-      // 判断当前商品的数量和传入进来的修改的数量相加,要大于0
-      if (item.skuNum + changeNum > 0) {
-        // 分发action
-        this.$store.dispatch("addToCart3", {
-          skuId,
-          skuNum: changeNum,
+    // 移除选中的商品
+    delCheckSku() {
+      if (window.confirm("是否移除选中的所有商品")) {
+        this.cartList.map((sku) => {
+          if (sku.isChecked) {
+            this.deleteCart(sku.skuId);
+          }
+          return sku;
         });
       }
     },
+    // 使得数量输入内容不能是非数字
+    isNumber(e) {
+      e.target.value = e.target.value.replace(/\D+/g, "");
+      if (e.target.value <= 1) {
+        e.target.value = 1;
+      }
+      if (e.target.value >= 10) {
+        e.target.value = 10;
+      }
+    },
+  },
+  mounted() {
+    this.getCartList();
   },
 };
 </script>

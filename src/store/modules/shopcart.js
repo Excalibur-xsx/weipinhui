@@ -1,104 +1,75 @@
-import { reqAddToCart, reqDeleteCartItem, reqShopCartList, reqCheckCartItem } from "@api/shopcart";
+import {
+  cartListRequest,
+  addToCartRequest,
+  checkCartRequest,
+  deleteCartRequest
+} from '@api/shopcart';
+
 
 export default {
   state: {
-    shopList: [] // 购物车中的商品信息数据数组
+    cartList: [],
+    addToCartMessage: {
+      skuName: '',
+      skuNum: 1,
+      skuDefaultImg: ''
+    }
+  },
+  getters: {},
+  actions: {
+    // 获取购物车列表
+    async getCartList({ commit }) {
+      const cartList = await cartListRequest();
+      commit('GET_CART_LIST', cartList);
+    },
+    // 修改购物车商品数量
+    async addToCart({ commit }, { skuId, skuNum }) {
+      await addToCartRequest(skuId, skuNum);
+      // 在购物车页面添加后需要更新页面
+      commit('ADD_TO_CART', { skuId, skuNum });
+    },
+    // 修改商品的选中状态
+    async checkCart({ commit }, { skuId, isChecked }) {
+      await checkCartRequest(skuId, isChecked);
+      // 在购物车页面更新选中状态后需要更新页面
+      commit('CHECK_CART', { skuId, isChecked });
+    },
+    // 删除购物车中的商品
+    async deleteCart({ commit }, skuId) {
+      await deleteCartRequest(skuId);
+      // 在购物车页面删除商品后需要更新页面
+      commit('DELETE_CART', skuId);
+    }
+
   },
   mutations: {
-    // 直接修改shopList数据
-    RECEIVE_SHOP_LIST(state, shopList) {
-      state.shopList = shopList
+    GET_CART_LIST(state, cartList) {
+      state.cartList = cartList;
+    },
+    ADD_TO_CART(state, { skuId, skuNum }) {
+      state.cartList = state.cartList.map((sku) => {
+        if (sku.skuId === skuId) {
+          sku.skuNum += skuNum;
+        }
+        return sku;
+      });
+    },
+    CHECK_CART(state, { skuId, isChecked }) {
+      state.cartList = state.cartList.map((sku) => {
+        if (sku.skuId === skuId) {
+          sku.isChecked = isChecked;
+        }
+        return sku;
+      });
+    },
+    DELETE_CART(state, skuId) {
+      state.cartList = state.cartList.filter((sku) => sku.skuId !== skuId);
+    },
+    ADD_TO_CART_MESSAGE(state, { skuName, skuNum, skuDefaultImg }) {
+      state.addToCartMessage.skuName = skuName;
+      state.addToCartMessage.skuNum = skuNum;
+      state.addToCartMessage.skuDefaultImg = skuDefaultImg;
     }
+
   },
-  actions: {
-    // 添加购物车操作
-    async addToCart1({ commit }, { skuId, skuNum, callback }) {
-      console.log(commit)
-      const result = await reqAddToCart(skuId, skuNum)
-      if (result.code === 200) {
-        // 如果成功,回调函数中传入的是一个空字符串
-        callback('')
-      } else {
-        // 如果失败,回调函数中传入的是一个非空字符串
-        callback(result.message || '添加失败')
-      }
-    },
-    // 通过this.$store.dispatch('addToCart2') 有会返回值, 就是当前的这个action的返回值
-    async addToCart2({ commit }, { skuId, skuNum }) {
-      console.log(commit)
-      const result = await reqAddToCart(skuId, skuNum)
-      return result.code === 200 ? '' : result.message || '添加失败'
-    },
-    async addToCart3({ commit, dispatch }, { skuId, skuNum }) {
-      console.log(commit)
-      const result = await reqAddToCart(skuId, skuNum)
-      if (result.code === 200) {
-        // 成功了
-        dispatch('getShopList')
-      } else {
-        // 失败了
-        alert(result.message)
-      }
-    },
-    // 获取购物车中的商品信息数据
-    async getShopList({ commit }) {
-      // 调用api接口,发送异步请求
-      const result = await reqShopCartList()
-      if (result.code === 200) {
-        // 更新数据
-        commit('RECEIVE_SHOP_LIST', result.data)
-      }
-    },
-    // 根据skuId删除购物车中的某个购物项
-    async deleteCartItem1({ commit }, skuId) {
-      console.log(commit)
-      // 调用api接口函数
-      const result = await reqDeleteCartItem(skuId)
-      return result.code === 200 ? '' : result.message || '删除失败'
-    },
-    // 根据skuId删除购物车中的某个购物项
-    async deleteCartItem2({ commit }, skuId) {
-      console.log(commit)
-      // 调用api接口函数
-      const result = await reqDeleteCartItem(skuId)
-      if (result.code !== 200) {
-        // 扔出一个异常---失败的promise
-        throw new Error(result.message || '失败了')
-      }
-    },
-    // 切换购物项选中状态的
-    async checkCartItem1({ commit }, { skuId, isChecked }) {
-      console.log(commit)
-      const result = await reqCheckCartItem(skuId, isChecked)
-      // 失败的问题
-      if (result.code !== 200) {
-        // 扔出错误
-        throw new Error(result.message || '切换勾选状态失败')
-      }
-    }
-  },
-  getters: {
-    // 总数量
-    totalCount(state) {
-      // 调用reduce来进行计算
-      return state.shopList.reduce((pre, item) => {
-        return item.isChecked === 1 ? pre + item.skuNum : pre
-      }, 0)
-    },
-    // 总价格
-    totalPrice(state) {
-      return state.shopList.reduce((pre, item) => {
-        return item.isChecked === 1 ? pre + item.skuNum * item.skuPrice : pre
-      }, 0)
-    },
-    // 是否全都选中
-    isCheckAll(state) {
-      // 数组中要有数据,并且每个数据都是选中的,才有意义
-      return state.shopList.length > 0 && state.shopList.every(item => item.isChecked === 1)
-    },
-    // 获取所有选中的购物项
-    selectedCartItems(state) {
-      return state.shopList.filter(item => item.isChecked === 1)
-    }
-  }
-}
+};

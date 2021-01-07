@@ -65,7 +65,7 @@
             </div>
             <div class="head_2th_right">
               <span class="right_1th">待支付：</span>
-              <span class="right_2th">￥149.00</span>
+              <span class="right_2th">￥666.00</span>
             </div>
           </div>
         </div>
@@ -78,11 +78,11 @@
           </div>
           <div class="pay_count">
             支付：￥
-            <span>149.00</span>
+            <span>666.00</span>
             （已优惠：￥0）
           </div>
         </div>
-        <div class="pay_end">
+        <div class="pay_end" @click="submit">
           <span>立即支付</span>
         </div>
       </div>
@@ -91,10 +91,57 @@
 </template>
 
 <script>
+// 二维码生成
+import QRCode from "qrcode";
+import { getCodeUrlRequest, getPayStatuslRequest } from "@api/order";
+
 export default {
   name: "Pay",
+  methods: {
+    async submit() {
+      const { orderId } = this.$route.query;
+      // 发送请求获取二维码相关数据
+      const payMessage = await getCodeUrlRequest(orderId);
+      // 生成二维码
+      QRCode.toDataURL(payMessage.codeUrl)
+        .then((url) => {
+          this.$alert(`<img src="${url}"/>`, "微信支付二维码", {
+            showCancelButton: true, //是否显示取消按钮
+            showClose: false, //是否显示右上角的X按钮
+            dangerouslyUseHTMLString: true, //是否将 message 属性作为 HTML 片段处理
+            confirmButtonText: "我已成功支付",
+            cancelButtonText: "支付遇到了一些问题",
+            center: true,
+          })
+            .then(() => {
+              getPayStatuslRequest(orderId)
+                .then(() => {
+                  console.log("支付成功");
+                  this.$message({
+                    type: "success",
+                    message: "支付成功!",
+                  });
+                  this.$router.push("/paysuccess");
+                })
+                .catch(() => {
+                  this.$router.push("/center");
+                });
+            })
+            .catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消删除",
+              });
+            });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+  },
 };
 </script>
+
 
 <style lang="less" scoped>
 ul {

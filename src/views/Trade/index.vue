@@ -77,28 +77,33 @@
         <div class="info_title">收货信息</div>
         <div class="info_add">
           <ul>
-            <li class="info_add_item">
+            <li
+              class="info_add_item"
+              v-for="userAddress in tradeList.userAddressList"
+              :key="userAddress.id"
+              @click="isSelected = userAddress.id"
+            >
               <div class="add_item_inner">
                 <div class="add_item_1th">
-                  <div class="add_item_name">幸世鑫</div>
+                  <div class="add_item_name">{{ userAddress.consignee }}</div>
                   <div>
                     <span>修改</span>
                     <span>删除</span>
-                    <span>选择地址</span>
+                    <span v-if="+userAddress.isDefault">默认地址</span>
                   </div>
                 </div>
                 <div class="add_item_2th">
-                  <div>152*****168</div>
+                  <div>{{ userAddress.phoneNum }}</div>
                   <div>周一至周日均可收货</div>
                 </div>
                 <div class="add_item_3th">
-                  <strong>江西省赣州市</strong>&nbsp;
-                  <span>南康区天宇花园</span>
+                  <strong>{{ userAddress.userAddress }}</strong>&nbsp;
+                  <span></span>
                 </div>
-                <span class="add_item_select"></span>
+                <span :class="{add_item_select: isSelected === userAddress.id }"></span>
               </div>
             </li>
-            <li class="info_add_item">
+            <!-- <li class="info_add_item">
               <div class="add_item_inner">
                 <div class="add_item_1th">
                   <div class="add_item_name">幸世鑫</div>
@@ -113,12 +118,12 @@
                   <div>周一至周日均可收货</div>
                 </div>
                 <div class="add_item_3th">
-                  <strong>江西省赣州市</strong>&nbsp;
-                  <span>南康区天宇花园</span>
+                  <strong>广东省深圳市</strong>&nbsp;
+                  <span>宝安区草围村</span>
                 </div>
                 <span></span>
               </div>
-            </li>
+            </li>-->
             <li class="add_new_item">
               <div class="add_new">
                 <div class="add_mark">+</div>
@@ -146,15 +151,15 @@
             </ul>
           </div>
           <div class="goods_item_body">
-            <div class="item_body">
+            <div class="item_body" v-for="detail in tradeList.detailArrayList" :key="detail.skuId">
               <ul>
                 <li class="body_1th">
-                  <img src="./images/history.jpg" />
-                  <p>儿童宝宝回力车惯性车玩具车合金小汽车工程车跑车巴士耐摔迷你</p>
+                  <img :src="detail.imgUrl" />
+                  <p>{{ detail.skuName }}</p>
                 </li>
-                <li class="body_2th">惯性回力合金车</li>
-                <li class="body_3th">¥49</li>
-                <li class="body_4th">1</li>
+                <li class="body_2th">标准</li>
+                <li class="body_3th">¥{{ detail.orderPrice }}</li>
+                <li class="body_4th">{{ detail.skuNum }}</li>
               </ul>
             </div>
           </div>
@@ -162,7 +167,7 @@
             <div class="goods_foot">
               <span class="foot_1th">运费： 免运费</span>
               <span class="foot_2th">本组商品金额：&nbsp;</span>
-              <span class="foot_3th">¥49</span>
+              <span class="foot_3th">¥{{ tradeList.totalAmount }}</span>
             </div>
           </div>
         </div>
@@ -190,7 +195,7 @@
           <ul>
             <li class="top_1th">
               <span class="top_text">商品金额：</span>
-              <span class="top_price">¥49</span>
+              <span class="top_price">¥{{ tradeList.totalAmount }}</span>
             </li>
             <li class="top_2th">
               <span class="top_text">运费：</span>
@@ -199,14 +204,14 @@
           </ul>
           <div class="pay_count">
             <span class="top_text">待支付：</span>
-            <span class="top_price">¥49</span>
+            <span class="top_price">¥{{ tradeList.totalAmount }}</span>
           </div>
           <div class="goto_add">
-            <span>送货至：南康区 天宇花园，幸世鑫，152*****168</span>
+            <span>送货至：{{ currentAddress.userAddress }}，{{ currentAddress.consignee }}，{{ currentAddress.phoneNum }}</span>
           </div>
         </div>
         <div class="pay_money_bottom">
-          <div class="pay_ok">
+          <div class="pay_ok" @click="submit">
             <span>提交订单</span>
           </div>
           <div class="pay_warn">
@@ -225,8 +230,97 @@
 </template>
 
 <script>
+import { gettradeRequest, submitOrderRequest } from "@api/order";
+
 export default {
   name: "Trade",
+  data() {
+    return {
+      tradeList: {},
+      // tradeList: {
+      //   userAddressList: [
+      //     {
+      //       id: -1,
+      //       consignee: "幸世鑫",
+      //       userAddress: "广东省深圳市宝安区",
+      //       phoneNum: "15207978168",
+      //       isDefault: "1",
+      //     },
+      //     {
+      //       id: 2,
+      //       consignee: "幸世鑫",
+      //       userAddress: "江西省赣州市南康区",
+      //       phoneNum: "15207978168",
+      //       isDefault: "0",
+      //     },
+      //   ],
+      //   detailArrayList: [
+      //     {
+      //       id: 61,
+      //       userId: "2",
+      //       skuId: 4,
+      //       orderPrice: 5999,
+      //       skuNum: 4,
+      //       imgUrl: "/img/shop1.bf6021a6.jpg",
+      //       skuName:
+      //         "坦克玩具车耐摔儿童玩具车男孩3岁大号合金小汽车军事模型套装",
+      //       isChecked: 1,
+      //       skuPrice: 5999,
+      //     },
+      //     {
+      //       id: 62,
+      //       userId: "2",
+      //       skuId: 2,
+      //       orderPrice: 5499,
+      //       skuNum: 1,
+      //       imgUrl: "/img/shop2.cbaccffb.jpg",
+      //       skuName: "Apple iPhone 11 (A2223) 64GB 红色",
+      //       isChecked: 1,
+      //       skuPrice: 5499,
+      //     },
+      //   ],
+      //   totalAmount: 12345,
+      // },
+      isSelected: -1,
+      orderComment: "",
+    };
+  },
+  computed: {
+    // 当前选中的收货地址
+    currentAddress() {
+      const { userAddressList } = this.tradeList;
+      const userAddress = userAddressList
+        ? userAddressList.find((userAddress) => {
+            return userAddress.id === this.isSelected;
+          })
+        : {};
+      return userAddress;
+    },
+  },
+  methods: {
+    // 提交订单
+    async submit() {
+      const { tradeNo, detailArrayList } = this.tradeList;
+      const { consignee, phoneNum, userAddress } = this.currentAddress;
+      const orderId = await submitOrderRequest({
+        tradeNo,
+        consignee,
+        consigneeTel: phoneNum,
+        deliveryAddress: userAddress,
+        paymentWay: "ONLINE",
+        orderComment: this.orderComment,
+        orderDetailList: detailArrayList,
+      });
+      this.$router.push(`/pay?orderId=${orderId}`);
+    },
+  },
+  async mounted() {
+    const tradeList = await gettradeRequest();
+    this.tradeList = tradeList;
+    this.isSelected = this.tradeList.userAddressList.find((userAddress) => {
+      return userAddress.isDefault === "1";
+    }).id;
+  },
 };
 </script>
 
@@ -556,6 +650,7 @@ ul {
       }
       .goods_item_body {
         .item_body {
+          margin-bottom: 20px;
           ul {
             display: flex;
             .body_1th {
@@ -727,6 +822,7 @@ ul {
         border: 1px solid #f10180;
         color: #fff;
         text-align: center;
+        cursor: pointer;
         span {
           font-size: 18px;
           line-height: 50px;
