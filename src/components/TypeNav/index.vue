@@ -1,7 +1,9 @@
 <template>
   <div class="type-nav">
-    <div class="container">
-      <h2 class="all"><i class="iconfont icon-mianbaoxie"></i>商品分类</h2>
+    <div class="container fix" @mouseleave="isShowCategory = false">
+      <h2 class="all" @mouseenter="isShowCategory = true">
+        <i class="iconfont icon-mianbaoxie"></i>商品分类
+      </h2>
       <nav class="nav">
         <a href="###" class="first">首页</a>
         <a href="###">3折疯抢</a>
@@ -15,13 +17,99 @@
         <a href="###">鞋包</a>
         <a href="###">更多</a>
       </nav>
+      <transition name="search">
+        <div class="sort" v-show="isShowCategory">
+          <div class="all-sort-list2">
+            <div
+              class="item bo"
+              v-for="category in categoryList"
+              :key="category.categoryId"
+            >
+              <h3>
+                <a href="###">{{ category.categoryName }}</a>
+              </h3>
+              <div class="item-list clearfix">
+                <div class="subitem">
+                  <dl
+                    class="fore"
+                    v-for="child in category.categoryChild"
+                    :key="child.categoryId"
+                  >
+                    <dt>
+                      <a href="###">{{ child.categoryName }}</a>
+                    </dt>
+                    <dd>
+                      <em
+                        v-for="item in child.categoryChild"
+                        :key="item.categoryId"
+                      >
+                        <a href="###">{{ item.categoryName }}</a>
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="brandContainer">
+                <div class="brand">
+                  <div class="recommend">品牌推荐</div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                  <div class="detail">
+                    <img src="../NavHeader/images/logo.png" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   name: "",
+  data() {
+    return {
+      isShowCategory: false,
+    };
+  },
+  computed: {
+    ...mapState({
+      categoryList: (state) => state.home.categoryList.slice(0, 11),
+    }),
+  },
+  methods: {
+    ...mapActions(["getBaseCategoryList"]),
+  },
+  mounted() {
+    this.getBaseCategoryList();
+    console.log(this);
+  },
 };
 </script>
 
@@ -46,19 +134,19 @@ export default {
         vertical-align: middle;
         margin-top: -3px;
         margin-right: 6px;
+        font-size: 28px;
       }
     }
     .nav {
-      .first{
+      .first {
         color: #f10180;
-        font-weight:500;
+        font-weight: 500;
       }
       a {
         height: 43px;
         padding: 0 10px;
         line-height: 43px;
         font-size: 16px;
-        color: #333;
         white-space: nowrap;
       }
     }
@@ -66,10 +154,10 @@ export default {
       position: absolute;
       left: 0;
       top: 45px;
-      width: 210px;
-      height: 461px;
+      width: 156px;
+      height: 495px;
       position: absolute;
-      background: #fafafa;
+      background: #f10180;
       z-index: 999;
       // 控制显示隐藏过渡效果
       &.search-enter-active {
@@ -80,34 +168,46 @@ export default {
         height: 0px;
       }
       .all-sort-list2 {
+        color: #fff;
+        &:hover .item-list .subitem {
+          display: block;
+        }
         .item {
           h3 {
-            line-height: 30px;
-            font-size: 14px;
+            // width: 156px;
+            line-height: 45px;
+            font-size: 12px;
             font-weight: 400;
             overflow: hidden;
-            padding: 0 20px;
-            margin: 0;
+            padding-left: 20px;
             a {
-              color: #333;
+              color: #fff;
+            }
+            &:hover {
+              background-color: #fff;
+              a {
+                color: #f10180;
+              }
             }
           }
           .item-list {
             display: none;
+            float: left;
+            width: 519px;
+            padding: 16px 40px 16px 40px;
+            border-top: 1px solid #eee;
             position: absolute;
-            width: 734px;
-            min-height: 460px;
-            _height: 200px;
-            background: #f7f7f7;
-            left: 210px;
-            border: 1px solid #ddd;
+            height: 495px;
+            background: #ffffff;
+            left: 156px;
             top: 0;
             z-index: 9999 !important;
             .subitem {
-              float: left;
-              width: 650px;
-              padding: 0 4px 0 8px;
+              position: absolute;
               dl {
+                margin-bottom: 24px;
+                position: relative;
+                font-size: 12px;
                 border-top: 1px solid #eee;
                 padding: 6px 0;
                 overflow: hidden;
@@ -119,22 +219,26 @@ export default {
                   float: left;
                   width: 54px;
                   line-height: 22px;
-                  text-align: right;
                   padding: 3px 6px 0 0;
                   font-weight: 700;
+                  line-height: 22px;
+                  left: 0;
+                  width: 83px;
+                  color: #222;
+                  overflow: hidden;
                 }
                 dd {
-                  float: left;
-                  width: 415px;
-                  padding: 3px 0 0;
+                  width: 425px;
+                  margin-left: 95px;
                   overflow: hidden;
+                  *zoom: 1;
+                  word-break: keep-all;
                   em {
                     float: left;
                     height: 14px;
                     line-height: 14px;
                     padding: 0 8px;
                     margin-top: 5px;
-                    border-left: 1px solid #ccc;
                   }
                 }
               }
@@ -144,6 +248,38 @@ export default {
             .item-list {
               display: block;
             }
+            .brandContainer {
+              display: block;
+            }
+          }
+        }
+      }
+      .brandContainer {
+        display: none;
+        background-color: #f5f5f5;
+        width: 213px;
+        height: 463px;
+        padding: 16px;
+        position: absolute;
+        top: 0;
+        left: 754px;
+        .recommend {
+          font-size: 12px;
+          color: #222;
+          line-height: 21px;
+          margin-bottom: 28px;
+        }
+        .detail {
+          width: 68px;
+          height: 68px;
+          display: inline-block;
+          background: #fff;
+          margin-top: -12px;
+          img {
+            display: block;
+            width: 68px;
+            height: 68px;
+            position: relative;
           }
         }
       }
