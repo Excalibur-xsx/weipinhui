@@ -67,8 +67,8 @@ const router = new VueRouter({
  * @next 一个路由跳转的函数，来决定跳转到哪个路由。直接next()调用是跳转到to的路由
  */
 // 需要验证是否登录的名单
-// const isLoginList = ['/trade', '/center', '/pay', '/paysuccess'];
-const isLoginList = [];
+const isLoginList = ['/trade', '/center', '/pay', '/paysuccess'];
+// const isLoginList = [];
 router.beforeEach((to, from, next) => {
 	if (isLoginList.indexOf(to.path) > -1 && !store.state.user.user.token) {
 		next('/login');
