@@ -14,7 +14,6 @@ export const reqRegister = ({ phone, password, code }) => {
 };
 
 // 登录请求
-// 注册请求
 export const reqLogin = (phone, password) => {
   return request({
     method: "POST",
@@ -23,5 +22,12 @@ export const reqLogin = (phone, password) => {
       phone,
       password,
     },
+  });
+};
+// 退出登录请求
+export const reqLogout = () => {
+  return request({
+    method: "GET",
+    url: "/user/passport/logout",
   });
 };

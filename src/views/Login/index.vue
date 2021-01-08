@@ -14,8 +14,22 @@
         <div class="back">
           <div class="registerContentRight">
             <div class="registerContentRightTop">
-              <h3 class="memberRegisterTxet">扫码登录</h3>
-              <h3 class="memberRegisterTxet" style="color: #f10180">
+              <h3
+                :class="{
+                  memberRegisterTxetL: true,
+                  active: showLogin ? '' : 'active',
+                }"
+                @click="fncShowLogin(0)"
+              >
+                扫码登录
+              </h3>
+              <h3
+                :class="{
+                  memberRegisterTxetR: true,
+                  active: showLogin ? 'active' : '',
+                }"
+                @click="fncShowLogin(1)"
+              >
                 账户登录
               </h3>
             </div>
@@ -24,6 +38,7 @@
               :rules="rules"
               ref="ruleForm"
               class="demo-ruleForm"
+              v-if="showLogin"
             >
               <el-form-item prop="phone" class="formHome">
                 <el-input
@@ -47,16 +62,39 @@
               <div class="registerTreaty">
                 <div class="treaty">
                   <a href="">短信验证登录</a>
-                  <a href="">忘记密码</a>
+                  <a href="">忘记密码?</a>
                 </div>
               </div>
 
-              <button class="registeBtn" @click="toLogin">登录</button>
+              <button class="registeBtn" @click.prevent="toLogin">登录</button>
             </el-form>
+            <el-form
+              :model="ruleForm"
+              :rules="rules"
+              ref="ruleForm"
+              class="demo-ruleForm"
+              v-else
+            >
+              <el-form-item class="appWeixin">
+                <img
+                  src="https://passport.vip.com/qrLogin/getQrImage?qrToken=10000-f2e62c9d38b34cb19898170e55162f72"
+                  alt=""
+                />
+                <div class="jinglintu"></div>
+                <div class="apptext">
+                  <span style="color: #f10180">打开唯品会APP-个人中心</span
+                  >，扫一扫登录
+                </div>
+              </el-form-item>
+            </el-form>
+
             <div class="registerContentRightFooter">
               <div class="weixin">
                 <div class="halvingLine"></div>
-                <span class="jinglingtu"></span>
+                <a
+                  class="jinglingtu"
+                  href="https://open.weixin.qq.com/connect/qrconnect?appid=wxce0a56c2bb620e25&redirect_uri=https%3A%2F%2Fpassport.vip.com%2Fcallback%2Fweixin&response_type=code&scope=snsapi_login&state=c7c15643eb9f42b99f4c4b9d5a0bc516#wechat_redirect"
+                ></a>
                 <div class="halvingLine"></div>
               </div>
               <ul class="loginList">
@@ -88,6 +126,7 @@ export default {
   name: "Login",
   data() {
     return {
+      showLogin: true,
       ruleForm: {
         phone: "",
         password: "",
@@ -114,9 +153,13 @@ export default {
   methods: {
     async toLogin() {
       try {
-        if (this.isLogining) return;
-        this.isLogining = true;
         const { phone, password } = this.ruleForm;
+        if (this.isLogining) return;
+        if (!phone && !password) {
+          this.$message.error("请输入账号和密码");
+          return;
+        }
+        this.isLogining = true;
         await this.$store.dispatch("login", { phone, password });
         localStorage.setItem("token", this.token);
         localStorage.setItem("name", this.name);
@@ -126,6 +169,15 @@ export default {
       }
 
       // console.log(result);
+    },
+    fncShowLogin(type) {
+      if (type) {
+        this.showLogin = true;
+        console.log(111, this.showLogin);
+      } else {
+        this.showLogin = false;
+        console.log(222, this.showLogin);
+      }
     },
   },
   mounted() {},
@@ -169,14 +221,32 @@ export default {
     float: right;
   }
   .registerContentRightTop {
-    display: flex;
+    // display: flex;
     width: 100%;
-    justify-content: space-around;
+    // justify-content: space-around;
     height: 50px;
     line-height: 50px;
     border-bottom: 1px solid #e0e0e0;
-    .memberRegisterTxet {
+    align-items: center;
+    cursor: pointer;
+    .memberRegisterTxetL {
+      // display: flex;
+      // align-items: center;
+      display: inline-block;
       font-size: 18px;
+      border-right: 1px solid #ccc;
+      width: 50%;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .memberRegisterTxetR {
+      display: inline-block;
+      text-align: center;
+      font-size: 18px;
+      width: 50%;
+    }
+    .active {
+      color: #f10180;
     }
     .registerTxet {
       font-size: 14px;
@@ -265,6 +335,36 @@ export default {
       }
     }
   }
+  .appWeixin {
+    width: 360px;
+    height: 264px;
+    padding-top: 20px;
+
+    img {
+      border: 0 none;
+      width: 150px;
+      height: 150px;
+      padding: 26px 0 0 52px;
+    }
+    .jinglintu {
+      background-image: url(//member-ssl.vipstatic.com/img/passport/sprites-hash-c9975078.png?4eaaf192);
+      background-position: 0 -104px;
+      width: 120px;
+      height: 192px;
+      // display: none;
+      position: absolute;
+      top: 0;
+      right: 30px;
+      // z-index: 1;
+      // opacity: 0;
+    }
+    .apptext {
+      width: 100%;
+      height: 80px;
+      line-height: 80px;
+      text-align: center;
+    }
+  }
   .registerTreaty {
     .treaty {
       display: flex;
@@ -284,6 +384,7 @@ export default {
     outline: none;
     border: 0;
     border-radius: 10px;
+    cursor: pointer;
   }
 }
 .registerBottom {
@@ -313,6 +414,7 @@ export default {
       position: relative;
       z-index: 3;
       margin: 0 5px;
+      cursor: pointer;
     }
     .halvingLine {
       width: 50%;

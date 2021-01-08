@@ -1,27 +1,30 @@
 // @ts-nocheck
-import Vue from "vue"
-import App from "./App"
+import Vue from "vue";
+import App from "./App";
 
-import VueLazyload from "vue-lazyload"
+import VueLazyload from "vue-lazyload";
+// import VueWechatTitle from "vue-wechat-title";
 
-import router from "./router"
-import store from "./store"
+import router from "./router";
+import store from "./store";
 
 import "./style/reset.css";
 
 Vue.config.productionTip = false;
-import "./plugins/element.js"
+import "./plugins/element.js";
 
 //引入默认样式
-import "./style/reset.css"
+import "./style/reset.css";
 //引入懒加载的默认图片
-import loading from "./assets/images/loading.gif"
+import loading from "./assets/images/loading.gif";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+// Vue.use(VueWechatTitle);
 
 Vue.use(VueLazyload, {
   loading,
-})
+});
 
 new Vue({
   beforeCreate() {
@@ -32,4 +35,4 @@ new Vue({
   // 应用router
   router,
   store,
-}).$mount("#app")
+}).$mount("#app");

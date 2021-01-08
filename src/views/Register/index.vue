@@ -14,7 +14,9 @@
         <div class="registerContentRight">
           <div class="registerContentRightTop">
             <h3 class="memberRegisterTxet">会员注册</h3>
-            <div class="registerTxet">已注册可<a href="">直接登录</a></div>
+            <div class="registerTxet">
+              已注册可<router-link to="/login">直接登录</router-link>
+            </div>
           </div>
           <el-form
             :model="ruleForm"
@@ -27,6 +29,7 @@
                 class="formHomeInput"
                 v-model="ruleForm.phone"
                 placeholder="请输入手机号码"
+                clearable
               ></el-input>
               <span class="iconfont icon-phone"></span>
               <span></span>
@@ -36,6 +39,7 @@
                 class="formCodeInput"
                 v-model="ruleForm.code"
                 placeholder="请输入验证码"
+                clearable
               ></el-input>
               <span class="iconfont icon-icon-test2"></span>
               <img
@@ -51,6 +55,7 @@
                 class="formPasswordInput"
                 v-model="ruleForm.password"
                 placeholder="密码由8-20位字母，数字和符号组合"
+                clearable
               ></el-input>
               <span class="iconfont icon-icon-test3"></span>
             </el-form-item>
@@ -60,6 +65,7 @@
                 class="formPasswordInput"
                 v-model="ruleForm.notarizePassword"
                 placeholder="请再次输入上面的密码"
+                clearable
               ></el-input>
               <span class="iconfont icon-icon-test3"></span>
             </el-form-item>
@@ -254,6 +260,9 @@ export default {
         line-height: 46px;
         font-size: 16px;
         border-radius: 5px;
+        // input::-webkit-input-placeholder {
+        //   color: #f10180 !important;
+        // }
       }
       .icon-phone {
         position: absolute;
