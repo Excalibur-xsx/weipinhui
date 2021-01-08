@@ -17,7 +17,7 @@ const modules = context.keys().reduce((modules, modulePath) => {
   return modules;
 }, {});
 
-// 创建store对象
+
 const store = new Vuex.Store({
   /*  modules暴露内容
   modules: {
