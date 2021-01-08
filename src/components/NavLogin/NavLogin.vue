@@ -152,7 +152,6 @@ export default {
     mouseover(UserShow, moveFlag) {
       if (this.flag) return;
       if (UserShow) {
-        // console.log(22);
         this.move = "-36px";
         this.moveFlag = true;
         // console.log("moveFlag1", moveFlag);
