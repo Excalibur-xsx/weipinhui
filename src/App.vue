@@ -1,19 +1,22 @@
 <template>
   <div>
-    <NavHeader></NavHeader>
+    <NavHeader />
     <router-view></router-view>
-    <Footer></Footer>
+    <Footer />
+    <NavLogin />
   </div>
 </template>
 
 <script>
 import Footer from "./components/footer";
 import NavHeader from "./components/NavHeader/index";
+import NavLogin from "./components/NavLogin/NavLogin";
 export default {
   name: "app",
   components: {
     NavHeader,
-    Footer
+    Footer,
+    NavLogin,
   },
 };
 </script>

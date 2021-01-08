@@ -132,7 +132,7 @@
           <div class="search">
             <form class="searchForm">
               <input class="searchInput" type="text" />
-              <button class="searchBtn">
+              <button class="searchBtn" @click="$router.push('/searchList')">
                 <i class="iconfont icon-sousuo"></i>
               </button>
             </form>
@@ -190,12 +190,8 @@ export default {
   components: {
     TypeNav,
   },
-  methods:{
-    
-  },
-  mounted(){
-   
-  }
+  methods: {},
+  mounted() {},
 };
 </script>
 

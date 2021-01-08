@@ -8,7 +8,7 @@
       <nav class="nav">
         <router-link to="/" class="first">首页</router-link>
         <a href="###">3折疯抢</a>
-        <a href="###">唯品快抢</a>
+        <router-link to="/forestallBuy">唯品快抢</router-link>
         <a href="###">唯品奥莱</a>
         <a href="###">品牌清仓</a>
         <a href="###">女装</a>
