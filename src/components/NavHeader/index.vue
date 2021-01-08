@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="common-header">
+    <header class="common-header" ref="height">
       <nav class="top-nav">
         <div class="header-inner">
           <div class="address-container">
@@ -190,6 +190,12 @@ export default {
   components: {
     TypeNav,
   },
+  methods:{
+    
+  },
+  mounted(){
+   
+  }
 };
 </script>
 

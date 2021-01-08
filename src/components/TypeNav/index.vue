@@ -1,6 +1,7 @@
-<template>
-  <div class="type-nav">
-    <div class="container fix" @mouseleave="isShowCategory = false">
+<template @scroll.native="getScroll">
+  <!-- <div class="type-nav" :class="isFixed?'fixedtrans':''"> -->
+  <div :class="{'type-nav':true,'fixedtrans':show}">
+    <div class="container" @mouseleave="isShowCategory = false">
       <h2 class="all" @mouseenter="isShowCategory = true">
         <i class="iconfont icon-mianbaoxie"></i>商品分类
       </h2>
@@ -93,9 +94,12 @@
 import { mapState, mapActions } from "vuex";
 export default {
   name: "",
+  // props:['isFixed'],
   data() {
     return {
       isShowCategory: false,
+      scroll:0,
+      show:false
     };
   },
   computed: {
@@ -105,16 +109,43 @@ export default {
   },
   methods: {
     ...mapActions(["getBaseCategoryList"]),
+    getScroll(event) {
+      console.log("getScroll",event)
+      // 获取滚动条离顶部的距离
+      this.scroll = document.documentElement.scrollTop||document.body.scrollTop
+      console.log(this.scroll)
+      // let res = this.$refs.height.clientHeight
+      // console.log(res)//175
+      if(this.scroll >= 200){
+        this.show  = true
+        return;
+      }else{
+        this.show  = false
+      }
+    },
   },
   mounted() {
+    window.addEventListener('scroll', this.getScroll,true)
     this.getBaseCategoryList();
-    console.log(this);
+    console.log(this)
   },
 };
 </script>
 
 <style lang="less" scoped>
 .type-nav {
+  &.fixedtrans{
+    position: fixed;
+    width: 100%;
+    z-index:999;
+    background-color: #fff;
+    transition: .3s linear;
+    -webkit-transition: .3s linear;
+    top: 0;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    box-shadow: 0 1px 3px 0 #a7a7a7;
+  }
   .container {
     width: 1000px;
     margin: 0 auto;
@@ -285,5 +316,6 @@ export default {
       }
     }
   }
+  
 }
 </style>

@@ -4,7 +4,7 @@
       <img src="./images/bgimage.jpg" alt="" />
     </div>
     <div class="focus-banners">
-      <el-carousel indicator-position="outside" class="banners" autoplay>
+      <el-carousel class="banners" autoplay>
         <el-carousel-item class="bannersItem" v-for="item in banners" :key="item.id">
           <img v-lazy="item.imgUrl" alt="" />
         </el-carousel-item>
@@ -160,7 +160,6 @@ export default {
     .bannersItem img {
       width: 976px;
       height: 340px;
-      z-index: 2;
       opacity: 1;
       margin: 0 auto;
     }
@@ -172,7 +171,6 @@ export default {
     margin-left: -488px;
     height: 40px;
     position: absolute;
-    z-index: 2;
     bottom: 20px;
     .triggerItem {
       width: 100%;
