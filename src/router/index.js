@@ -2,7 +2,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import Home from "../views/Home";
+import Home from "../views/Home/index.vue";
 
 // 安装插件
 Vue.use(VueRouter);

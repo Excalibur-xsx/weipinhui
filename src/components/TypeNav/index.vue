@@ -6,7 +6,7 @@
         <i class="iconfont icon-mianbaoxie"></i>商品分类
       </h2>
       <nav class="nav">
-        <a href="###" class="first">首页</a>
+        <router-link to="/" class="first">首页</router-link>
         <a href="###">3折疯抢</a>
         <a href="###">唯品快抢</a>
         <a href="###">唯品奥莱</a>

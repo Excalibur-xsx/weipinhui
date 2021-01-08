@@ -1,11 +1,15 @@
-<template>
+<template @scroll.native="getScroll">
   <div class="bannersContainer">
     <div class="bgImage">
       <img src="./images/bgimage.jpg" alt="" />
     </div>
     <div class="focus-banners">
       <el-carousel class="banners" autoplay>
-        <el-carousel-item class="bannersItem" v-for="item in banners" :key="item.id">
+        <el-carousel-item
+          class="bannersItem"
+          v-for="item in banners"
+          :key="item.id"
+        >
           <img v-lazy="item.imgUrl" alt="" />
         </el-carousel-item>
       </el-carousel>
@@ -34,7 +38,47 @@
         <img src="./images/low.png" alt="" />
       </div>
     </div>
-    <div class="sale">
+    <div class="sale" ref="sale">
+      <div :class="{ lift: true, isFixed: list }">
+        <div class="fixedBox">
+          <a href="###">
+            <!-- <span></span> -->
+            <span>女装</span>
+          </a>
+          <a href="###">
+            <!-- <span></span> -->
+            <span>鞋包</span>
+          </a>
+          <a href="###">
+            <!-- <span></span> -->
+            <span>男装</span>
+          </a>
+          <a href="###">
+            <!-- <span></span> -->
+            <span>运动</span>
+          </a>
+          <a href="###">
+            <!-- <span></span> -->
+            <span>饰品</span>
+          </a>
+          <a href="###">
+            <!-- <span></span> -->
+            <span>美妆</span>
+          </a>
+          <a href="###">
+            <!-- <span></span> -->
+            <span>母婴</span>
+          </a>
+          <a href="###">
+            <!-- <span></span> -->
+            <span>居家</span>
+          </a>
+          <a href="###">
+            <!-- <span></span> -->
+            <span>生活</span>
+          </a>
+        </div>
+      </div>
       <img src="./images/sale.png" alt="" />
       <a href="###" class="reset">马上刷新</a>
     </div>
@@ -60,66 +104,46 @@
         <a href="###">逛更多品牌</a>
       </div>
     </div>
-    <div class="lift">
-      <div class="fixedBox">
-        <a href="###">
-          <span></span>
-          <span>女装</span>
-        </a>
-        <a href="###">
-          <span></span>
-          <span>鞋包</span>
-        </a>
-        <a href="###">
-          <span></span>
-          <span>男装</span>
-        </a>
-        <a href="###">
-          <span></span>
-          <span>运动</span>
-        </a>
-        <a href="###">
-          <span></span>
-          <span>饰品</span>
-        </a>
-        <a href="###">
-          <span></span>
-          <span>美妆</span>
-        </a>
-        <a href="###">
-          <span></span>
-          <span>母婴</span>
-        </a>
-        <a href="###">
-          <span></span>
-          <span>居家</span>
-        </a>
-        <a href="###">
-          <span></span>
-          <span>生活</span>
-        </a>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-import {mapState,mapActions} from 'vuex'
+import { mapState, mapActions } from "vuex";
 export default {
   name: "Home",
-  computed:{
+  data() {
+    return {
+      list: false,
+    };
+  },
+  computed: {
     ...mapState({
-      banners:(state)=>state.home.banners,
-      floors:(state)=>state.home.floors
-    })
+      banners: (state) => state.home.banners,
+      floors: (state) => state.home.floors,
+    }),
   },
   methods: {
-    ...mapActions(["getBanners","getFloors"])
+    ...mapActions(["getBanners", "getFloors"]),
+    getScroll(event) {
+      console.log("getScroll", event);
+      // 获取滚动条离顶部的距离
+      this.scroll =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      console.log(this.scroll);
+      let res = this.$refs.sale.scrollTop;
+      console.log(res); //175
+      if (this.scroll >= 1350) {
+        this.list = true;
+        return;
+      } else {
+        this.list = false;
+      }
+    },
   },
-  mounted(){
-    this.getBanners()
-    this.getFloors()
-  }
+  mounted() {
+    this.getBanners();
+    this.getFloors();
+  },
 };
 </script>
 
@@ -262,11 +286,40 @@ export default {
     font-size: 14px;
     padding: 0;
   }
+  .lift {
+    width: 76px;
+    border: 1px solid #d6d6d6;
+    border-radius: 3px;
+    position: absolute;
+    left: -130px;
+    top: 80px;
+    &.isFixed {
+      position: fixed;
+      top: 112px;
+    }
+    .fixedBox {
+      a {
+        span {
+          text-align: center;
+          width: 52px;
+          display: inline-block;
+          padding: 8px 8px 10px;
+          color: #fff;
+          background-color: #f10180;
+          border-bottom: 0;
+          border-radius: 4px;
+          margin-top: 3px;
+          left: 3px;
+          position: relative;
+        }
+      }
+    }
+  }
 }
 .girlClothes {
   width: 1000px;
   margin: 0 auto;
-  
+
   .girlBrand {
     margin-bottom: 30px;
     min-height: 43px;
@@ -329,13 +382,5 @@ export default {
       margin: -1px auto 20px;
     }
   }
-}
-.lift {
-  position: fixed;
-  top: 112px;
-  left:80px;
-  width: 36px;
-  height: 300px;
-  font-size: 16px;
 }
 </style>
