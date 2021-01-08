@@ -6,12 +6,11 @@ import { v4 as uuidv4 } from "uuid"
 		- 如果没有，需要创建userTempId，同时保存在localStorage中
 */
 export default function getUserTempId() {
-  let userTempId = localStorage.getItem("userTempId")
-  if (userTempId) {
-    return userTempId
-  }
-  userTempId = uuidv4()
-  localStorage.setItem("userTempId", userTempId)
-  return userTempId
+	let userTempId = localStorage.getItem("userTempId")
+	if (userTempId) {
+		return userTempId
+	}
+	userTempId = uuidv4()
+	localStorage.setItem("userTempId", userTempId)
+	return userTempId
 }
-
