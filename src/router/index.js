@@ -68,7 +68,7 @@ const router = new VueRouter({
       path: "/searchList",
       component: SearchList,
       meta: {
-        title: "搜索",
+        title: "搜索商品",
       },
     },
     {

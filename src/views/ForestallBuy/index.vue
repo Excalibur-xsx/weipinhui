@@ -1,99 +1,25 @@
 <template>
   <div>
-    <div class="wrapper">
+    <div class="wrapper" v-wechat-title="$route.meta.title">
       <div class="hot-product-container">
         <div class="product-list">
-          <div class="product-item">
+          <div
+            class="product-item"
+            v-for="hot in forestallBuyList.hotSale"
+            :key="hot.id"
+          >
             <div class="pic">
-              <img
-                src="//h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcpos/1100005574/2020/0802/137/4823bff6-fac1-4b33-bb37-0308dbf0fedc.jpg!75.webp"
-              />
+              <img :src="hot.imgUrl" />
               <div class="hot">
                 <img
                   src="//h2.appsimg.com/a.appsimg.com/upload/pmc/2019/10/28/15/1572234761550.png"
                 />
               </div>
             </div>
-            <transition name="slide-fade">
-              <p class="title">13斤洗衣柔顺组合</p>
-            </transition>
+            <p class="title">{{ hot.name }}</p>
             <div class="msg">
               <span>特卖价</span>
-              <span class="price">￥59</span>
-            </div>
-          </div>
-          <div class="product-item">
-            <div class="pic">
-              <img
-                src="//h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcpos/1100005574/2020/0802/137/4823bff6-fac1-4b33-bb37-0308dbf0fedc.jpg!75.webp"
-              />
-              <div class="hot">
-                <img
-                  src="//h2.appsimg.com/a.appsimg.com/upload/pmc/2019/10/28/15/1572234761550.png"
-                />
-              </div>
-            </div>
-            <transition name="slide-fade">
-              <p class="title">13斤洗衣柔顺组合</p>
-            </transition>
-            <div class="msg">
-              <span>特卖价</span>
-              <span class="price">￥59</span>
-            </div>
-          </div>
-          <div class="product-item">
-            <div class="pic">
-              <img
-                src="//h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcpos/1100005574/2020/0802/137/4823bff6-fac1-4b33-bb37-0308dbf0fedc.jpg!75.webp"
-              />
-              <div class="hot">
-                <img
-                  src="//h2.appsimg.com/a.appsimg.com/upload/pmc/2019/10/28/15/1572234761550.png"
-                />
-              </div>
-            </div>
-            <transition name="slide-fade">
-              <p class="title">13斤洗衣柔顺组合</p>
-            </transition>
-            <div class="msg">
-              <span>特卖价</span>
-              <span class="price">￥59</span>
-            </div>
-          </div>
-          <div class="product-item">
-            <div class="pic">
-              <img
-                src="//h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcpos/1100005574/2020/0802/137/4823bff6-fac1-4b33-bb37-0308dbf0fedc.jpg!75.webp"
-              />
-              <div class="hot">
-                <img
-                  src="//h2.appsimg.com/a.appsimg.com/upload/pmc/2019/10/28/15/1572234761550.png"
-                />
-              </div>
-            </div>
-            <transition name="slide-fade">
-              <p class="title">13斤洗衣柔顺组合</p>
-            </transition>
-            <div class="msg">
-              <span>特卖价</span>
-              <span class="price">￥59</span>
-            </div>
-          </div>
-          <div class="product-item">
-            <div class="pic">
-              <img
-                src="//h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcpos/1100005574/2020/0802/137/4823bff6-fac1-4b33-bb37-0308dbf0fedc.jpg!75.webp"
-              />
-              <div class="hot">
-                <img
-                  src="//h2.appsimg.com/a.appsimg.com/upload/pmc/2019/10/28/15/1572234761550.png"
-                />
-              </div>
-            </div>
-            <p class="title">13斤洗衣柔顺组合</p>
-            <div class="msg">
-              <span>特卖价</span>
-              <span class="price">￥59</span>
+              <span class="price">￥{{ hot.price }}</span>
             </div>
           </div>
         </div>
@@ -102,132 +28,17 @@
         <Title titleName="热销分类" />
         <div class="sale-catalog-wrap">
           <ul class="sale-catalog">
-            <li class="sale-catalog-item">
+            <li
+              class="sale-catalog-item"
+              v-for="cateLog in forestallBuyList.hotCateLog"
+              :key="cateLog.id"
+            >
               <div class="show-detail">
                 <div class="sale-cate-name">
-                  <p>面部护理</p>
+                  <p>{{ cateLog.name }}</p>
                 </div>
                 <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
-                </div>
-              </div>
-              <div class="show-bg"></div>
-            </li>
-            <li class="sale-catalog-item">
-              <div class="show-detail">
-                <div class="sale-cate-name">
-                  <p>面部护理</p>
-                </div>
-                <div class="sale-cate-img">
-                  <img
-                    src="//h2.appsimg.com/b.appsimg.com/upload/mst/2020/04/14/108/7b329f71a337226707c2e3d0938cfc1f.png!75.webp"
-                  />
+                  <img :src="cateLog.imgUrl" />
                 </div>
               </div>
               <div class="show-bg"></div>
@@ -235,20 +46,35 @@
           </ul>
         </div>
       </div>
-      <ProductList />
+      <ProductList
+        v-for="product in forestallBuyList.productList"
+        :key="product.id"
+        :product="product"
+      />
+      <div class="sidebar" v-show="isShowSidebar">
+        <div
+          v-for="(product, index) in forestallBuyList.productList"
+          :key="index"
+          class="sidebar-item"
+        >
+          <a :href="`#${product.id}`">{{ product.name }}</a>
+        </div>
+        <a href="#">返回顶部</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getHotSaleList } from "../../api/forestallBuy";
+import { getForestallBuyList } from "../../api/forestallBuy";
 import Title from "./Title";
 import ProductList from "./ProductList";
 export default {
   name: "ForestallBuy",
   data() {
     return {
-      hotSaleList: [],
+      forestallBuyList: {},
+      isShowSidebar: false,
     };
   },
   components: {
@@ -256,7 +82,17 @@ export default {
     ProductList,
   },
   async mounted() {
-    this.hotSaleList = await getHotSaleList();
+    this.forestallBuyList = await getForestallBuyList();
+    window.onscroll = () => {
+      var scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 900) {
+        this.isShowSidebar = true;
+      }
+      if (scrollTop < 900) {
+        this.isShowSidebar = false;
+      }
+    };
   },
 };
 </script>
@@ -400,6 +236,41 @@ export default {
     height: 100%;
     background-color: #f558af;
     top: 0%;
+  }
+}
+.sidebar {
+  position: fixed;
+  top: 30%;
+  right: 6%;
+  background-color: #fff;
+  padding: 30px 10px;
+  border: 1px solid #f10180;
+  border-radius: 10px;
+  overflow: hidden;
+  .sidebar-item {
+    height: 30px;
+    text-align: 30px;
+    z-index: 1;
+    color: black;
+    a {
+      font-size: 16px;
+      padding-top: 5px;
+      border-bottom: 1px solid #f10180;
+      text-decoration: none;
+    }
+    a:link {
+      text-decoration: none;
+    }
+    a:visited {
+      text-decoration: underline;
+    }
+    a:hover {
+      color: #f10180;
+      text-decoration: none;
+    }
+    a:actived {
+      text-decoration: none;
+    }
   }
 }
 </style>

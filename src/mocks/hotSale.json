@@ -1,7 +1,0 @@
-[
-  {
-    "id|+1": 1,
-    "imgUrl": "@image('140x140','@color','png', '@title')",
-    "text": "@ctitle(8,11)"
-  }
-]

@@ -1,22 +1,25 @@
 <template>
   <div class="product-container">
-    <Title titleName="今日必抢" id="1" />
+    <Title :titleName="product.name" :id="product.id" />
     <div class="product-list">
-      <div class="product-item">
-        <img
-          src="https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcvis/2020/11/25/99/cc79f50d-da27-46b5-b813-a6fbfa266356.jpg!75.webp"
-        />
-        <p>DEVONDALE澳洲德运全脂成人奶粉 1000g（3岁以上）</p>
-        <h3>澳洲奶源 源自天然</h3>
-        <p class="sellNum">累计热卖3.0万件</p>
+      <div
+        class="product-item"
+        v-for="item in product.productLists"
+        :key="item.id"
+      >
+        <img v-lazy="item.imgUrl" />
+        <p>{{ item.productTitle }}</p>
+        <h3>{{ item.productName }}{{ item.productName }}</h3>
+        <p class="sellNum">累计热卖{{ item.saleNum }}万件</p>
         <div class="price">
           <span>特卖价</span>
-          <span>￥49</span>
-          <span>￥49</span>
-          <span>3.3折</span>
+          <span>￥{{ item.salePrice }}</span>
+          <span>￥{{ item.salePrice * 2 }}</span>
+          <span>{{ item.discount }}折</span>
         </div>
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -24,6 +27,9 @@
 import Title from "../Title";
 export default {
   name: "ProductList",
+  props: {
+    product: Object,
+  },
   components: {
     Title,
   },
@@ -43,7 +49,8 @@ export default {
       background-color: #fff;
       border-radius: 10px;
       padding: 10px;
-      cursor:pointer;
+      margin: 10px;
+      cursor: pointer;
       img {
         width: 230px;
         height: 230px;

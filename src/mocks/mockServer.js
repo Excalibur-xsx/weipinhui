@@ -1,7 +1,7 @@
 import Mock from "mockjs"
-import hotSale from "./hotSale.json"
+import forestallBuyList from "./forestallBuyList.json"
 
-Mock.mock("/mock/hotSale", "get", {
+Mock.mock("/mock/forestallBuyList", "get", {
   code: 200,
-  "data|5": hotSale,
+  data: forestallBuyList,
 })

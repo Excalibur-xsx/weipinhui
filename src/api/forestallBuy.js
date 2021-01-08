@@ -1,8 +1,8 @@
 import mockRequest from "../utils/mockRequest"
 
-export const getHotSaleList = () => {
+export const getForestallBuyList = () => {
   return mockRequest({
     method: "GET",
-    url: "/hotSale",
+    url: "/forestallBuyList",
   })
 }
