@@ -25,6 +25,13 @@ module.exports = {
         // pathRewrite: { // 重写路径
         //   "^/api": "",
         // },
+        changeOrigin: true,
+      },
+      //获取唯品会数据的跨域
+      "/huan": {
+        target: "https://myi.vip.com",
+        changeOrigin: true,
+        pathRewrite: { "^/huan": "" }
       },
     },
   },

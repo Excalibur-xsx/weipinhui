@@ -124,14 +124,11 @@ export default {
   },
   methods: {
     ...mapActions(["getBanners", "getFloors"]),
-    getScroll(event) {
-      console.log("getScroll", event);
+    getScroll() {
       // 获取滚动条离顶部的距离
       this.scroll =
         document.documentElement.scrollTop || document.body.scrollTop;
-      console.log(this.scroll);
-      let res = this.$refs.sale.scrollTop;
-      console.log(res); //175
+      // let res = this.$refs.sale.scrollTop;
       if (this.scroll >= 1350) {
         this.list = true;
         return;

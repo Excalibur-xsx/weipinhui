@@ -37,12 +37,17 @@ export default {
   methods: {
     //跳转商品详情
     toDetail(id) {
-      // this.$router.push(`/detile/${id}`);
-      // 打开新窗口跳转页面
-      const { href } = this.$router.resolve({
-        path: `/detile/${id}`,
+      this.$router.push({
+        name:"detail",
+        params:{
+          id
+        }
       });
-      window.open(href, "_blank");
+      // 打开新窗口跳转页面
+      /* const { href } = this.$router.resolve({
+        path: `/detail/${id}`,
+      });
+      window.open(href, "_blank"); */
     },
   },
 };

@@ -18,8 +18,6 @@ import router from "./router"
 import store from "./store"
 //引入mockServer
 import mockServer from "./mocks/mockServer"
-//引入默认样式
-import "./style/reset.css"
 //引入懒加载的默认图片
 import loading from "./assets/images/loading.gif"
 
@@ -38,4 +36,5 @@ new Vue({
   // 应用router
   router,
   store,
+  mockServer
 }).$mount("#app");

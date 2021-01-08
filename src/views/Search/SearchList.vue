@@ -314,7 +314,6 @@ export default {
 .productContainer {
   width: 1170px;
   margin: 0 auto;
-  margin-top: 300px;
   .sortContainer {
     margin-top: 10px;
     display: flex;

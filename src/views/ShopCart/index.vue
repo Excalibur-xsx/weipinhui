@@ -246,7 +246,7 @@ export default {
   },
   computed: {
     ...mapState({
-      cartList: (state) => state.shopCart.cartList,
+      cartList: (state) => state.shopcart.cartList,
     }),
     // 购物车商品总价
     totalSkuPrice() {
