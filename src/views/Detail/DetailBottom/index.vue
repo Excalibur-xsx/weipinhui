@@ -1,32 +1,32 @@
 <template>
   <div class="detailBottom">
-    <ul class="detailNav" :class="isSticky?'sticky':''" ref="detailNav">
-        <li :class="activePlace === 'params'?'active':''">
-          <a @click="scrollTo('params')">规格参数</a>
-        </li>
-        <li :class="activePlace === 'goodShow'?'active':''">
-          <a @click="scrollTo('goodShow')">商品展示</a>
-        </li>
-        <li :class="activePlace === 'comment'?'active':''">
-          <a @click="scrollTo('comment')">全部评价（666）</a>
-        </li>
-        <li>
-          <a>商品咨询</a>
-        </li>
-        <li>
-          <a>售后服务</a>
-        </li>
-        <li>
-          <a>关于我们</a>
-        </li>
-        <div v-if="isSticky" class="addShopcartWrap">
-          <span>￥ {{price}}</span>
-          <div class="addShopcart" @click="$emit('addShopcart',true)">
-            <i class="iconfont icon-ziyuan"></i>
-            <p>加入购物袋</p>
-          </div>
+    <ul class="detailNav" :class="isSticky ? 'sticky' : ''" ref="detailNav">
+      <li :class="activePlace === 'params' ? 'active' : ''">
+        <a @click="scrollTo('params')">规格参数</a>
+      </li>
+      <li :class="activePlace === 'goodShow' ? 'active' : ''">
+        <a @click="scrollTo('goodShow')">商品展示</a>
+      </li>
+      <li :class="activePlace === 'comment' ? 'active' : ''">
+        <a @click="scrollTo('comment')">全部评价（666）</a>
+      </li>
+      <li>
+        <a>商品咨询</a>
+      </li>
+      <li>
+        <a>售后服务</a>
+      </li>
+      <li>
+        <a>关于我们</a>
+      </li>
+      <div v-if="isSticky" class="addShopcartWrap">
+        <span>￥ {{ price }}</span>
+        <div class="addShopcart" @click="$emit('addShopcart', true)">
+          <i class="iconfont icon-ziyuan"></i>
+          <p>加入购物袋</p>
         </div>
-      </ul>
+      </div>
+    </ul>
     <div class="bottomContainer">
       <div class="certificate">
         <i class="iconfont icon-CCCrenzheng"></i>商品具有<a href=""
@@ -338,43 +338,61 @@ export default {
     return {
       isShowTable: false,
       isSticky: false,
-      activePlace: "params"
+      activePlace: "params",
     };
   },
-  props:["price"],
+  props: ["price"],
   methods: {
+    throttle() {
+      let lastTime = 0;
+      console.log(lastTime)
+
+      return ()=>{
+        let nowTime = Date.now();
+        console.log(nowTime)
+
+        if (nowTime - lastTime < 200) {
+          return;
+        }
+
+        this.changeNav();
+
+        lastTime = nowTime;
+      };
+    },
     changeShow() {
       this.isShowTable = !this.isShowTable;
     },
     changeNav() {
+      console.log(111);
       if (this.$refs.detailNav.getBoundingClientRect().top === 0) {
         this.isSticky = true;
       } else {
         this.isSticky = false;
       }
-      const placeArr = ['params','goodShow','comment']
-      placeArr.forEach(item=>{
-        if(this.$refs[item].getBoundingClientRect().top <= 40){
-          this.activePlace = item
+      const placeArr = ["params", "goodShow", "comment"];
+      placeArr.forEach((item) => {
+        if (this.$refs[item].getBoundingClientRect().top <= 40) {
+          this.activePlace = item;
         }
-      })
+      });
     },
-    scrollTo(place){
+    scrollTo(place) {
       this.$refs[place].scrollIntoView(true);
-      this.activePlace = place
-    }
+      this.activePlace = place;
+    },
   },
   mounted() {
-    window.addEventListener("scroll", this.changeNav);
+    window.addEventListener("scroll", this.throttle());
   },
   beforeDestroy() {
-    window.removeEventListener("scroll", this.changeNav);
+    window.removeEventListener("scroll", this.throttle());
   },
 };
 </script>
 
 <style lang="less" scoped>
-.detailBottom{
+.detailBottom {
   width: 100%;
 }
 .bottomContainer {
@@ -420,24 +438,24 @@ export default {
     padding: 0 173px;
   }
 }
-.addShopcartWrap{
+.addShopcartWrap {
   display: flex;
   position: absolute;
   top: -1px;
   right: 173px;
-  span{
+  span {
     padding: 0 20px;
     font-size: 26px;
     color: #f43499;
   }
 }
-.addShopcart{
+.addShopcart {
   display: flex;
   background-color: #f10180;
   color: #fff;
   font-size: 18px;
   padding: 0 20px;
-  p{
+  p {
     padding-left: 10px;
   }
 }
