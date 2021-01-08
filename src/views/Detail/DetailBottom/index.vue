@@ -345,11 +345,8 @@ export default {
   methods: {
     throttle() {
       let lastTime = 0;
-      console.log(lastTime)
-
       return ()=>{
         let nowTime = Date.now();
-        console.log(nowTime)
 
         if (nowTime - lastTime < 200) {
           return;
