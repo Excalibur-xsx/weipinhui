@@ -1,25 +1,28 @@
 <template>
   <div class="addressBox">
     <ul class="addressTitle">
-      <li @click="clickProvince" :class="provinceActive ? 'active' : ''">
+      <li
+        @click="clickProvince('province')"
+        :class="provinceActive ? 'active' : ''"
+      >
         省份
       </li>
       <li
-        @click="clickCity"
+        @click="clickCity('city')"
         v-if="cityTitleActive"
         :class="cityActive ? 'active' : ''"
       >
         城市
       </li>
       <li
-        @click="clickCounty"
+        @click="clickCounty('county')"
         v-if="countyTitleActive"
         :class="countyActive ? 'active' : ''"
       >
         县区
       </li>
       <li
-        @click="clickStreet"
+        @click="clickStreet('street')"
         v-if="streetTitleActive"
         :class="streetActive ? 'active' : ''"
       >
@@ -28,38 +31,42 @@
     </ul>
     <i class="iconfont icon-cha" @click="$emit('hideX')"></i>
     <div>
-      <ul v-show="provinceActive" class="addressWrap">
-        <li v-for="item in provInfo" :key="item.id">
+      <ul v-show="provinceActive" class="addressWrap" @click="selectAddr($event,'province')">
+        <li v-for="item in address.provinceInfo" :key="item.id">
           <a
+            :data-id="item.id"
+            :data-name="item.name"
             :class="item.active ? 'active' : ''"
-            @click="selectProvince(item.id, item.name)"
             >{{ item.name }}</a
           >
         </li>
       </ul>
-      <ul v-show="cityActive" class="addressWrap">
-        <li v-for="item in cityInfo" :key="item.id">
+      <ul v-show="cityActive" class="addressWrap" @click="selectAddr($event,'city')">
+        <li v-for="item in address.cityInfo" :key="item.id">
           <a
+            :data-id="item.id"
+            :data-name="item.name"
             :class="item.active ? 'active' : ''"
-            @click="selectCity(item.id, item.name)"
             >{{ item.name }}</a
           >
         </li>
       </ul>
-      <ul v-show="countyActive" class="addressWrap">
-        <li v-for="item in countyInfo" :key="item.id">
+      <ul v-show="countyActive" class="addressWrap" @click="selectAddr($event,'county')">
+        <li v-for="item in address.countyInfo" :key="item.id">
           <a
+            :data-id="item.id"
+            :data-name="item.name"
             :class="item.active ? 'active' : ''"
-            @click="selectCounty(item.id, item.name)"
             >{{ item.name }}</a
           >
         </li>
       </ul>
-      <ul v-show="streetActive" class="addressWrap">
-        <li v-for="item in streetInfo" :key="item.id">
+      <ul v-show="streetActive" class="addressWrap" @click="selectAddr($event,'street')">
+        <li v-for="item in address.streetInfo" :key="item.id">
           <a
+            :data-id="item.id"
+            :data-name="item.name"
             :class="item.active ? 'active' : ''"
-            @click="selectStreet(item.id, item.name)"
             >{{ item.name }}</a
           >
         </li>
@@ -74,10 +81,12 @@ export default {
   name: "Address",
   data() {
     return {
-      provInfo: [],
-      cityInfo: [],
-      countyInfo: [],
-      streetInfo: [],
+      address: {
+        provinceInfo: [],
+        cityInfo: [],
+        countyInfo: [],
+        streetInfo: [],
+      },
       provinceActive: true,
       cityActive: false,
       countyActive: false,
@@ -85,88 +94,38 @@ export default {
       cityTitleActive: false,
       countyTitleActive: false,
       streetTitleActive: false,
-      provinceId: null,
-      cityId: null,
-      countyId: null,
+      addressArr: ["province", "city", "county", "street"],
     };
   },
-  props: ["provinceInfo", "addressInfo"],
+  props: ["provinceFromDetail", "addressInfo"],
   watch: {
-    async provinceInfo(val) {
-      this.provInfo = val;
-      this.provInfo.map((item) => {
-        if (item.name === this.addressInfo.addressName.province) {
-          this.$set(item, "active", true);
-          this.provinceId = item.id;
-        }
-        return item;
-      });
-      let city;
-      if (this.cityInfo.length) return;
-      if (
-        this.provinceId === "101101" ||
-        this.provinceId === "101102" ||
-        this.provinceId === "105100" ||
-        this.provinceId === "103101"
-      ) {
-        city = await getAddress2(this.provinceId);
-        this.cityInfo = city.data.list;
-      } else {
-        city = await getAddress(this.provinceId);
-        this.cityInfo = city.data.list;
-      }
-      this.cityInfo.splice(0,1)
+    async provinceFromDetail(val) {
+      this.address.provinceInfo = val;
+      if (this.address.cityInfo.length) return;
+      // 当省份数据获取到时获取城市数据
+      this.getCity(this.addressInfo.addressIds.provinceId);  //触发两次？
     },
-    cityInfo() {
-      this.cityInfo.map((item) => {
-        if (item.name === this.addressInfo.addressName.city) {
-          this.$set(item, "active", true);
-          this.cityId = item.id;
-        }
-        return item;
-      });
-    },
-    countyInfo() {
-      this.countyInfo.map((item) => {
-        if (item.name === this.addressInfo.addressName.county) {
-          this.$set(item, "active", true);
-          this.countyId = item.id;
-        }
-        return item;
-      });
-    },
-    streetInfo() {
-      this.streetInfo.map((item) => {
-        if (item.name === this.addressInfo.addressName.street) {
-          this.$set(item, "active", true);
-        }
-        return item;
-      });
+    //当地址中的id与localStorage中的地址的id一样时给地址加上active: true
+    address: {
+      handler(newAddress) {
+        // this.addActiveForA(newAddress,this.addressInfo.addressIds[ele + "Id"])
+        this.addressArr.forEach((ele) => {
+          newAddress[ele + "Info"].map((item) => {
+            if (item.id === this.addressInfo.addressIds[ele + "Id"]) {
+              this.$set(item, "active", true);
+            }
+            return item;
+          });
+        });
+      },
+      deep: true,
     },
   },
   methods: {
-    //选择省份
-    async selectProvince(id, name) {
-      this.provInfo.map((info) => {
-        if (info.id === id) {
-          this.$set(info, "active", true);
-        } else {
-          this.$set(info, "active", false);
-        }
-        return info;
-      });
-      this.$emit("selectAddress", "province", name,id);
-      this.$emit("selectAddress", "city", "",id);
-      this.$emit("selectAddress", "county", "",id);
-      this.$emit("selectAddress", "street", "",id);
-      this.provinceActive = false;
-      this.cityTitleActive = true;
-      this.countyTitleActive = false;
-      this.streetTitleActive = false;
-      this.cityActive = true;
-      this.cityInfo = [];
-      //如果选择的是北京、上海、重庆、天津，
+    //获取城市数据的方法
+    async getCity(id) {
       let city;
+      //如果选择的是北京、上海、重庆、天津，
       if (
         id === "101101" ||
         id === "101102" ||
@@ -174,126 +133,200 @@ export default {
         id === "103101"
       ) {
         city = await getAddress2(id);
-        this.cityInfo = city.data.list;
       } else {
+        //如果选择的是其他省份
         city = await getAddress(id);
-        this.cityInfo = city.data.list;
       }
-      this.cityInfo.splice(0,1)
+      const cityInfo = city.data.list;
+      cityInfo.splice(0, 1);
+      this.address.cityInfo = cityInfo;
+    },
+
+    //把当前选择的地址类型的下标取出来
+    getAddrCodeIndex(addrCode) {
+      let addrIndex;
+      this.addressArr.forEach((item, index) => {
+        if (item === addrCode) {
+          addrIndex = index;
+        }
+      });
+      return addrIndex;
+    },
+
+    //触发给Detail组件传递地址数据的函数
+    triggerSelectAddress(name, id, addrCode) {
+      //把当前选择的地址类型的下标取出来
+      const addrIndex = this.getAddrCodeIndex(addrCode);
+
+      //把已经选择过的地址类型过滤掉来触发自定义事件
+      this.addressArr
+        .filter((item, index) => index >= addrIndex)
+        .forEach((item) => {
+          if (item === addrCode) {
+            this.$emit("selectAddress", item, name, id);
+          } else {
+            this.$emit("selectAddress", item, "", id);
+          }
+        });
+    },
+
+    //改变地址类型active值
+    changeActive(addrCode) {
+      const addrIndex = this.getAddrCodeIndex(addrCode);
+
+      //addressArr: ["province", "city", "county", "street"]
+
+      this.addressArr.forEach((item) => {
+        if (item === this.addressArr[addrIndex + 1]) {
+          this[item + "Active"] = true;
+          this[item + "TitleActive"] = true;
+        } else {
+          this[item + "Active"] = false;
+          //地址头部出现就不需要隐藏了
+          // this[item+'TitleActive'] = false
+        }
+      });
+    },
+
+    //点击地址头部标签
+    clickAddrTab(addrCode) {
+      this.addressArr.forEach((item) => {
+        if (item === addrCode) {
+          this[item + "Active"] = true;
+        } else {
+          this[item + "Active"] = false;
+        }
+      });
+    },
+
+    //给具体地址a标签加active:true
+    addActiveForA(addrObj,id) {
+      this.addressArr.forEach((ele) => {
+        this.address[ele + "Info"].map((item) => {
+          if (item.id === id) {
+            this.$set(item, "active", true);
+          } else {
+            this.$set(item, "active", false);
+          }
+          return item;
+        });
+      });
+    },
+
+    //获取下一个地址类型的数据的方法
+    async getData(id,addrCode){
+      const addrIndex = this.getAddrCodeIndex(addrCode)
+
+      let addrInfo = await getAddress(id);
+      addrInfo = addrInfo.data.list
+      addrInfo.splice(0,1)
+      this.address[this.addressArr[addrIndex+1]+"Info"] = addrInfo
+    },
+
+    //选择地址事件委托
+    selectAddr(e,addrCode){
+      const addrId =e.target.dataset.id
+      const addrName = e.target.dataset.name
+      if(!addrId) return
+      console.log('select'+addrCode)
+      this['select'+addrCode](addrId,addrName,addrCode)
+    },
+
+    //选择省份
+    async selectprovince(id, name, addrCode) {
+      this.addActiveForA(this.address,id)
+
+      this.triggerSelectAddress(name, id, addrCode);
+
+      this.changeActive(addrCode);
+
+      this.address.cityInfo = [];
+      this.getCity(id);
     },
     //选择市
-    async selectCity(id, name) {
-      this.cityInfo.map((info) => {
-        if (info.id === id) {
-          this.$set(info, "active", true);
-        } else {
-          this.$set(info, "active", false);
-        }
-        return info;
-      });
-      this.$emit("selectAddress", "city", name,id);
-      this.$emit("selectAddress", "county", "",id);
-      this.$emit("selectAddress", "street", "",id);
-      this.countyTitleActive = true;
-      this.streetTitleActive = false;
-      this.provinceActive = false;
-      this.cityActive = false;
-      this.countyActive = true;
-      this.countyInfo = [];
-      const county = await getAddress(id);
-      this.countyInfo = county.data.list;
-      this.countyInfo.splice(0,1)
+    selectcity(id, name, addrCode) {
+      this.addActiveForA(this.address,id)
+
+      this.triggerSelectAddress(name, id, addrCode);
+
+      this.changeActive(addrCode);
+
+      this.address.countyInfo = [];
+
+      this.getData(id,addrCode)
+
     },
     //选择县
-    async selectCounty(id, name) {
-      this.countyInfo.map((info) => {
-        if (info.id === id) {
-          this.$set(info, "active", true);
-        } else {
-          this.$set(info, "active", false);
-        }
-        return info;
-      });
-      this.$emit("selectAddress", "county", name,id);
-      this.$emit("selectAddress", "street", "",id);
-      this.streetTitleActive = true;
-      this.countyActive = false;
-      this.streetActive = true;
-      this.streetInfo = [];
-      const street = await getAddress(id);
-      this.streetInfo = street.data.list;
-      this.streetInfo.splice(0,1)
+    async selectcounty(id, name, addrCode) {
+      this.addActiveForA(this.address,id)
+
+      this.triggerSelectAddress(name, id, addrCode);
+
+      this.changeActive(addrCode);
+
+      //清空原来的街道数据
+      this.address.streetInfo = [];
+      //获取街道数据
+      this.getData(id,addrCode)
     },
     //选择街道
-    selectStreet(id, name) {
-      this.streetInfo.map((info) => {
-        if (info.id === id) {
-          this.$set(info, "active", true);
-        } else {
-          this.$set(info, "active", false);
-        }
-        return info;
-      });
-      this.$emit("selectAddress", "street", name,id);
+    selectstreet(id, name, addrCode) {
+      this.addActiveForA(this.address,id)
+
+      //选择街道后不需要隐藏自己
+      // this.changeActive(addrCode)
+
+      this.triggerSelectAddress(name, id, addrCode);
+
+      //直接隐藏整个地址组件
       this.$emit("hideX");
     },
     //点击地址头部
-    async clickProvince() {
-      this.provinceActive = true;
-      this.cityActive = false;
-      this.countyActive = false;
-      this.streetActive = false;
+    async clickProvince(addrCode) {
+      this.clickAddrTab(addrCode);
     },
-    async clickCity() {
-      this.provinceActive = false;
-      this.cityActive = true;
-      this.countyActive = false;
-      this.streetActive = false;
-      if (this.countyInfo.length) return;
-      const county = await getAddress(this.cityId);
-      this.countyInfo = county.data.list;
-      this.countyInfo.splice(0,1)
+    async clickCity(addrCode) {
+      this.clickAddrTab(addrCode);
+
+      //获取数据
+      if (this.address.countyInfo.length) return;
+
+      this.getData(this.addressInfo.addressIds.cityId,addrCode)
+
     },
-    async clickCounty() {
-      this.provinceActive = false;
-      this.cityActive = false;
-      this.countyActive = true;
-      this.streetActive = false;
+    async clickCounty(addrCode) {
+      this.clickAddrTab(addrCode);
       //获取县数据
-      if (this.countyInfo.length) return;
-      const res = await getAddress(this.addressInfo.addressIds.cityId)
-      const county = res.data.list
-      county.splice(0,1)
-      this.countyInfo = county
+      if (this.address.countyInfo.length) return;
+      const res = await getAddress(this.addressInfo.addressIds.cityId);
+      const county = res.data.list;
+      county.splice(0, 1);
+      this.address.countyInfo = county;
       //获取街道数据
-      if (this.streetInfo.length) return;
-      const street = await getAddress(this.countyId);
-      this.streetInfo = street.data.list;
-      this.streetInfo.splice(0,1)
+      // if (this.address.streetInfo.length) return;
+
+      this.getData(this.addressInfo.addressIds.countyId,addrCode)
+
     },
-    clickStreet() {
-      this.provinceActive = false;
-      this.cityActive = false;
-      this.countyActive = false;
-      this.streetActive = true;
+    clickStreet(addrCode) {
+      this.clickAddrTab(addrCode);
     },
   },
   async mounted() {
     if (this.addressInfo.addressName.street) {
       //如果localStorage有地址数据，就显示全部地址头部
-      this.cityTitleActive = true;
-      this.countyTitleActive = true;
-      this.streetTitleActive = true;
+      this.addressArr.forEach((item) => {
+        this[item + "TitleActive"] = true;
+      });
+
       //显示街道
-      this.provinceActive = false;
-      this.cityActive = false;
-      this.countyActive = false;
-      this.streetActive = true;
+      this.clickAddrTab("street");
       //获取街道数据
-      const res = await getAddress(this.addressInfo.addressIds.countyId)
-      const street = res.data.list
-      street.splice(0,1)
-      this.streetInfo = street
+      // this.getData(this.addressInfo.addressIds.countyId,'street')
+      const res = await getAddress(this.addressInfo.addressIds.countyId);
+      const street = res.data.list;
+      street.splice(0, 1);
+      this.address.streetInfo = street;
     }
   },
 };
@@ -315,7 +348,7 @@ export default {
     right: 15px;
     font-size: 12px;
     color: #8b8a8b;
-    &:hover{
+    &:hover {
       color: #666;
     }
   }

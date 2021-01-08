@@ -96,7 +96,7 @@
               :class="isClick ? 'isClick' : ''"
               @click="showAddress"
             >
-              <p v-if="!addressInfo.addressName.province">请选择配送地址</p>
+              <p v-if="!addressInfo.addressName.province">请选择收货地址</p>
               <p v-else>
                 {{ addressInfo.addressName.province }} {{ addressInfo.addressName.city }}
                 {{ addressInfo.addressName.county }}
@@ -115,7 +115,7 @@
               v-show="isClick"
               @hideX="isClick = false"
               @selectAddress="selectAddress"
-              :provinceInfo="provinceInfo"
+              :provinceFromDetail="provinceFromDetail"
               :addressInfo="addressInfo"
             />
             <p class="time">现在付款，最快一年后送达</p>
@@ -242,7 +242,7 @@ export default {
       count: 1,
       goodDetail: {},
       currentIndex: 0,
-      provinceInfo: [],
+      provinceFromDetail: [],
       addressInfo: {
         addressIds:{},
         addressName:{}
@@ -280,13 +280,13 @@ export default {
     //点击选择地址
     async showAddress() {
       this.isClick = true;
-      if (this.provinceInfo.length) {
+      if (this.provinceFromDetail.length) {
         return;
       }
       //获取省份数据
       const res = await getProvince();
-      this.provinceInfo = res.data.list;
-      this.provinceInfo.splice(0,1)
+      this.provinceFromDetail = res.data.list;
+      this.provinceFromDetail.splice(0,1)
     },
     //当Address组件选择地址时
     selectAddress(title, name,id) {
