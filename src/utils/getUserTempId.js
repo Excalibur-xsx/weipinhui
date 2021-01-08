@@ -1,4 +1,8 @@
-import { v4 as uuidv4 } from "uuid"
+/*
+  读取userTempId
+*/
+import { v4 as uuidv4 } from "uuid";
+
 /*
   整体流程：
 		- 先读取本地localStorage数据，看是否有userTempId

@@ -381,7 +381,8 @@ export default {
     border: 1px solid black;
     box-sizing: border-box;
     padding: 0px 14px;
-    z-index: -1;
+    background-color: white;
+    z-index: 99;
     .navLoginShopTextH {
       width: 272px;
       height: 20px;

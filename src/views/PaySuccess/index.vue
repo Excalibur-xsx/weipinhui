@@ -1,55 +1,7 @@
 <template>
   <div>
     <!-- 头部导航条 -->
-    <div class="heard">
-      <div class="heardContaiter">
-        <div class="heardLeft">
-          <router-link title="唯品会" to="/">
-            <!-- <img src="./images/checkoutHeader.png" alt="logo" /> -->
-            <div class="logo_img"></div>
-          </router-link>
-        </div>
-        <div class="heardRight">
-          <ul class="heardRight_top">
-            <li>
-              你好, 152*****1
-              <div class="member_logo"></div>
-            </li>
-            <li>[退出]</li>
-            <ul class="heardRight_top_nav">
-              <li>订单管理</li>
-              <span class="line_between"></span>
-              <li>
-                <span class="iconfont icon-phone"></span>
-                400-6789-888
-              </li>
-              <span class="line_between"></span>
-              <li>
-                <span class="iconfont icon-atm-fill"></span>
-                在线客服
-              </li>
-              <span class="line_between"></span>
-              <li>
-                <span class="iconfont icon-Customermanagement-fill"></span>
-                会员服务
-                <span class="iconfont icon-arrow-down"></span>
-              </li>
-            </ul>
-          </ul>
-          <ul class="heardRight_bottom">
-            <li>
-              <div class="heardRight_bottom_true"></div>100% 正品保证
-            </li>
-            <li>
-              <div class="heardRight_bottom_seven"></div>七天无理由放心退
-            </li>
-            <li>
-              <div class="heardRight_bottom_time"></div>限时抢购
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+  
     <!-- 支付成功 -->
     <div class="paysuccess">
       <div class="success">

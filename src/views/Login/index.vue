@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="registerContainer">
+    <div class="registerContainer" v-wechat-title="$route.meta.title">
       <div class="registerHeader">
         <img
           class="logo"
@@ -67,25 +67,6 @@
               </div>
 
               <button class="registeBtn" @click.prevent="toLogin">登录</button>
-            </el-form>
-            <el-form
-              :model="ruleForm"
-              :rules="rules"
-              ref="ruleForm"
-              class="demo-ruleForm"
-              v-else
-            >
-              <el-form-item class="appWeixin">
-                <img
-                  src="https://passport.vip.com/qrLogin/getQrImage?qrToken=10000-f2e62c9d38b34cb19898170e55162f72"
-                  alt=""
-                />
-                <div class="jinglintu"></div>
-                <div class="apptext">
-                  <span style="color: #f10180">打开唯品会APP-个人中心</span
-                  >，扫一扫登录
-                </div>
-              </el-form-item>
             </el-form>
 
             <div class="registerContentRightFooter">
@@ -167,8 +148,6 @@ export default {
       } catch {
         this.isLogining = false;
       }
-
-      // console.log(result);
     },
     fncShowLogin(type) {
       if (type) {
@@ -180,7 +159,6 @@ export default {
       }
     },
   },
-  mounted() {},
 };
 </script>
 
