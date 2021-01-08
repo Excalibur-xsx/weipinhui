@@ -60,7 +60,7 @@
                 </li>
               </ul>
             </li>
-            <li class="nav-good">
+            <li class="nav-log nav-good">
               <span>
                 <i class="good"><img src="./images/签到有礼.gif" alt="" /></i>
                 <span>签到有礼</span>
@@ -200,10 +200,7 @@ export default {
   list-style: none;
 }
 .common-header {
-  // width: 100%;
   .top-nav {
-    position: relative;
-    z-index: 103;
     height: 30px;
     line-height: 30px;
     background-color: #f5f5f5;
@@ -211,20 +208,14 @@ export default {
     .header-inner {
       width: 1000px;
       margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
+      cursor: pointer;
       .address-container {
+        display: inline-block;
         .address-header {
           position: relative;
-          z-index: 1;
           padding-left: 15px;
           padding-right: 23px;
           width: 46px;
-          height: 27px;
-          cursor: pointer;
-          border-width: 1px 1px 0;
-          border-style: solid;
-          border-color: #f5f5f5;
           font-size: 12px;
           .area-title .iconfont {
             position: absolute;
@@ -233,16 +224,28 @@ export default {
         }
       }
       .nav-tool {
+        float: right;
         display: flex;
-        font-size: 12px;
-        color: #777;
+        li {
+          flex-grow: 1;
+          padding-left: 10px;
+          padding-right: 17px;
+        }
         .nav-log {
-          position: relative;
-          z-index: 11;
-          height: 26px;
           text-align: center;
           padding-left: 10px;
           padding-right: 17px;
+          // &::before {
+          //   background-image: url("./images/sprites.png");
+          //   background-position: -207px -184px;
+          //   width: 16px;
+          //   height: 16px;
+          //   position: absolute;
+          //   top: 6px;
+          //   right: -5px;
+          //   z-index: 1;
+          //   content: "";
+          // }
           .nav-logRes {
             display: flex;
             .user-login {
@@ -267,25 +270,17 @@ export default {
                 top: 25px;
                 width: 280px;
                 height: 150px;
-                padding: 10px 0;
                 z-index: 20;
                 border: 1px solid #cdcdcd;
                 background-color: #fff;
                 color: #333;
                 padding-top: 14px;
-                background-color: #fff;
-                z-index: 4;
                 left: 0;
                 .bottom {
                   width: 143px;
-                  background: #fff;
-                  position: absolute;
                   height: 3px;
                   top: -3px;
-                  font-style: normal;
-                  display: inline-block;
                 }
-
                 .avaterCon {
                   .avaterAside {
                     display: flex;
@@ -314,7 +309,6 @@ export default {
                 }
                 .user-content {
                   line-height: 20px;
-                  float: left;
                   margin: 10px 12px;
                   padding: 0 0 0 15px;
                   span {
@@ -327,20 +321,8 @@ export default {
               }
             }
             .user-register {
-              padding-left: 10px;
               padding-right: 17px;
             }
-          }
-          &::after {
-            background-image: url("./images/sprites.png");
-            background-position: -207px -184px;
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            top: 6px;
-            right: -5px;
-            z-index: 1;
-            content: "";
           }
         }
         .nav-good {

@@ -5,11 +5,8 @@
     </div>
     <div class="focus-banners">
       <el-carousel indicator-position="outside" class="banners" autoplay>
-        <el-carousel-item class="bannersItem">
-          <img src="./images/banners-3.jpg" alt="" />
-        </el-carousel-item>
-        <el-carousel-item class="bannersItem">
-          <img src="./images/banners-2.jpg" alt="" />
+        <el-carousel-item class="bannersItem" v-for="item in banners" :key="item.id">
+          <img v-lazy="item.imgUrl" alt="" />
         </el-carousel-item>
       </el-carousel>
       <div class="triggerCon">
@@ -24,37 +21,47 @@
         <img src="./images/everyday.jpg" alt="" />
       </div>
     </div>
-    <div class="middles">
-      <div class="showImg">
-        <div class="discount">
-          <img class="boy" src="./images/boy.jpg" alt="" />
-          <img class="dis" src="./images/discount.png" alt="" />
-        </div>
+    <div class="imgList">
+      <div class="discount">
+        <img src="./images/discount.png" alt="" />
       </div>
-      <div class="showImg">
-        <div class="discount">
-          <img class="boy" src="./images/boy.jpg" alt="" />
-          <img class="dis" src="./images/discount.png" alt="" />
-        </div>
+      <div class="bang">
+        <img src="./images/ranking.png" alt="" />
       </div>
     </div>
-    <div class="middles">
-      <div class="showImg">
-        <div class="discount">
-          <img class="boy" src="./images/boy.jpg" alt="" />
-          <img class="dis" src="./images/discount.png" alt="" />
-        </div>
-      </div>
-      <div class="showImg">
-        <div class="discount">
-          <img class="boy" src="./images/boy.jpg" alt="" />
-          <img class="dis" src="./images/discount.png" alt="" />
-        </div>
+    <div class="low">
+      <div class="lowItem">
+        <img src="./images/low.png" alt="" />
       </div>
     </div>
-
+    <div class="sale">
+      <img src="./images/sale.png" alt="" />
+      <a href="###" class="reset">马上刷新</a>
+    </div>
+    <div class="girlClothes" v-for="(item, index) in 10" :key="index">
+      <div class="girlBrand"><img src="./images/girlBrand.png" alt="" /></div>
+      <div class="aside" v-for="item in floors" :key="item.id">
+        <div class="detailContaniner">
+          <div class="detailImge">
+            <img v-lazy="item.imgUrl" alt="" />
+            <span class="mihuang">米皇mihuang羊绒-最后疯抢专场</span>
+            <span class="three">三折疯抢</span>
+          </div>
+        </div>
+        <div class="detailContaniner">
+          <div class="detailImge">
+            <img v-lazy="item.imgUrl" alt="" />
+            <span class="mihuang">米皇mihuang羊绒-最后疯抢专场</span>
+            <span class="three">三折疯抢</span>
+          </div>
+        </div>
+      </div>
+      <div class="more">
+        <a href="###">逛更多品牌</a>
+      </div>
+    </div>
     <div class="lift">
-      <div class="fixedBox" @click="switched">
+      <div class="fixedBox">
         <a href="###">
           <span></span>
           <span>女装</span>
@@ -97,13 +104,22 @@
 </template>
 
 <script>
+import {mapState,mapActions} from 'vuex'
 export default {
   name: "Home",
-  methods: {
-    switched() {
-      console.log("switched");
-    },
+  computed:{
+    ...mapState({
+      banners:(state)=>state.home.banners,
+      floors:(state)=>state.home.floors
+    })
   },
+  methods: {
+    ...mapActions(["getBanners","getFloors"])
+  },
+  mounted(){
+    this.getBanners()
+    this.getFloors()
+  }
 };
 </script>
 
@@ -199,30 +215,127 @@ export default {
     }
   }
 }
-.middles {
+.imgList {
   display: flex;
   width: 1000px;
   margin: 0 auto;
-  .showImg {
-    .discount {
-      position: relative;
-      .dis {
-        width: 510px;
-        height: 290px;
+  .discount {
+    img {
+      width: 510px;
+      height: 290px;
+    }
+  }
+  .bang {
+    img {
+      width: 490px;
+      height: 290px;
+    }
+  }
+}
+.low {
+  .lowItem {
+    width: 1000px;
+    margin: 0 auto;
+    img {
+      width: 1000px;
+      height: 298px;
+    }
+  }
+}
+.sale {
+  width: 1000px;
+  margin: 0 auto;
+  height: 80px;
+  position: relative;
+  background-repeat: no-repeat;
+  img {
+    position: absolute;
+    left: 50%;
+    margin-left: -585px;
+    top: 0;
+  }
+  .reset {
+    position: absolute;
+    top: 57px;
+    left: 507px;
+    width: 88px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    padding: 0;
+  }
+}
+.girlClothes {
+  width: 1000px;
+  margin: 0 auto;
+  
+  .girlBrand {
+    margin-bottom: 30px;
+    min-height: 43px;
+    border-bottom: 1px #1a1a1a solid;
+    img {
+      vertical-align: top;
+    }
+  }
+  .aside {
+    display: flex;
+    .detailContaniner {
+      .detailImge {
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 20px;
+        background: #fff;
+        img {
+          width: 490px;
+          height: 235px;
+        }
+        .mihuang {
+          margin-top: 18px;
+          cursor: pointer;
+          font-family: MicrosoftYaHei;
+          font-weight: 700;
+          font-size: 18px;
+          color: #333;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 455px;
+          display: block;
+        }
+        .three {
+          color: #4d4d4d;
+          font-size: 16px;
+          margin-right: 10px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 100px;
+          display: inline-block;
+        }
       }
-      .boy {
-        position: absolute;
-        width: 147px;
-        height: 186px;
-        top: 70px;
-        left: 30px;
-      }
+    }
+  }
+  .more {
+    border-top: 1px solid #e8e8e8;
+    a {
+      width: 324px;
+      display: block;
+      color: #fff;
+      height: 44px;
+      background-color: #f10180;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+      font-size: 16px;
+      text-align: center;
+      line-height: 44px;
+      margin: -1px auto 20px;
     }
   }
 }
 .lift {
   position: fixed;
   top: 112px;
+  left:80px;
   width: 36px;
   height: 300px;
   font-size: 16px;
