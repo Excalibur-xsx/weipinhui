@@ -14,7 +14,15 @@ import PaySuccess from "../views/PaySuccess";
 
 const Home = () => import(/* webpackChunkName: "Home"*/ "../views/Home")
 //搜索页面
+<<<<<<< HEAD
 const SearchList = () => import(/* webpackChunkName: "Home"*/ "../views/Search/SearchList")
+=======
+const SearchList = () =>
+  import(/* webpackChunkName: "Home"*/ "../views/Search/SearchList")
+//唯品快抢
+const ForestallBuy = () =>
+  import(/* webpackChunkName: "ForestallBuy"*/ "../views/ForestallBuy")
+>>>>>>> xionglin
 
 // 安装插件
 Vue.use(VueRouter)
@@ -31,6 +39,7 @@ VueRouter.prototype.replace = function (location, onComplete, onAbort = () => { 
 };
 
 const router = new VueRouter({
+<<<<<<< HEAD
 	// 路由配置
 	routes: [
 		{
@@ -88,6 +97,53 @@ const router = new VueRouter({
 	scrollBehavior() {
 		return { x: 0, y: 0 };
 	}
+=======
+  mode: "history",
+  // 路由配置
+  routes: [
+    {
+      path: "/",
+      component: Home,
+      meta: {
+        title: "唯品会首页",
+      },
+    },
+    {
+      path: "/register",
+      component: Register,
+      meta: {
+        title: "注册",
+      },
+    },
+    {
+      path: "/login",
+      component: Login,
+      meta: {
+        title: "登录",
+      },
+    },
+    {
+      path: "/navlogin",
+      component: NvaLogin,
+    },
+    {
+      name: "search",
+      path: "/searchList",
+      component: SearchList,
+      meta: {
+        title: "搜索商品",
+      },
+    },
+    {
+      name: "forestallBuy",
+      path: "/forestallBuy",
+      component: ForestallBuy,
+      meta: {
+        title: "唯品快抢",
+      },
+    },
+  ],
+>>>>>>> xionglin
 })
 
 // 全局路由前置守卫

@@ -1,0 +1,35 @@
+{
+  "hotSale|5": [
+    {
+      "id|+1": 1,
+      "imgUrl": "@image('140x140','@color','png', '@title')",
+      "name": "@ctitle(8,10)",
+      "price|280-666": 666
+    }
+  ],
+  "hotCateLog|10": [
+    {
+      "id|+1": 1,
+      "imgUrl": "@image('65x65','@color','png', '@title')",
+      "name": "@ctitle(4,5)"
+    }
+  ],
+  "productList|10": [
+    {
+      "id|+1": 1,
+      "imgUrl": "@image('65x65','@color','png', '@title')",
+      "name": "@ctitle(4,5)",
+      "productLists|60": [
+        {
+          "id|+1": 1,
+          "imgUrl": "@image('230x230','@color','png', '@title')",
+          "productTitle": "@ctitle(10,20)",
+          "productName": "@ctitle(4,5)",
+          "saleNum|1-10.1":1,
+          "salePrice|280-666": 666,
+          "discount|4-7.1": 1
+        }
+      ]
+    }
+  ]
+}
