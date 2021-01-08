@@ -184,7 +184,6 @@
             <i class="iconfont icon-duihua"></i>
             <a>在线客服</a>
             <span>(09:00-22:00)</span>
-            <a @click="getShopcartList">看看购物车</a>
           </div>
         </div>
         <div class="service attr">
@@ -231,7 +230,6 @@ import {
   getGoodDetail,
   getProvince,
   addToShopcart,
-  getShopcartList,
 } from "../../api/detail";
 export default {
   name: "Detail",
@@ -356,10 +354,6 @@ export default {
         return;
       }
       addToShopcart(this.goodDetail.skuInfo.id, this.count);
-    },
-    //test获取购物车列表
-    getShopcartList() {
-      getShopcartList();
     },
   },
   async mounted() {

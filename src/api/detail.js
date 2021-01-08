@@ -40,11 +40,3 @@ export const addToShopcart = (skuId,skuNum)=>{
     url: `/cart/addToCart/${skuId}/${skuNum}`
   })
 }
-
-//获取购物车列表（test）
-export const getShopcartList = () => {
-  return request({
-    method: "GET",
-    url: "/cart/cartList"
-  })
-}
