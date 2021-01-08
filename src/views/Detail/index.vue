@@ -130,7 +130,7 @@
         </div>
         <div class="color attr" :class="noSelectColor ? 'active' : ''">
           <p class="attrName">颜色</p>
-          <div class="colorContainer">
+          <div class="colorContainer" v-if="colorInfo">
             <div
               class="colorValue"
               :class="color.isActive ? 'active' : ''"
@@ -322,7 +322,7 @@ export default {
       });
     },
     //加入购物车
-    addShopcart(isScroll) {
+    async addShopcart(isScroll) {
       //判断是否选择颜色
       const colorList = this.colorInfo.spuSaleAttrValueList;
       const selectedColor = colorList.find((item) => item.isActive);
@@ -353,7 +353,8 @@ export default {
         }
         return;
       }
-      addToShopcart(this.goodDetail.skuInfo.id, this.count);
+      await addToShopcart(this.goodDetail.skuInfo.id, this.count);
+      this.$bus.$emit("showShop")
     },
   },
   async mounted() {

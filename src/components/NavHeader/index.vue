@@ -166,12 +166,12 @@
               </ul>
             </div>
           </div>
-          <div class="cart">
+          <!-- <div class="cart">
             <div class="tool">
               <i class="iconfont icon-gouwudai"></i>
               <a href="###">购物车</a>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <TypeNav></TypeNav>
@@ -433,7 +433,7 @@ export default {
         width: 391px;
         .searchForm {
           position: relative;
-          z-index: 2;
+          // z-index: 2;
           width: 387px;
           height: 32px;
           border: 2px solid #fa2a83;

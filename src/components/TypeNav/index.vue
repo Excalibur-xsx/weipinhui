@@ -109,11 +109,9 @@ export default {
   },
   methods: {
     ...mapActions(["getBaseCategoryList"]),
-    getScroll(event) {
-      console.log("getScroll",event)
+    getScroll() {
       // 获取滚动条离顶部的距离
       this.scroll = document.documentElement.scrollTop||document.body.scrollTop
-      console.log(this.scroll)
       // let res = this.$refs.height.clientHeight
       // console.log(res)//175
       if(this.scroll >= 200){
@@ -127,7 +125,7 @@ export default {
   mounted() {
     window.addEventListener('scroll', this.getScroll,true)
     this.getBaseCategoryList();
-    console.log(this)
+    // console.log(this)
   },
 };
 </script>

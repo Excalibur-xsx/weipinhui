@@ -77,60 +77,36 @@
           <span>14分06秒</span>
           <span @click="shopClick(!ShopShow)">X</span>
         </div>
-        <div class="navLoginShopTextM">
+        
+        <div class="navLoginShopTextM" v-for="item in cartList" :key="item.id">
           <img
-            src="./images/cecd2889-0cd7-4202-b520-679fee3cffaf.jpg"
+            :src="item.imgUrl"
             alt=""
             style="width: 50px; height: 70px"
           />
           <div class="Shopinformation">
-            <span>男装2020秋冬新品男士厚款</span>
+            <span>{{item.skuName}}</span>
             <p>L</p>
           </div>
-          <span class="num">1</span>
-          <span class="price">￥351.00</span>
+          <span class="num">{{item.skuNum}}</span>
+          <span class="price">￥{{item.skuPrice}}</span>
         </div>
-        <div class="navLoginShopTextM">
-          <img
-            src="./images/cecd2889-0cd7-4202-b520-679fee3cffaf.jpg"
-            alt=""
-            style="width: 50px; height: 70px"
-          />
-          <div class="Shopinformation">
-            <span>男装2020秋冬新品男士厚款</span>
-            <p>L</p>
-          </div>
-          <span class="num">3</span>
-          <span class="price">￥351.00</span>
-        </div>
-        <div class="navLoginShopTextM">
-          <img
-            src="./images/cecd2889-0cd7-4202-b520-679fee3cffaf.jpg"
-            alt=""
-            style="width: 50px; height: 70px"
-          />
-          <div class="Shopinformation">
-            <span>男装2020秋冬新品男士厚款</span>
-            <p>L</p>
-          </div>
-          <span class="num">1</span>
-          <span class="price">￥351.00</span>
-        </div>
+        
         <div class="navLoginShopTextF">
           <div class="site">
             <span class="num">5</span>
             <span>款商品配送至湛江市</span>
           </div>
-          <span class="price">¥351</span>
+          <span class="price">¥{{price}}</span>
         </div>
-        <button>去购物车</button>
+        <button @click="toShopcart">去购物车</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "NavLogin",
   data() {
@@ -146,9 +122,19 @@ export default {
   computed: {
     ...mapState({
       name: (state) => state.user.name,
+      cartList: (state) => state.shopcart.cartList,
     }),
+    price(){
+      const res = this.cartList.reduce((p,c)=>{
+        p += c.skuNum * c.skuPrice
+        // item.skuNum * item.skuPrice
+        return p
+      },0)
+      return res
+    }
   },
   methods: {
+    ...mapActions(["getCartList"]),
     mouseover(UserShow, moveFlag) {
       if (this.flag) return;
       if (UserShow) {
@@ -188,6 +174,21 @@ export default {
     //   this.ShopShow = true;
     //   this.flag = false;
     // },
+    async showShop(){
+      this.ShopShow = false
+      this.flag = true
+      this.clickMove = "302px"
+      await this.getCartList();
+    },
+    toShopcart(){
+      this.$router.push('/shopcart')
+      this.ShopShow = true
+      this.flag = false
+      this.clickMove = "-32px"
+    }
+  },
+  mounted() {
+    this.$bus.$on("showShop",this.showShop);
   },
 };
 </script>
