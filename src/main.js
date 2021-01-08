@@ -1,9 +1,8 @@
 // @ts-nocheck
-import Vue from "vue";
-import App from "./App";
+import Vue from "vue"
+import App from "./App"
 
-import router from "./router";
-import store from "./store";
+import VueLazyload from "vue-lazyload"
 
 import "./plugins/element.js";
 import "./plugins/lazyload.js";
@@ -14,6 +13,19 @@ import "./styles/reset.css";
 // 里面代码一旦加载，就去启动mock服务器，从而拦截相应的请求
 import "./mock/mockServe";
 Vue.config.productionTip = false;
+import "./plugins/element.js"
+import router from "./router"
+import store from "./store"
+//引入默认样式
+import "./style/reset.css"
+//引入懒加载的默认图片
+import loading from "./assets/images/loading.gif"
+
+Vue.config.productionTip = false
+
+Vue.use(VueLazyload, {
+  loading,
+})
 
 new Vue({
   beforeCreate() {

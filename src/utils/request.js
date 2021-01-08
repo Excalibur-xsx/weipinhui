@@ -1,10 +1,11 @@
 import axios from "axios";
 // 引入进度条插件
 import NProgress from "nprogress";
+import { Message } from "element-ui";
 // 进度条样式
 import "nprogress/nprogress.css";
 //引入vuex中的数据
-// import store from "../store/index";
+import store from "../store";
 
 import getUserTempId from "./getUserTempId";
 //获取未登录的userTempId
@@ -31,7 +32,7 @@ instance.interceptors.request.use(
     //添加未登录的默认请求参数userTempId
     config.headers.userTempId = userTempId;
     //登录后添加token
-    // config.headers.token = store.state.user.token;
+    config.headers.token = store.state.user.token;
 
     return config;
   }
@@ -49,6 +50,7 @@ instance.interceptors.response.use(
       return response.data.data;
     }
     //如果响应结果的值是失败的则要返回失败的promise对象
+    Message.error(response.data.message);
     return Promise.reject(response.data.message);
   },
   //响应失败触发
